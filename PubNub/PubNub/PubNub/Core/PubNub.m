@@ -28,7 +28,7 @@
 #endif
 #import "PNServiceChannelDelegate.h"
 #import "PNConnection+Protected.h"
-#import "NSObject+PNAdditions.h"
+#import "NSObject+PNPrivateAdditions.h"
 #import "PNMessagingChannel.h"
 #import "PNLogger+Protected.h"
 #import "PNServiceChannel.h"
@@ -121,6 +121,13 @@ static dispatch_once_t onceToken;
  Stores reference on crypto helper tool which is used on message encryption/descryption.
  */
 @property (nonatomic, strong) PNCryptoHelper *cryptoHelper;
+
+/**
+ @brief Stores reference on data synchronization manager.
+ 
+ @since <#version number#>
+ */
+@property (nonatomic, strong) PNDataSynchronization *dataSynchronization;
 
 /**
  Stores reference on local \b PubNub cache instance which will cache some portion of data.
@@ -604,6 +611,7 @@ shouldObserveProcessing:(BOOL)shouldObserveProcessing;
 
         self.state = PNPubNubClientStateCreated;
         self.cache = [PNCache new];
+        self.dataSynchronization = [PNDataSynchronization new];
         self.pendingInvocations = [NSMutableArray array];
         self.reprioritizedPendingInvocations = [NSMutableArray array];
         self.observationCenter = [PNObservationCenter observationCenterWithDefaultObserver:self];
@@ -1687,6 +1695,7 @@ shouldObserveProcessing:(BOOL)shouldObserveProcessing;
                 return @[PNLoggerSymbols.api.disconnecting, [self humanReadableStateFrom:self.state]];
             }];
 
+            [self.dataSynchronization purgeLocalCache];
             [self.cache purgeAllState];
 
             [self.observationCenter removeClientAsPushNotificationsEnabledChannelsObserver];
@@ -2017,6 +2026,8 @@ shouldObserveProcessing:(BOOL)shouldObserveProcessing;
         [request isKindOfClass:[PNTimeTokenRequest class]] ||
         [request isKindOfClass:[PNClientStateRequest class]] ||
         [request isKindOfClass:[PNClientStateUpdateRequest class]] ||
+        [request isKindOfClass:[PNRemoteObjectDataFetchRequest class]] ||
+        [request isKindOfClass:[PNRemoteObjectDataModificationRequest class]] ||
         [request isKindOfClass:[PNChannelGroupsRequest class]] ||
         [request isKindOfClass:[PNChannelGroupNamespacesRequest class]] ||
         [request isKindOfClass:[PNChannelGroupNamespaceRemoveRequest class]] ||
@@ -4211,6 +4222,10 @@ shouldObserveProcessing:(BOOL)shouldObserveProcessing;
     [self pn_destroyPrivateDispatchQueue];
     
     [self unsubscribeFromNotifications];
+    
+    [self.dataSynchronization purgeLocalCache];
+    self.dataSynchronization = nil;
+    
     [self.cache purgeAllState];
     self.cache = nil;
 

@@ -90,7 +90,7 @@
 
         self.sendingByUserRequest = YES;
         self.accessRightOptions = [PNAccessRightOptions accessRightOptionsForApplication:nil withRights:accessRights
-                                                                                channels:channels clients:clientsAuthorizationKey
+                                                                                 objects:channels clients:clientsAuthorizationKey
                                                                             accessPeriod:accessPeriod];
 
     }
@@ -113,7 +113,8 @@
 - (NSString *)PAMSignature {
 
     NSMutableArray *parameters = [NSMutableArray array];
-    NSMutableString *signature = [NSMutableString stringWithFormat:@"%@\n%@\ngrant\n", self.subscriptionKey, self.publishKey];
+    NSMutableString *signature = [NSMutableString stringWithFormat:@"%@\n%@\ngrant\n",
+                                  self.subscriptionKey, self.publishKey];
 
     if ([self.accessRightOptions.clientsAuthorizationKeys count] > 0) {
 
@@ -131,12 +132,18 @@
 
         NSString *channel = [[self.accessRightOptions.channels lastObject] name];
         BOOL isChannelGroupProvided = ((PNChannel *)[self.accessRightOptions.channels lastObject]).isChannelGroup;
+        BOOL isSynchronizationChannelProvided = ((PNChannel *)[self.accessRightOptions.channels lastObject]).isForDataSynchronization;
         if ([self.accessRightOptions.channels count] > 1) {
 
             channel = [[self.accessRightOptions.channels valueForKey:@"name"] componentsJoinedByString:@","];
         }
-        [parameters addObject:[NSString stringWithFormat:@"%@=%@",
-                               (!isChannelGroupProvided ? @"channel" : @"channel-group"), [channel pn_percentEscapedString]]];
+        NSString *objectType = @"channel";
+        if (isChannelGroupProvided || isSynchronizationChannelProvided) {
+            
+            objectType = (isChannelGroupProvided ? @"channel-group" : @"obj-id");
+        }
+        [parameters addObject:[NSString stringWithFormat:@"%@=%@", objectType,
+                               [channel pn_percentEscapedString]]];
     }
     
     [parameters addObject:[NSString stringWithFormat:@"m=%@",
@@ -186,6 +193,14 @@
 
     NSString *channel = [[self.accessRightOptions.channels lastObject] name];
     BOOL isChannelGroupProvided = ((PNChannel *)[self.accessRightOptions.channels lastObject]).isChannelGroup;
+    BOOL isSynchronizationChannelProvided = ((PNChannel *)[self.accessRightOptions.channels lastObject]).isForDataSynchronization;
+    
+    NSString *objectType = @"channel";
+    if (isChannelGroupProvided || isSynchronizationChannelProvided) {
+        
+        objectType = (isChannelGroupProvided ? @"channel-group" : @"obj-id");
+    }
+    
     if ([self.accessRightOptions.channels count] > 1) {
 
         channel = [[self.accessRightOptions.channels valueForKey:@"name"] componentsJoinedByString:@","];
@@ -196,8 +211,7 @@
                                        "=%@&%@", [self.subscriptionKey pn_percentEscapedString],
             (authorizationKey ? [NSString stringWithFormat:@"auth=%@&", [authorizationKey pn_percentEscapedString]] : @""),
             [self callbackMethodName], self.shortIdentifier,
-            (channel ? [NSString stringWithFormat:@"&%@=%@", (!isChannelGroupProvided ? @"channel" : @"channel-group"),
-                        [channel pn_percentEscapedString]] : @""),
+            (channel ? [NSString stringWithFormat:@"&%@=%@", objectType, [channel pn_percentEscapedString]] : @""),
             [NSString stringWithFormat:@"m=%@", [PNBitwiseHelper is:self.accessRightOptions.rights
                                                         containsBit:PNManagementRight] ? @"1" : @"0"],
             [self clientInformationField], [NSString stringWithFormat:@"r=%@", [PNBitwiseHelper is:self.accessRightOptions.rights

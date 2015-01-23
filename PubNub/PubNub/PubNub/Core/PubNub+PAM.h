@@ -5690,14 +5690,19 @@
  @param accessPeriodDuration Duration in minutes during which provided access rights should be applied on application 
                              level.
  
- @note To be able use this API, you should provide \a 'secret' key which is used for signature generation.
- @note Make sure that you enabled "Access Manager" on https://admin.pubnub.com.
- @note You can pass a value less than \c 0 as \a 'accessPeriodDuration' argument to use default value
-      (default value is \b 1440 minutes).
+ @note    To be able use this API, you should provide \a 'secret' key which is used for signature
+          generation.
+ @note    Make sure that you enabled "Access Manager" on https://admin.pubnub.com.
+ @note    You can pass a value less than \c 0 as \a 'accessPeriodDuration' argument to use 
+          default value (default value is \b 1440 minutes).
+ @warning As soon as "Access Manager" will be enabled, all \b PubNub clients won't be able to
+          subscribe / publish to any channels till the moment, when access rights will be 
+          configured.
  
  @since 3.7.0
  */
-- (void)changeApplicationAccessRightsTo:(PNAccessRights)accessRights onPeriod:(NSInteger)accessPeriodDuration;
+- (void)changeApplicationAccessRightsTo:(PNAccessRights)accessRights
+                               onPeriod:(NSInteger)accessPeriodDuration;
 
 /**
  @brief Alter application level access rights (based on subscription key).
@@ -5793,10 +5798,14 @@
                              \a -localizedFailureReason and \a -localizedRecoverySuggestion to get human readable 
                              description for error).
  
- @note To be able use this API, you should provide \a 'secret' key which is used for signature generation.
- @note Make sure that you enabled "Access Manager" on https://admin.pubnub.com.
- @note You can pass a value less than \c 0 as \a 'accessPeriodDuration' argument to use default value
-      (default value is \b 1440 minutes).
+ @note    To be able use this API, you should provide \a 'secret' key which is used for signature
+          generation.
+ @note    Make sure that you enabled "Access Manager" on https://admin.pubnub.com.
+ @note    You can pass a value less than \c 0 as \a 'accessPeriodDuration' argument to use 
+          default value (default value is \b 1440 minutes).
+ @warning As soon as "Access Manager" will be enabled, all \b PubNub clients won't be able to
+          subscribe / publish to any channels till the moment, when access rights will be 
+          configured.
  
  @since 3.7.0
  */
@@ -7680,16 +7689,26 @@
  Also observation can be done using \b NSNotificationCenter to observe this notifications: 
  kPNClientAccessRightsChangeDidCompleteNotification, kPNClientAccessRightsChangeDidFailNotification.
  
- @param channelObjects       List of objects (which conforms to \b PNChannelProtocol data feed object protocol) like
-                             \b PNChannel, \b PNChannelGroup or \b PNChannelGroupNamespace for which access rights
-                             should be changed
- @param accessRights         Bit field which allow to specify set of options. Bit options specified in \c PNAccessRights
- @param accessPeriodDuration Duration in minutes during which provided access rights should be applied on channel level.
- 
- @note To be able use this API, you should provide \a 'secret' key which is used for signature generation.
- @note Make sure that you enabled "Access Manager" on https://admin.pubnub.com.
- @note You can pass a value less than \c 0 as \a 'accessPeriodDuration' argument to use default value (default value is 
-       \b 1440 minutes).
+ @param channelObjects       List of objects (which conforms to \b PNChannelProtocol data feed 
+                             object protocol) like \b PNChannel,  \b PNChannelGroup,
+                             \b PNChannelGroupNamespace or \b PNObject for which access rights
+                             should be changed.
+ @param accessRights         Bit field which allow to specify set of options. Bit options 
+                             specified in \c PNAccessRights
+ @param accessPeriodDuration Duration in minutes during which provided access rights should be 
+                             applied on channel level.
+
+ @note    To be able use this API, you should provide \a 'secret' key which is used for signature
+          generation.
+ @note    Make sure that you enabled "Access Manager" on https://admin.pubnub.com.
+ @note    You can pass a value less than \c 0 as \a 'accessPeriodDuration' argument to use 
+          default value (default value is \b 1440 minutes).
+ @warning Don't mix \b PNObject with other data feed objects in this API. To change access rights
+          for remote data objects use it separately from changing access rights on channels, 
+          groups and namespaces.
+ @warning As soon as "Access Manager" will be enabled, all \b PubNub clients won't be able to
+          subscribe / publish to any channels till the moment, when access rights will be 
+          configured.
  
  @since 3.7.0
  */
@@ -7777,9 +7796,10 @@
  Also observation can be done using \b NSNotificationCenter to observe this notifications: 
  kPNClientAccessRightsChangeDidCompleteNotification, kPNClientAccessRightsChangeDidFailNotification.
  
- @param channelObjects       List of objects (which conforms to \b PNChannelProtocol data feed object protocol) like
-                             \b PNChannel, \b PNChannelGroup or \b PNChannelGroupNamespace for which access rights 
-                             should be changed
+ @param channelObjects       List of objects (which conforms to \b PNChannelProtocol data feed 
+                             object protocol) like \b PNChannel, \b PNChannelGroup, 
+                             \b PNChannelGroupNamespace or \b PNObject for which access rights
+                             should be changed.
  @param accessRights         Bit field which allow to specify set of options. Bit options specified in \c PNAccessRights
  @param accessPeriodDuration Duration in minutes during which provided access rights should be applied on channel level.
  @param handlerBlock         The block which will be called by \b PubNub client when one of success or error events will 
@@ -7789,11 +7809,18 @@
                              access rights change. Always check \a error.code to find out what caused error (check 
                              PNErrorCodes header file and use \a -localizedDescription / \a -localizedFailureReason and
                              \a -localizedRecoverySuggestion to get human readable description for error).
- 
- @note To be able use this API, you should provide \a 'secret' key which is used for signature generation.
- @note Make sure that you enabled "Access Manager" on https://admin.pubnub.com.
- @note You can pass a value less than \c 0 as \a 'accessPeriodDuration' argument to use default value (default value is 
-       \b 1440 minutes).
+
+ @note    To be able use this API, you should provide \a 'secret' key which is used for signature
+          generation.
+ @note    Make sure that you enabled "Access Manager" on https://admin.pubnub.com.
+ @note    You can pass a value less than \c 0 as \a 'accessPeriodDuration' argument to use 
+          default value (default value is \b 1440 minutes).
+ @warning Don't mix \b PNObject with other data feed objects in this API. To change access rights
+          for remote data objects use it separately from changing access rights on channels, 
+          groups and namespaces.
+ @warning As soon as "Access Manager" will be enabled, all \b PubNub clients won't be able to
+          subscribe / publish to any channels till the moment, when access rights will be 
+          configured.
  
  @since 3.7.0
  */
@@ -7867,16 +7894,21 @@
  @param clientsAuthorizationKeys List of \a NSString instances which specify list of client for which access rights 
                                  should be changed.
  @param object                   List of objects (which conforms to \b PNChannelProtocol data feed object protocol) like
-                                 \b PNChannel, \b PNChannelGroup or \b PNChannelGroupNamespace
+                                 \b PNChannel, \b PNChannelGroup, \b PNChannelGroupNamespace or
+                                 or \b PNObject
  @param accessRights             Bit field which allow to specify set of options. Bit options specified in 
                                  \c PNAccessRights
  @param accessPeriodDuration     Duration in minutes during which provided access rights should be applied on channel 
                                  level.
  
- @note To be able use this API, you should provide \a 'secret' key which is used for signature generation.
- @note Make sure that you enabled "Access Manager" on https://admin.pubnub.com.
- @note You can pass a value less than \c 0 as \a 'accessPeriodDuration' argument to use default value (default value is 
-       \b 1440 minutes).
+ @note    To be able use this API, you should provide \a 'secret' key which is used for signature 
+          generation.
+ @note    Make sure that you enabled "Access Manager" on https://admin.pubnub.com.
+ @note    You can pass a value less than \c 0 as \a 'accessPeriodDuration' argument to use 
+          default value (default value is \b 1440 minutes).
+ @warning As soon as "Access Manager" will be enabled, all \b PubNub clients won't be able to
+          subscribe / publish to any channels till the moment, when access rights will be 
+          configured.
  
  @since 3.7.0
  */
@@ -7965,7 +7997,8 @@
  @param clientsAuthorizationKeys List of \a NSString instances which specify list of client for which access rights 
                                  should be changed.
  @param object                   List of objects (which conforms to \b PNChannelProtocol data feed object protocol) like
-                                 \b PNChannel, \b PNChannelGroup or \b PNChannelGroupNamespace
+                                 \b PNChannel, \b PNChannelGroup, \b PNChannelGroupNamespace or
+                                 or \b PNObject
  @param accessRights             Bit field which allow to specify set of options. Bit options specified in 
                                  \c PNAccessRights
  @param accessPeriodDuration     Duration in minutes during which provided access rights should be applied on channel 
@@ -7979,10 +8012,14 @@
                                  \a -localizedDescription / \a -localizedFailureReason and 
                                  \a -localizedRecoverySuggestion to get human readable description for error).
  
- @note To be able use this API, you should provide \a 'secret' key which is used for signature generation.
- @note Make sure that you enabled "Access Manager" on https://admin.pubnub.com.
- @note You can pass a value less than \c 0 as \a 'accessPeriodDuration' argument to use default value (default value is 
-       \b 1440 minutes).
+ @note    To be able use this API, you should provide \a 'secret' key which is used for signature
+          generation.
+ @note    Make sure that you enabled "Access Manager" on https://admin.pubnub.com.
+ @note    You can pass a value less than \c 0 as \a 'accessPeriodDuration' argument to use 
+          default value (default value is \b 1440 minutes).
+ @warning As soon as "Access Manager" will be enabled, all \b PubNub clients won't be able to
+          subscribe / publish to any channels till the moment, when access rights will be 
+          configured.
  
  @since 3.7.0
  */
@@ -8050,9 +8087,6 @@
  kPNClientAccessRightsAuditDidFailNotification.
 
  @note Make sure that you enabled "Access Manager" on https://admin.pubnub.com.
-
- @warning As soon as "Access Manager" will be enabled, all \b PubNub clients won't be able to subscribe / publish to
- any channels till the moment, when access rights will be configured.
 
  @since 3.7.0
  */
@@ -8145,9 +8179,6 @@
  \a -localizedDescription / \a -localizedFailureReason and \a -localizedRecoverySuggestion to get human readable description for error).
 
  @note Make sure that you enabled "Access Manager" on https://admin.pubnub.com.
-
- @warning As soon as "Access Manager" will be enabled, all \b PubNub clients won't be able to subscribe / publish to
- any channels till the moment, when access rights will be configured.
 
  @since 3.7.0
  */
@@ -8650,18 +8681,21 @@
          // access level for which audition has been requested.
      }
  }];
+ @endcode
 
  Also observation can be done using \b NSNotificationCenter to observe this notifications: 
  kPNClientAccessRightsAuditDidCompleteNotification, kPNClientAccessRightsAuditDidFailNotification.
 
  @param channelObjects List of objects (which conforms to \b PNChannelProtocol data feed object protocol) like 
-                       \b PNChannel, \b PNChannelGroup or \b PNChannelGroupNamespace for which \b PubNub client should 
-                       retrieve access rights information.
+                       \b PNChannel, \b PNChannelGroup, \b PNChannelGroupNamespace or \b PNObject
+                       for which \b PubNub client should retrieve access rights information.
 
- @note Event if you never configured access rights for \c channel it's value will be calculated and returned in response.
- @note Make sure that you enabled "Access Manager" on https://admin.pubnub.com.
- @warning As soon as "Access Manager" will be enabled, all \b PubNub clients won't be able to subscribe / publish to
- any channels till the moment, when access rights will be configured.
+ @note    Event if you never configured access rights for \c channel it's value will be 
+          calculated and returned in response.
+ @note    Make sure that you enabled "Access Manager" on https://admin.pubnub.com.
+ @warning Don't mix \b PNObject with other data feed objects in this API. To change access rights
+          for remote data objects use it separately from changing access rights on channels, 
+          groups and namespaces.
  */
 - (void)auditAccessRightsFor:(NSArray *)channelObjects;
 
@@ -8844,13 +8878,14 @@
          // 'error.associatedObject' contains PNAccessRightOptions instance which describes access level for which audition has been requested.
      }
  }];
+ @endcode
 
  Also observation can be done using \b NSNotificationCenter to observe this notifications: kPNClientAccessRightsAuditDidCompleteNotification,
  kPNClientAccessRightsAuditDidFailNotification.
 
  @param channelObjects List of objects (which conforms to \b PNChannelProtocol data feed object protocol) like 
-                       \b PNChannel, \b PNChannelGroup or \b PNChannelGroupNamespace for which \b PubNub client should 
-                       retrieve access rights information.
+                       \b PNChannel, \b PNChannelGroup, \b PNChannelGroupNamespace or \b PNObject
+                       for which \b PubNub client should retrieve access rights information.
  @param handlerBlock   The block which will be called by \b PubNub client when one of success or error events will be 
                        received. The block takes two arguments: \c collection - \b PNAccessRightsCollection instance 
                        which hold set of \b PNAccessRightsInformation instances to describe \a 'user' access rights for 
@@ -8859,11 +8894,12 @@
                        header file and use \a -localizedDescription / \a -localizedFailureReason and 
                        \a -localizedRecoverySuggestion to get human readable description for error).
 
- @note Event if you never configured access rights for \c channel or one of clients from \c clientsAuthorizationKeys
- it's value will be calculated and returned in response.
- @note Make sure that you enabled "Access Manager" on https://admin.pubnub.com.
- @warning As soon as "Access Manager" will be enabled, all \b PubNub clients won't be able to subscribe / publish to
- any channels till the moment, when access rights will be configured.
+ @note    Event if you never configured access rights for \c channel or one of clients from 
+          \c clientsAuthorizationKeys it's value will be calculated and returned in response.
+ @note    Make sure that you enabled "Access Manager" on https://admin.pubnub.com.
+ @warning Don't mix \b PNObject with other data feed objects in this API. To change access rights
+          for remote data objects use it separately from changing access rights on channels, 
+          groups and namespaces.
  */
 - (void) auditAccessRightsFor:(NSArray *)channelObjects
   withCompletionHandlingBlock:(PNClientChannelAccessRightsAuditBlock)handlerBlock;
@@ -9002,20 +9038,21 @@
          // 'error.associatedObject' contains PNAccessRightOptions instance which describes access level for which audition has been requested.
      }
  }];
+ @endcode
 
  Also observation can be done using \b NSNotificationCenter to observe this notifications: 
  kPNClientAccessRightsAuditDidCompleteNotification, kPNClientAccessRightsAuditDidFailNotification.
 
  @param object                   Object (which conforms to \b PNChannelProtocol data feed object protocol) like 
-                                 \b PNChannel, \b PNChannelGroup or \b PNChannelGroupNamespace for which \b PubNub 
-                                 client should retrieve access rights information.
- @param clientsAuthorizationKeys Array of \a NSString instances each of which represent client authorization key.
+                                 \b PNChannel, \b PNChannelGroup, \b PNChannelGroupNamespace or
+                                 \b PNObject for which \b PubNub client should retrieve access 
+                                 rights information.
+ @param clientsAuthorizationKeys Array of \a NSString instances each of which represent client 
+                                 authorization key.
 
- @note Event if you never configured access rights for \c channel or one of clients from \c clientsAuthorizationKeys
- it's value will be calculated and returned in response.
- @note Make sure that you enabled "Access Manager" on https://admin.pubnub.com.
- @warning As soon as "Access Manager" will be enabled, all \b PubNub clients won't be able to subscribe / publish to
- any channels till the moment, when access rights will be configured.
+ @note    Event if you never configured access rights for \c channel or one of clients from 
+          \c clientsAuthorizationKeys it's value will be calculated and returned in response.
+ @note    Make sure that you enabled "Access Manager" on https://admin.pubnub.com.
  */
 - (void)auditAccessRightsFor:(id <PNChannelProtocol>)object clients:(NSArray *)clientsAuthorizationKeys;
 
@@ -9207,8 +9244,9 @@
  kPNClientAccessRightsAuditDidFailNotification.
 
  @param object                   Object (which conforms to \b PNChannelProtocol data feed object protocol) like 
-                                 \b PNChannel, \b PNChannelGroup or \b PNChannelGroupNamespace for which \b PubNub 
-                                 client should retrieve access rights information.
+                                 \b PNChannel, \b PNChannelGroup, \b PNChannelGroupNamespace or
+                                 \b PNObject for which \b PubNub client should retrieve access 
+                                 rights information.
  @param clientsAuthorizationKeys Array of \a NSString instances each of which represent client authorization key.
  @param handlerBlock             The block which will be called by \b PubNub client when one of success or error events
                                  will be received. The block takes two arguments: \c collection - 
@@ -9219,11 +9257,10 @@
                                  \a -localizedDescription / \a -localizedFailureReason and
                                  \a -localizedRecoverySuggestion to get human readable description for error).
 
- @note Event if you never configured access rights for \c channel or one of clients from \c clientsAuthorizationKeys
- it's value will be calculated and returned in response.
+ @note Event if you never configured access rights for \c channel or one of clients from 
+       \c clientsAuthorizationKeys it's value will be calculated and returned in response.
  @note Make sure that you enabled "Access Manager" on https://admin.pubnub.com.
- @warning As soon as "Access Manager" will be enabled, all \b PubNub clients won't be able to subscribe / publish to
- any channels till the moment, when access rights will be configured.
+
  */
 - (void)auditAccessRightsFor:(id <PNChannelProtocol>)object clients:(NSArray *)clientsAuthorizationKeys
         withCompletionHandlingBlock:(PNClientChannelAccessRightsAuditBlock)handlerBlock;

@@ -17,7 +17,7 @@
 #import <Security/SecureTransport.h>
 #import "PNConnection+Protected.h"
 #import "PNResponseDeserialize.h"
-#import "NSObject+PNAdditions.h"
+#import "NSObject+PNPrivateAdditions.h"
 #import "PNLogger+Protected.h"
 #import "PNResponseProtocol.h"
 #import "PubNub+Protected.h"

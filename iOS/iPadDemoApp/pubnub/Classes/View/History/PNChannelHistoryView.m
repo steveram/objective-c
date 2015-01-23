@@ -8,7 +8,7 @@
 
 #import "PNChannelHistoryView.h"
 #import "NSString+PNLocalization.h"
-#import "NSObject+PNAddition.h"
+#import "NSObject+PNDemoAddition.h"
 #import "UIView+PNAddition.h"
 #import "PNHistoryHelper.h"
 #import "PNConsoleView.h"

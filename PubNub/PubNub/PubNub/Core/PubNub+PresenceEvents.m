@@ -7,7 +7,7 @@
  */
 
 #import "PubNub+PresenceEvents.h"
-#import "NSObject+PNAdditions.h"
+#import "NSObject+PNPrivateAdditions.h"
 #import "PNMessagingChannel.h"
 #import "PubNub+Protected.h"
 #import "PNNotifications.h"
@@ -520,50 +520,63 @@
     
     void(^handlerBlock)(BOOL) = ^(BOOL shouldNotify){
         
-        [PNLogger logGeneralMessageFrom:self withParametersFromBlock:^NSArray *{
-            
-            return @[PNLoggerSymbols.api.enabledPresenceObservation, (channelObjects ? channelObjects : [NSNull null]),
-                     [self humanReadableStateFrom:self.state]];
-        }];
+        [self pn_dispatchBlock:^{
+        
+            [PNLogger logGeneralMessageFrom:self withParametersFromBlock:^NSArray *{
+                
+                return @[PNLoggerSymbols.api.enabledPresenceObservation, (channelObjects ? channelObjects : [NSNull null]),
+                         [self humanReadableStateFrom:self.state]];
+            }];
 
-        if (shouldNotify) {
+            if (shouldNotify) {
 
-            // Check whether delegate can handle new message arrival or not
-            if ([self.clientDelegate respondsToSelector:@selector(pubnubClient:didEnablePresenceObservationOn:)]) {
+                // Check whether delegate can handle new message arrival or not
+                if ([self.clientDelegate respondsToSelector:@selector(pubnubClient:didEnablePresenceObservationOn:)]) {
 
-                dispatch_async(dispatch_get_main_queue(), ^{
+                    dispatch_async(dispatch_get_main_queue(), ^{
 
-                    [self.clientDelegate performSelector:@selector(pubnubClient:didEnablePresenceObservationOn:)
-                                              withObject:self withObject:channelObjects];
-                });
+                        [self.clientDelegate performSelector:@selector(pubnubClient:didEnablePresenceObservationOn:)
+                                                  withObject:self withObject:channelObjects];
+                    });
+                }
+
+                [self sendNotification:kPNClientPresenceEnablingDidCompleteNotification withObject:channelObjects];
             }
-
-            [self sendNotification:kPNClientPresenceEnablingDidCompleteNotification withObject:channelObjects];
-        }
+        }];
     };
     
     [self checkShouldChannelNotifyAboutEvent:messagingChannel withBlock:^(BOOL shouldNotify) {
         
-        if (!isSequenced) {
-            
-            [self handleLockingOperationBlockCompletion:^{
+        [self.dataSynchronization hasActiveSynchronizationTasks:^(BOOL hasActiveTask) {
+        
+            if (!isSequenced && !hasActiveTask) {
+                
+                [self handleLockingOperationBlockCompletion:^{
+                    
+                    handlerBlock(shouldNotify);
+                }
+                                            shouldStartNext:YES];
+            }
+            else {
                 
                 handlerBlock(shouldNotify);
             }
-                                        shouldStartNext:YES];
-        }
-        else {
-            
-            handlerBlock(shouldNotify);
-        }
+        }];
     }];
 }
 
 - (void)messagingChannel:(PNMessagingChannel *)messagingChannel didFailPresenceEnablingOn:(NSArray *)channelObjects
                withError:(PNError *)error sequenced:(BOOL)isSequenced {
     
-    error.associatedObject = channelObjects;
-    [self notifyDelegateAboutPresenceEnablingFailWithError:error completeLockingOperation:!isSequenced];
+    [self pn_dispatchBlock:^{
+        
+        [self.dataSynchronization hasActiveSynchronizationTasks:^(BOOL hasActiveTask) {
+    
+            error.associatedObject = channelObjects;
+            [self notifyDelegateAboutPresenceEnablingFailWithError:error
+                                          completeLockingOperation:(!isSequenced && !hasActiveTask)];
+        }];
+    }];
 }
 
 - (void)messagingChannel:(PNMessagingChannel *)messagingChannel willDisablePresenceObservationOn:(NSArray *)channelObjects
@@ -589,50 +602,63 @@
     
     void(^handlerBlock)(BOOL) = ^(BOOL shouldNotify){
         
-        [PNLogger logGeneralMessageFrom:self withParametersFromBlock:^NSArray *{
-            
-            return @[PNLoggerSymbols.api.disabledPresenceObservation, (channelObjects ? channelObjects : [NSNull null]),
-                     [self humanReadableStateFrom:self.state]];
-        }];
+        [self pn_dispatchBlock:^{
+        
+            [PNLogger logGeneralMessageFrom:self withParametersFromBlock:^NSArray *{
+                
+                return @[PNLoggerSymbols.api.disabledPresenceObservation, (channelObjects ? channelObjects : [NSNull null]),
+                         [self humanReadableStateFrom:self.state]];
+            }];
 
-        if (shouldNotify) {
+            if (shouldNotify) {
 
-            // Check whether delegate can handle new message arrival or not
-            if ([self.clientDelegate respondsToSelector:@selector(pubnubClient:didDisablePresenceObservationOn:)]) {
+                // Check whether delegate can handle new message arrival or not
+                if ([self.clientDelegate respondsToSelector:@selector(pubnubClient:didDisablePresenceObservationOn:)]) {
 
-                dispatch_async(dispatch_get_main_queue(), ^{
+                    dispatch_async(dispatch_get_main_queue(), ^{
 
-                    [self.clientDelegate performSelector:@selector(pubnubClient:didDisablePresenceObservationOn:)
-                                              withObject:self withObject:channelObjects];
-                });
+                        [self.clientDelegate performSelector:@selector(pubnubClient:didDisablePresenceObservationOn:)
+                                                  withObject:self withObject:channelObjects];
+                    });
+                }
+
+                [self sendNotification:kPNClientPresenceDisablingDidCompleteNotification withObject:channelObjects];
             }
-
-            [self sendNotification:kPNClientPresenceDisablingDidCompleteNotification withObject:channelObjects];
-        }
+        }];
     };
     
     [self checkShouldChannelNotifyAboutEvent:messagingChannel withBlock:^(BOOL shouldNotify) {
         
-        if (!isSequenced) {
+        [self.dataSynchronization hasActiveSynchronizationTasks:^(BOOL hasActiveTask) {
             
-            [self handleLockingOperationBlockCompletion:^{
+            if (!isSequenced && !hasActiveTask) {
+            
+                [self handleLockingOperationBlockCompletion:^{
+                    
+                    handlerBlock(shouldNotify);
+                }
+                                            shouldStartNext:YES];
+            }
+            else {
                 
                 handlerBlock(shouldNotify);
             }
-                                        shouldStartNext:YES];
-        }
-        else {
-            
-            handlerBlock(shouldNotify);
-        }
+        }];
     }];
 }
 
 - (void)messagingChannel:(PNMessagingChannel *)messagingChannel didFailPresenceDisablingOn:(NSArray *)channelObjects
                withError:(PNError *)error sequenced:(BOOL)isSequenced {
     
-    error.associatedObject = channelObjects;
-    [self notifyDelegateAboutPresenceDisablingFailWithError:error completeLockingOperation:!isSequenced];
+    [self pn_dispatchBlock:^{
+        
+        [self.dataSynchronization hasActiveSynchronizationTasks:^(BOOL hasActiveTask) {
+    
+            error.associatedObject = channelObjects;
+            [self notifyDelegateAboutPresenceDisablingFailWithError:error
+                                           completeLockingOperation:(!isSequenced && !hasActiveTask)];
+        }];
+    }];
 }
 
 - (void)messagingChannel:(PNMessagingChannel *)messagingChannel didReceiveEvent:(PNPresenceEvent *)event {

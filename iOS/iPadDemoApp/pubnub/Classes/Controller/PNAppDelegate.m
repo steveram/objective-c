@@ -312,6 +312,110 @@
           ((PNClient *)error.associatedObject).identifier, ((PNClient *)error.associatedObject).channel, error);
 }
 
+- (void)pubnubClient:(PubNub *)client didStartObjectSynchronization:(PNObject *)object
+ withDataAtLocations:(NSArray *)locations {
+    
+    NSLog(@"PubNub client successfully synchronized with remote object %@ at: %@",
+          object.identifier, [locations componentsJoinedByString:@", "]);
+}
+
+- (void)   pubnubClient:(PubNub *)client
+  objectSynchronization:(PNObjectInformation *)objectInformation
+  startDidFailWithError:(PNError *)error {
+    
+    NSLog(@"PubNub client did fail synchronization with remote object %@ at: %@\nbecause of "
+          "error: %@", objectInformation.identifier,
+          [objectInformation.dataLocations componentsJoinedByString:@", "], error);
+}
+
+- (void)          pubnubClient:(PubNub *)client
+  didStopObjectSynchronization:(PNObjectInformation *)objectInformation {
+    
+    NSLog(@"PubNub client successfully stopped remote object %@ synchronization with data at: %@",
+          objectInformation.identifier,
+          [objectInformation.dataLocations componentsJoinedByString:@", "]);
+}
+
+- (void)  pubnubClient:(PubNub *)client
+ objectSynchronization:(PNObjectInformation *)objectInformation
+  stopDidFailWithError:(PNError *)error {
+    
+    NSLog(@"PubNub client did fail to stop remote object %@ synchronization with data at: %@"
+          "\nbecause of error: %@", objectInformation.identifier,
+          [objectInformation.dataLocations componentsJoinedByString:@", "], error);
+}
+
+- (void)pubnubClient:(PubNub *)client didReceiveModificationEventFor:(PNObject *)object
+         atLocations:(NSArray *)dataLocationKeyPaths {
+    
+    NSLog(@"PubNub client received remote object data update events for %@ at: %@",
+          object.identifier, [dataLocationKeyPaths componentsJoinedByString:@", "]);
+}
+
+- (void)      pubnubClient:(PubNub *)client
+  didFetchRemoteObjectData:(PNObjectInformation *)objectInformation {
+    
+    NSLog(@"PubNub client successfully fetched remote object %@ data at %@: %@",
+          objectInformation.identifier, [objectInformation.dataLocations lastObject],
+          objectInformation.data);
+}
+
+- (void)   pubnubClient:(PubNub *)client remoteObject:(PNObjectInformation *)objectInformation
+  fetchDidFailWithError:(PNError *)error {
+    
+    NSLog(@"PubNub client did fail to fetche remote object %@ data at %@ because of error: %@",
+          objectInformation.identifier, [objectInformation.dataLocations lastObject],
+          error);
+}
+
+- (void)       pubnubClient:(PubNub *)client
+  didPushDataToRemoteObject:(PNObjectInformation *)objectInformation {
+    
+    NSLog(@"PubNub client successfully updated remote object %@ data at %@ with: %@",
+          objectInformation.identifier, [objectInformation.dataLocations lastObject],
+          objectInformation.data);
+}
+
+- (void)      pubnubClient:(PubNub *)client remoteObject:(PNObjectInformation *)objectInformation
+  dataPushDidFailWithError:(PNError *)error {
+    
+    NSLog(@"PubNub client did fail to update remote object %@ data at %@ with: %@\n because of"
+          " error: %@", objectInformation.identifier, [objectInformation.dataLocations lastObject],
+          objectInformation.data, error);
+}
+
+- (void)        pubnubClient:(PubNub *)client
+  didReplaceRemoteObjectData:(PNObjectInformation *)objectInformation {
+    
+    NSLog(@"PubNub client successfully replaced remote object %@ data at %@ with: %@",
+          objectInformation.identifier, [objectInformation.dataLocations lastObject],
+          objectInformation.data);
+}
+
+- (void)         pubnubClient:(PubNub *)client
+                 remoteObject:(PNObjectInformation *)objectInformation
+  dataReplaceDidFailWithError:(PNError *)error {
+    
+    NSLog(@"PubNub client did fail to replace remote object %@ data at %@ with: %@\n because of"
+          " error: %@", objectInformation.identifier, [objectInformation.dataLocations lastObject],
+          objectInformation.data, error);
+}
+
+- (void)       pubnubClient:(PubNub *)client
+  didRemoveRemoteObjectData:(PNObjectInformation *)objectInformation {
+    
+    NSLog(@"PubNub client successfully removed remote object %@ data at %@",
+          objectInformation.identifier, [objectInformation.dataLocations lastObject]);
+}
+
+- (void)        pubnubClient:(PubNub *)client
+                remoteObject:(PNObjectInformation *)objectInformation
+  dataRemoveDidFailWithError:(PNError *)error {
+    
+    NSLog(@"PubNub client did fail to remove remote object %@ data at %@ because of error: %@",
+          objectInformation.identifier, [objectInformation.dataLocations lastObject], error);
+}
+
 - (void)pubnubClient:(PubNub *)client didSubscribeOn:(NSArray *)channelObjects {
 
     NSLog(@"PubNub client successfully subscribed on channels: %@", channelObjects);

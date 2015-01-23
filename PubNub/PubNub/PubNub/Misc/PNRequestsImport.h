@@ -14,8 +14,10 @@
 #ifndef PNRequestsImport_h
 #define PNRequestsImport_h
 
+#import "PNRemoteObjectDataModificationRequest+Protected.h"
 #import "PNChannelsListUpdateForChannelGroupRequest.h"
 #import "PNPushNotificationsEnabledChannelsRequest.h"
+#import "PNRemoteObjectDataFetchRequest+Protected.h"
 #import "PNPushNotificationsStateChangeRequest.h"
 #import "PNChannelGroupNamespaceRemoveRequest.h"
 #import "PNPushNotificationsRemoveRequest.h"

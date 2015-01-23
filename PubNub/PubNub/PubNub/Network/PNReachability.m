@@ -14,7 +14,7 @@
 
 #import "PNReachability.h"
 #import <SystemConfiguration/SystemConfiguration.h>
-#import "NSObject+PNAdditions.h"
+#import "NSObject+PNPrivateAdditions.h"
 #import "PNLogger+Protected.h"
 #import "PNResponseParser.h"
 #import "PubNub+Protected.h"

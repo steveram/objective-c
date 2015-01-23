@@ -15,7 +15,7 @@
 #import "PNChannelsForGroupRequest.h"
 #import "PNChannelGroup+Protected.h"
 #import "PNChannelGroupsRequest.h"
-#import "NSObject+PNAdditions.h"
+#import "NSObject+PNPrivateAdditions.h"
 #import "PNServiceChannel.h"
 #import "PubNub+Protected.h"
 #import "PNNotifications.h"

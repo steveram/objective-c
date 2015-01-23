@@ -11,7 +11,7 @@
 #import "PNObjectInformationView.h"
 #import "NSString+PNLocalization.h"
 #import "PNChannelRegistryHelper.h"
-#import "NSObject+PNAddition.h"
+#import "NSObject+PNDemoAddition.h"
 #import "UIView+PNAddition.h"
 #import "PNObjectCell.h"
 #import "PNTableView.h"

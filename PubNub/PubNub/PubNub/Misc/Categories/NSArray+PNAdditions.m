@@ -7,6 +7,7 @@
 //
 
 #import "NSArray+PNAdditions.h"
+#import "NSObject+PNAdditions.h"
 
 
 // ARC check
@@ -37,8 +38,45 @@
     return array;
 }
 
++ (BOOL)pn_isEntryIndexString:(NSString *)string {
+    
+    // Lighweight check to ensure that string at least start with char specific only to time
+    // tokens.
+    BOOL isEntryIndexString = [string hasPrefix:@"-"];
+    if (isEntryIndexString) {
+        
+        
+        isEntryIndexString = ([string rangeOfString:@"^-([A-Za-z]*)?!([0-9]{17})"
+                                            options:NSRegularExpressionSearch].location != NSNotFound);
+    }
+    
+    
+    return isEntryIndexString;
+}
+
 
 #pragma mark - Instance methods
+
+- (id)pn_objectAtIndex:(NSString *)pnIndex {
+    
+    __block id storedObject = nil;
+    if (pnIndex) {
+
+        [[self copy] enumerateObjectsUsingBlock:^(id object, NSUInteger objectIdx,
+                BOOL *objectEnumeratorStop) {
+
+            if ([[object pn_index] isEqualToString:pnIndex]) {
+
+                storedObject = object;
+            }
+
+            *objectEnumeratorStop = (storedObject != nil);
+        }];
+    }
+    
+    
+    return storedObject;
+}
 
 - (NSString *)logDescription {
     

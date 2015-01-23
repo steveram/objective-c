@@ -12,9 +12,10 @@
 //
 
 #import "PNObservationCenter+Protected.h"
+#import "PNObjectInformation+Protected.h"
+#import "NSObject+PNPrivateAdditions.h"
 #import "PNMessagesHistory+Protected.h"
 #import "PNChannelGroupChange.h"
-#import "NSObject+PNAdditions.h"
 #import "PNHereNow+Protected.h"
 #import "PNLogger+Protected.h"
 #import "PNError+Protected.h"
@@ -25,6 +26,7 @@
 #import "PNChannel.h"
 #import "PNClient.h"
 #import "PNHelper.h"
+#import "PNObject.h"
 #import "PNMacro.h"
 #import "PubNub.h"
 
@@ -48,6 +50,13 @@ struct PNObservationEventsStruct {
     __unsafe_unretained NSString *clientConnectionStateChange;
     __unsafe_unretained NSString *clientMetadataRetrieval;
     __unsafe_unretained NSString *clientMetadataUpdate;
+    __unsafe_unretained NSString *remoteObjectSynchronizationStart;
+    __unsafe_unretained NSString *remoteObjectSynchronizationStop;
+    __unsafe_unretained NSString *remoteObjectDataFetch;
+    __unsafe_unretained NSString *remoteObjectDataPush;
+    __unsafe_unretained NSString *remoteObjectDataReplace;
+    __unsafe_unretained NSString *remoteObjectDataRemove;
+    __unsafe_unretained NSString *remoteObjectDataModification;
     __unsafe_unretained NSString *clientChannelGroupsRequest;
     __unsafe_unretained NSString *clientChannelGroupNamespacesRequest;
     __unsafe_unretained NSString *clientChannelGroupNamespaceRemoval;
@@ -85,6 +94,13 @@ static struct PNObservationEventsStruct PNObservationEvents = {
     .clientConnectionStateChange = @"clientConnectionStateChangeEvent",
     .clientMetadataRetrieval = @"clientMetadataRetrieveEvent",
     .clientMetadataUpdate = @"clientMedataUpdateEvent",
+    .remoteObjectSynchronizationStart = @"remoteObjectSynchronizationStart",
+    .remoteObjectSynchronizationStop = @"remoteObjectSynchronizationStop",
+    .remoteObjectDataFetch = @"remoteObjectDataFetch",
+    .remoteObjectDataPush = @"remoteObjectDataPush",
+    .remoteObjectDataReplace = @"remoteObjectDataReplace",
+    .remoteObjectDataRemove = @"remoteObjectDataRemove",
+    .remoteObjectDataModification = @"remoteObjectDataModification",
     .clientChannelGroupsRequest = @"clientChannelGroupsRequest",
     .clientChannelGroupNamespacesRequest = @"clientChannelGroupNamespacesRequest",
     .clientChannelGroupNamespaceRemoval = @"clientChannelGroupNamespaceRemoval",
@@ -165,6 +181,11 @@ static struct PNObservationObserverDataStruct PNObservationObserverData = {
 - (void)handleClientConnectionStateChange:(NSNotification *)notification;
 - (void)handleClientMetadataRetrieveProcess:(NSNotification *)notification;
 - (void)handleClientMetadataUpdateProcess:(NSNotification *)notification;
+- (void)handleClientSynchronizationStartProcess:(NSNotification *)notification;
+- (void)handleClientSynchronizationStopProcess:(NSNotification *)notification;
+- (void)handleClientRemoteObjectFetchProcess:(NSNotification *)notification;
+- (void)handleClientRemoteObjectModificationProcess:(NSNotification *)notification;
+- (void)handleClientRemoteObjectModificationEvent:(NSNotification *)notification;
 - (void)handleClientSubscriptionProcess:(NSNotification *)notification;
 - (void)handleClientChannelGroupsRequestProcess:(NSNotification *)notification;
 - (void)handleClientChannelGroupNamespacesRequestProcess:(NSNotification *)notification;
@@ -266,6 +287,36 @@ static struct PNObservationObserverDataStruct PNObservationObserverData = {
                                    name:kPNClientDidUpdateClientStateNotification object:self.defaultObserver];
         [notificationCenter addObserver:self selector:@selector(handleClientMetadataUpdateProcess:)
                                    name:kPNClientStateUpdateDidFailWithErrorNotification object:self.defaultObserver];
+
+        
+        [notificationCenter addObserver:self selector:@selector(handleClientSynchronizationStartProcess:)
+                                   name:kPNObjectSynchronizationDidStartNotification object:self.defaultObserver];
+        [notificationCenter addObserver:self selector:@selector(handleClientSynchronizationStartProcess:)
+                                   name:kPNObjectSynchronizationStartDidFailWithErrorNotification object:self.defaultObserver];
+        [notificationCenter addObserver:self selector:@selector(handleClientSynchronizationStopProcess:)
+                                   name:kPNObjectSynchronizationDidStopNotification object:self.defaultObserver];
+        [notificationCenter addObserver:self selector:@selector(handleClientSynchronizationStopProcess:)
+                                   name:kPNObjectSynchronizationStopDidFailWithErrorNotification object:self.defaultObserver];
+        [notificationCenter addObserver:self selector:@selector(handleClientRemoteObjectFetchProcess:)
+                                   name:kPNClientDidFetchObjectDataNotification object:self.defaultObserver];
+        [notificationCenter addObserver:self selector:@selector(handleClientRemoteObjectFetchProcess:)
+                                   name:kPNClientObjectDataFetchDidFailWithErrorNotification object:self.defaultObserver];
+        [notificationCenter addObserver:self selector:@selector(handleClientRemoteObjectModificationProcess:)
+                                   name:kPNClientDidPushDataToObjectNotification object:self.defaultObserver];
+        [notificationCenter addObserver:self selector:@selector(handleClientRemoteObjectModificationProcess:)
+                                   name:kPNClientDataPushToObjectDidFailWithErrorNotification object:self.defaultObserver];
+        [notificationCenter addObserver:self selector:@selector(handleClientRemoteObjectModificationProcess:)
+                                   name:kPNClientDidReplaceObjectDataNotification object:self.defaultObserver];
+        [notificationCenter addObserver:self selector:@selector(handleClientRemoteObjectModificationProcess:)
+                                   name:kPNClientObjectDataReplaceDidFailWithErrorNotification object:self.defaultObserver];
+        [notificationCenter addObserver:self selector:@selector(handleClientRemoteObjectModificationProcess:)
+                                   name:kPNClientDidRemoveObjectDataNotification object:self.defaultObserver];
+        [notificationCenter addObserver:self selector:@selector(handleClientRemoteObjectModificationProcess:)
+                                   name:kPNClientObjectDataRemoveDidFailWithErrorNotification object:self.defaultObserver];
+
+        [notificationCenter addObserver:self selector:@selector(handleClientRemoteObjectModificationEvent:)
+                                   name:kPNObjectModificationEventNotification object:self.defaultObserver];
+
         
         // Handle channel registry events
         [notificationCenter addObserver:self selector:@selector(handleClientChannelGroupsRequestProcess:)
@@ -583,6 +634,172 @@ static struct PNObservationObserverDataStruct PNObservationObserverData = {
 - (void)removeClientAsStateUpdateObserver {
 
     [self removeObserver:self.defaultObserver forEvent:PNObservationEvents.clientMetadataUpdate oneTimeEvent:YES];
+}
+
+
+#pragma mark - Data synchronization observation
+
+- (void)addRemoteObjectSynchronizationStartObserver:(id)observer
+                                  withCallbackBlock:(PNRemoteObjectSynchronizationStartHandlerBlock)callbackBlock {
+    
+    [self addObserver:observer forEvent:PNObservationEvents.remoteObjectSynchronizationStart
+         oneTimeEvent:NO withBlock:callbackBlock];
+}
+
+- (void)removeRemoteObjectSynchronizationStartObserver:(id)observer {
+    
+    [self removeObserver:observer
+                forEvent:PNObservationEvents.remoteObjectSynchronizationStart oneTimeEvent:NO];
+}
+
+- (void)addRemoteObjectSynchronizationStopObserver:(id)observer
+                                 withCallbackBlock:(PNRemoteObjectSynchronizationStopHandlerBlock)callbackBlock {
+    
+    [self addObserver:observer forEvent:PNObservationEvents.remoteObjectSynchronizationStop
+         oneTimeEvent:NO withBlock:callbackBlock];
+}
+
+- (void)removeRemoteObjectSynchronizationStopObserver:(id)observer {
+    
+    [self removeObserver:observer
+                forEvent:PNObservationEvents.remoteObjectSynchronizationStop oneTimeEvent:NO];
+}
+
+- (void)addClientAsRemoteObjectSynchronizationStartObserverWithCallbackBlock:(PNRemoteObjectSynchronizationStartHandlerBlock)callbackBlock {
+    
+    [self addObserver:self.defaultObserver forEvent:PNObservationEvents.remoteObjectSynchronizationStart
+         oneTimeEvent:YES withBlock:callbackBlock];
+}
+
+- (void)removeClientAsRemoteObjectSynchronizationStartObserver {
+    
+    [self removeObserver:self.defaultObserver
+                forEvent:PNObservationEvents.remoteObjectSynchronizationStart oneTimeEvent:YES];
+}
+
+- (void)addClientAsRemoteObjectSynchronizationStopObserverWithCallbackBlock:(PNRemoteObjectSynchronizationStopHandlerBlock)callbackBlock {
+    
+    [self addObserver:self.defaultObserver forEvent:PNObservationEvents.remoteObjectSynchronizationStop
+         oneTimeEvent:YES withBlock:callbackBlock];
+}
+
+- (void)removeClientAsRemoteObjectSynchronizationStopObserver {
+    
+    [self removeObserver:self.defaultObserver
+                forEvent:PNObservationEvents.remoteObjectSynchronizationStop oneTimeEvent:YES];
+}
+
+- (void)addRemoteObjectModificationEventObserver:(id)observer
+                               withCallbackBlock:(PNRemoteObjectModificationEventHandlerBlock)callbackBlock {
+
+    [self addObserver:observer forEvent:PNObservationEvents.remoteObjectDataModification
+         oneTimeEvent:NO withBlock:callbackBlock];
+}
+
+- (void)removeRemoteObjectModificationEventObserver:(id)observer {
+
+    [self removeObserver:observer forEvent:PNObservationEvents.remoteObjectDataModification
+            oneTimeEvent:NO];
+}
+
+- (void)addRemoteObjectDataFetchObserver:(id)observer
+                       withCallBackBlock:(PNRemoteObjectDataFetchHandlerBlock)callbackBlock {
+    
+    [self addObserver:observer forEvent:PNObservationEvents.remoteObjectDataFetch
+         oneTimeEvent:NO withBlock:callbackBlock];
+}
+
+- (void)removeRemoteObjectDataFetchObserver:(id)observer {
+    
+    [self removeObserver:observer forEvent:PNObservationEvents.remoteObjectDataFetch
+            oneTimeEvent:NO];
+}
+
+- (void)addClientAsRemoteObjectDataFetchObserverWithCallBackBlock:(PNRemoteObjectDataFetchHandlerBlock)callbackBlock {
+    
+    [self addObserver:self.defaultObserver forEvent:PNObservationEvents.remoteObjectDataFetch
+         oneTimeEvent:YES withBlock:callbackBlock];
+}
+
+- (void)removeClientAsRemoteObjectDataFetchObserver {
+    
+    [self removeObserver:self.defaultObserver forEvent:PNObservationEvents.remoteObjectDataFetch
+            oneTimeEvent:YES];
+}
+
+- (void)addRemoteObjectDataPushObserver:(id)observer
+                      withCallBackBlock:(PNRemoteObjectDataPushHandlerBlock)callbackBlock {
+    
+    [self addObserver:observer forEvent:PNObservationEvents.remoteObjectDataPush
+         oneTimeEvent:NO withBlock:callbackBlock];
+}
+
+- (void)removeRemoteObjectDataPushObserver:(id)observer {
+    
+    [self removeObserver:observer forEvent:PNObservationEvents.remoteObjectDataPush
+            oneTimeEvent:NO];
+}
+
+- (void)addClientAsRemoteObjectDataPushObserverWithCallBackBlock:(PNRemoteObjectDataPushHandlerBlock)callbackBlock {
+    
+    [self addObserver:self.defaultObserver forEvent:PNObservationEvents.remoteObjectDataPush
+         oneTimeEvent:YES withBlock:callbackBlock];
+}
+
+- (void)removeClientAsRemoteObjectDataPushObserver {
+    
+    [self removeObserver:self.defaultObserver forEvent:PNObservationEvents.remoteObjectDataPush
+            oneTimeEvent:YES];
+}
+
+- (void)addRemoteObjectDataReplaceObserver:(id)observer
+                         withCallBackBlock:(PNRemoteObjectDataReplaceHandlerBlock)callbackBlock {
+    
+    [self addObserver:observer forEvent:PNObservationEvents.remoteObjectDataReplace
+         oneTimeEvent:NO withBlock:callbackBlock];
+}
+
+- (void)removeRemoteObjectDataReplaceObserver:(id)observer {
+    
+    [self removeObserver:observer forEvent:PNObservationEvents.remoteObjectDataReplace
+            oneTimeEvent:NO];
+}
+
+- (void)addClientAsRemoteObjectDataReplaceObserverWithCallBackBlock:(PNRemoteObjectDataReplaceHandlerBlock)callbackBlock {
+    
+    [self addObserver:self.defaultObserver forEvent:PNObservationEvents.remoteObjectDataReplace
+         oneTimeEvent:YES withBlock:callbackBlock];
+}
+
+- (void)removeClientAsRemoteObjectDataReplaceObserver {
+    
+    [self removeObserver:self.defaultObserver forEvent:PNObservationEvents.remoteObjectDataReplace
+            oneTimeEvent:YES];
+}
+
+- (void)addRemoteObjectDataRemoveObserver:(id)observer
+                        withCallBackBlock:(PNRemoteObjectDataRemoveHandlerBlock)callbackBlock {
+    
+    [self addObserver:observer forEvent:PNObservationEvents.remoteObjectDataRemove
+         oneTimeEvent:NO withBlock:callbackBlock];
+}
+
+- (void)removeRemoteObjectDataRemoveObserver:(id)observer {
+    
+    [self removeObserver:observer forEvent:PNObservationEvents.remoteObjectDataRemove
+            oneTimeEvent:NO];
+}
+
+- (void)addClientAsRemoteObjectDataRemoveObserverWithCallBackBlock:(PNRemoteObjectDataRemoveHandlerBlock)callbackBlock {
+    
+    [self addObserver:self.defaultObserver forEvent:PNObservationEvents.remoteObjectDataRemove
+         oneTimeEvent:YES withBlock:callbackBlock];
+}
+
+- (void)removeClientAsRemoteObjectDataRemoveObserver {
+    
+    [self removeObserver:self.defaultObserver forEvent:PNObservationEvents.remoteObjectDataRemove
+            oneTimeEvent:YES];
 }
 
 
@@ -1540,6 +1757,210 @@ static struct PNObservationObserverDataStruct PNObservationObserverData = {
     }];
 }
 
+- (void)handleClientSynchronizationStartProcess:(NSNotification *)notification {
+    
+    PNError *error = nil;
+    PNObjectInformation *objectInformation = nil;
+    PNObject *object = nil;
+    if ([[notification name] isEqualToString:kPNObjectSynchronizationDidStartNotification]) {
+        
+        objectInformation = (PNObjectInformation *)notification.userInfo;
+        object = objectInformation.object;
+    }
+    else {
+        
+        error = (PNError *)notification.userInfo;
+        objectInformation = (PNObjectInformation *)error.associatedObject;
+    }
+    
+    // Retrieving list of observers (including one time and persistent observers)
+    [self observersForEvent:PNObservationEvents.remoteObjectSynchronizationStart withBlock:^(NSMutableArray *observers) {
+        
+        // Clean one time observers for specific event
+        [self removeOneTimeObserversForEvent:PNObservationEvents.remoteObjectSynchronizationStart];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [observers enumerateObjectsUsingBlock:^(NSMutableDictionary *observerData, NSUInteger observerDataIdx,
+                                                    BOOL *observerDataEnumeratorStop) {
+                
+                // Call handling blocks
+                PNRemoteObjectSynchronizationStartHandlerBlock block = [observerData valueForKey:PNObservationObserverData.observerCallbackBlock];
+                if (block) {
+                    
+                    block(object, objectInformation.dataLocations, error);
+                }
+            }];
+        });
+    }];
+}
+
+- (void)handleClientSynchronizationStopProcess:(NSNotification *)notification {
+    
+    PNError *error = nil;
+    PNObjectInformation *objectInformation = nil;
+    if ([[notification name] isEqualToString:kPNObjectSynchronizationDidStopNotification]) {
+        
+        objectInformation = (PNObjectInformation *)notification.userInfo;
+    }
+    else {
+        
+        error = (PNError *)notification.userInfo;
+        objectInformation = (PNObjectInformation *)error.associatedObject;
+    }
+    
+    // Retrieving list of observers (including one time and persistent observers)
+    [self observersForEvent:PNObservationEvents.remoteObjectSynchronizationStop withBlock:^(NSMutableArray *observers) {
+        
+        // Clean one time observers for specific event
+        [self removeOneTimeObserversForEvent:PNObservationEvents.remoteObjectSynchronizationStop];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [observers enumerateObjectsUsingBlock:^(NSMutableDictionary *observerData, NSUInteger observerDataIdx,
+                                                    BOOL *observerDataEnumeratorStop) {
+                
+                // Call handling blocks
+                PNRemoteObjectSynchronizationStopHandlerBlock block = [observerData valueForKey:PNObservationObserverData.observerCallbackBlock];
+                if (block) {
+                    
+                    block(objectInformation, error);
+                }
+            }];
+        });
+    }];
+}
+
+- (void)handleClientRemoteObjectFetchProcess:(NSNotification *)notification {
+    
+    PNError *error = nil;
+    PNObjectInformation *objectInformation = nil;
+    if ([[notification name] isEqualToString:kPNClientDidFetchObjectDataNotification]) {
+        
+        objectInformation = (PNObjectInformation *)notification.userInfo;
+    }
+    else {
+        
+        error = (PNError *)notification.userInfo;
+        objectInformation = (PNObjectInformation *)error.associatedObject;
+    }
+    
+    // Retrieving list of observers (including one time and persistent observers)
+    [self observersForEvent:PNObservationEvents.remoteObjectDataFetch withBlock:^(NSMutableArray *observers) {
+        
+        // Clean one time observers for specific event
+        [self removeOneTimeObserversForEvent:PNObservationEvents.remoteObjectDataFetch];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [observers enumerateObjectsUsingBlock:^(NSMutableDictionary *observerData, NSUInteger observerDataIdx,
+                                                    BOOL *observerDataEnumeratorStop) {
+                
+                // Call handling blocks
+                PNRemoteObjectDataFetchHandlerBlock block = [observerData valueForKey:PNObservationObserverData.observerCallbackBlock];
+                if (block) {
+                    
+                    block(objectInformation, error);
+                }
+            }];
+        });
+    }];
+}
+
+- (void)handleClientRemoteObjectModificationProcess:(NSNotification *)notification {
+    
+    PNError *error = nil;
+    PNObjectInformation *objectInformation = nil;
+    
+    if ([[notification name] isEqualToString:kPNClientDidPushDataToObjectNotification] ||
+        [[notification name] isEqualToString:kPNClientDidReplaceObjectDataNotification] ||
+        [[notification name] isEqualToString:kPNClientDidRemoveObjectDataNotification]) {
+        
+        objectInformation = (PNObjectInformation *)notification.userInfo;
+    }
+    else {
+        
+        error = (PNError *)notification.userInfo;
+        objectInformation = (PNObjectInformation *)error.associatedObject;
+    }
+    
+    NSString *eventType = PNObservationEvents.remoteObjectDataPush;
+    
+    if ([[notification name] isEqualToString:kPNClientDidReplaceObjectDataNotification] ||
+             [[notification name] isEqualToString:kPNClientObjectDataReplaceDidFailWithErrorNotification]) {
+        
+        eventType = PNObservationEvents.remoteObjectDataReplace;
+    }
+    else if ([[notification name] isEqualToString:kPNClientDidRemoveObjectDataNotification] ||
+             [[notification name] isEqualToString:kPNClientObjectDataRemoveDidFailWithErrorNotification]) {
+        
+        eventType = PNObservationEvents.remoteObjectDataRemove;
+    }
+    
+    // Retrieving list of observers (including one time and persistent observers)
+    [self observersForEvent:eventType withBlock:^(NSMutableArray *observers) {
+        
+        // Clean one time observers for specific event
+        [self removeOneTimeObserversForEvent:eventType];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [observers enumerateObjectsUsingBlock:^(NSMutableDictionary *observerData, NSUInteger observerDataIdx,
+                                                    BOOL *observerDataEnumeratorStop) {
+                
+                if ([eventType isEqualToString:PNObservationEvents.remoteObjectDataPush]) {
+                    
+                    // Call handling blocks
+                    PNRemoteObjectDataPushHandlerBlock block = [observerData valueForKey:PNObservationObserverData.observerCallbackBlock];
+                    if (block) {
+                        
+                        block(objectInformation, error);
+                    }
+                }
+                else if ([eventType isEqualToString:PNObservationEvents.remoteObjectDataReplace]) {
+                    
+                    // Call handling blocks
+                    PNRemoteObjectDataReplaceHandlerBlock block = [observerData valueForKey:PNObservationObserverData.observerCallbackBlock];
+                    if (block) {
+                        
+                        block(objectInformation, error);
+                    }
+                }
+                else if ([eventType isEqualToString:PNObservationEvents.remoteObjectDataRemove]) {
+                    
+                    // Call handling blocks
+                    PNRemoteObjectDataRemoveHandlerBlock block = [observerData valueForKey:PNObservationObserverData.observerCallbackBlock];
+                    if (block) {
+                        
+                        block(objectInformation, error);
+                    }
+                }
+            }];
+        });
+    }];
+}
+
+- (void)handleClientRemoteObjectModificationEvent:(NSNotification *)notification {
+
+    PNObjectInformation *objectInformation = (PNObjectInformation *)notification.userInfo;
+
+    // Retrieving list of observers (including one time and persistent observers)
+    [self observersForEvent:PNObservationEvents.remoteObjectDataModification
+                  withBlock:^(NSMutableArray *observers) {
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+
+            [observers enumerateObjectsUsingBlock:^(NSMutableDictionary *observerData,
+                                                    NSUInteger observerDataIdx,
+                                                    BOOL *observerDataEnumeratorStop) {
+
+                // Call handling blocks
+                PNRemoteObjectModificationEventHandlerBlock block = [observerData valueForKey:PNObservationObserverData.observerCallbackBlock];
+                if (block) {
+
+                    block(objectInformation.object, objectInformation.dataLocations);
+                }
+            }];
+        });
+    }];
+}
+
 - (void)handleClientSubscriptionProcess:(NSNotification *)notification {
 
     NSArray *channels = nil;
@@ -2247,6 +2668,22 @@ static struct PNObservationObserverDataStruct PNObservationObserverData = {
     [notificationCenter removeObserver:self name:kPNClientStateRetrieveDidFailWithErrorNotification object:_defaultObserver];
     [notificationCenter removeObserver:self name:kPNClientDidUpdateClientStateNotification object:_defaultObserver];
     [notificationCenter removeObserver:self name:kPNClientStateUpdateDidFailWithErrorNotification object:_defaultObserver];
+    
+    
+    [notificationCenter removeObserver:self name:kPNObjectSynchronizationDidStartNotification object:_defaultObserver];
+    [notificationCenter removeObserver:self name:kPNObjectSynchronizationStartDidFailWithErrorNotification object:_defaultObserver];
+    [notificationCenter removeObserver:self name:kPNObjectSynchronizationDidStopNotification object:_defaultObserver];
+    [notificationCenter removeObserver:self name:kPNObjectSynchronizationStopDidFailWithErrorNotification object:_defaultObserver];
+    [notificationCenter removeObserver:self name:kPNClientDidFetchObjectDataNotification object:_defaultObserver];
+    [notificationCenter removeObserver:self name:kPNClientObjectDataFetchDidFailWithErrorNotification object:_defaultObserver];
+    [notificationCenter removeObserver:self name:kPNClientDidPushDataToObjectNotification object:_defaultObserver];
+    [notificationCenter removeObserver:self name:kPNClientDataPushToObjectDidFailWithErrorNotification object:_defaultObserver];
+    [notificationCenter removeObserver:self name:kPNClientDidReplaceObjectDataNotification object:_defaultObserver];
+    [notificationCenter removeObserver:self name:kPNClientObjectDataReplaceDidFailWithErrorNotification object:_defaultObserver];
+    [notificationCenter removeObserver:self name:kPNClientDidRemoveObjectDataNotification object:_defaultObserver];
+    [notificationCenter removeObserver:self name:kPNClientObjectDataRemoveDidFailWithErrorNotification object:_defaultObserver];
+
+    [notificationCenter removeObserver:self name:kPNObjectModificationEventNotification object:_defaultObserver];
     
     [notificationCenter removeObserver:self name:kPNClientChannelGroupsRequestCompleteNotification object:_defaultObserver];
     [notificationCenter removeObserver:self name:kPNClientChannelGroupsRequestDidFailWithErrorNotification object:_defaultObserver];

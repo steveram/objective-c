@@ -10,7 +10,7 @@
 #import "PNPushNotificationsEnabledChannelsRequest.h"
 #import "PNPushNotificationsStateChangeRequest.h"
 #import "PNPushNotificationsRemoveRequest.h"
-#import "NSObject+PNAdditions.h"
+#import "NSObject+PNPrivateAdditions.h"
 #import "PNServiceChannel.h"
 #import "PubNub+Protected.h"
 #import "PNNotifications.h"

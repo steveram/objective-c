@@ -27,6 +27,7 @@
 // Make developer's life a bit easier if small information about network is required
 #import "PNNetworkHelper.h"
 
+#import "NSObject+PNAdditions.h"
 #import "NSString+PNAddition.h"
 
 #import "PNCryptoHelper.h"
@@ -36,6 +37,7 @@
 
 #import "PNChannelGroupNamespace.h"
 #import "PNChannelGroupChange.h"
+#import "PNObjectInformation.h"
 #import "PNChannelProtocol.h"
 #import "PNPresenceEvent.h"
 #import "PNChannelGroup.h"
@@ -43,10 +45,12 @@
 #import "PNChannel.h"
 #import "PNClient.h"
 #import "PNLogger.h"
+#import "PNObject.h"
 #import "PNMacro.h"
 #import "PNError.h"
 #import "PNDate.h"
 
+#import "PubNub+DataSynchronization.h"
 #import "PubNub+ChannelRegistry.h"
 #import "PubNub+PresenceEvents.h"
 #import "PubNub+Subscription.h"

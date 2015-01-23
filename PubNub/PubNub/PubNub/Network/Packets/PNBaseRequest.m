@@ -230,15 +230,27 @@
     
     NSString *HTTPMethod = @"GET";
     NSData *postBody = nil;
-    if ([self HTTPMethod] == PNRequestPOSTMethod) {
+    if ([self HTTPMethod] == PNRequestPOSTMethod || [self HTTPMethod] == PNRequestPATCHMethod ||
+        [self HTTPMethod] == PNRequestPUTMethod) {
         
         HTTPMethod = @"POST";
+        if ([self HTTPMethod] == PNRequestPATCHMethod) {
+
+            HTTPMethod = @"PATCH";
+        }
+        else if ([self HTTPMethod] == PNRequestPUTMethod) {
+
+            HTTPMethod = @"PUT";
+        }
         postBody = [self POSTBody];
         
         if ([self shouldCompressPOSTBody]) {
             
             postBody = [postBody pn_GZIPDeflate];
         }
+    }if ([self HTTPMethod] == PNRequestDELETEMethod) {
+
+        HTTPMethod = @"DELETE";
     }
     
     [plainPayload appendFormat:@"%@ %@ HTTP/1.1\r\nHost: %@\r\nAccept: */*\r\n%@",
@@ -271,9 +283,35 @@
     NSString *resourcePath = ([self respondsToSelector:@selector(debugResourcePath)] ?
                               [self performSelector:@selector(debugResourcePath)] : [self resourcePath]);
     #pragma clang diagnostic pop
+
+    NSString *HTTPMethod = @"GET";
+    switch ([self HTTPMethod] ) {
+
+        case PNRequestPOSTMethod:
+
+            HTTPMethod = @"POST";
+            break;
+
+        case PNRequestPATCHMethod:
+
+            HTTPMethod = @"PATCH";
+            break;
+
+        case PNRequestPUTMethod:
+
+            HTTPMethod = @"PUT";
+            break;
+
+        case PNRequestDELETEMethod:
+
+            HTTPMethod = @"DELETE";
+            break;
+        default:
+            break;
+    }
     
-    return [NSString stringWithFormat:@"<%@|%@|%@>", ([self HTTPMethod] == PNRequestPOSTMethod ? @"POST" :@"GET"),
-            resourcePath, @([self shouldCompressPOSTBody])];
+    return [NSString stringWithFormat:@"<%@|%@|%@>", HTTPMethod, resourcePath,
+                    @([self shouldCompressPOSTBody])];
 }
 
 #pragma mark -

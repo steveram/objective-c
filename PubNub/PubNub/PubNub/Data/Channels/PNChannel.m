@@ -11,8 +11,9 @@
 //
 
 #import "PNChannel+Protected.h"
+#import "PNSynchronizationChannel+Protected.h"
 #import "PNChannelPresence+Protected.h"
-#import "NSObject+PNAdditions.h"
+#import "NSObject+PNPrivateAdditions.h"
 #import "NSString+PNAddition.h"
 #import "PNHereNow+Protected.h"
 #import "PNClient+Protected.h"
@@ -46,7 +47,7 @@ static NSObject *_synchronizationObject = nil;
 #pragma mark - Properties
 
 // Channel name
-@property (nonatomic, copy) NSString *name;
+@property (nonatomic, copy) NSString *channelName;
 @property (nonatomic, copy) NSString *updateTimeToken;
 @property (nonatomic, strong) PNDate *presenceUpdateDate;
 @property (nonatomic, assign) NSUInteger participantsCount;
@@ -54,6 +55,7 @@ static NSObject *_synchronizationObject = nil;
 @property (nonatomic, assign, getter = isChannelGroup) BOOL channelGroup;
 @property (nonatomic, assign, getter = shouldObservePresence) BOOL observePresence;
 @property (nonatomic, assign, getter = isAbleToResetTimeToken) BOOL ableToResetTimeToken;
+@property (nonatomic, assign, getter = isForDataSynchronization) BOOL forDataSynchronization;
 @property (nonatomic, assign, getter = isLinkedWithPresenceObservationChannel)BOOL linkedWithPresenceObservationChannel;
 
 
@@ -120,8 +122,12 @@ static NSObject *_synchronizationObject = nil;
         channel = [PNChannelPresence presenceForChannelWithName:channelName];
     }
     else if ([channelName rangeOfString:@":"].location != NSNotFound) {
-        
+
         channel = [PNChannelGroup channelGroupWithName:channelName];
+    }
+    else if ([PNSynchronizationChannel isObjectSynchronizationChannel:channelName]) {
+
+        channel = [PNSynchronizationChannel channelForObject:channelName dataAtLocation:nil];
     }
     else {
 
@@ -222,7 +228,7 @@ static NSObject *_synchronizationObject = nil;
         [self resetUpdateTimeToken];
         self.ableToResetTimeToken = YES;
 		self.updateTimeToken = @"0";
-        self.name = channelName;
+        self.channelName = channelName;
         self.participantsList = [NSMutableDictionary dictionary];
     }
     
@@ -330,6 +336,11 @@ static NSObject *_synchronizationObject = nil;
             [self.participantsList setValue:client forKey:clientStoreIdentifier];
         }];
     }];
+}
+
+- (NSString *)name {
+
+    return self.channelName;
 }
 
 - (NSString *)escapedName {

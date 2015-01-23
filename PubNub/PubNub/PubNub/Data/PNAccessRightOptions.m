@@ -15,7 +15,7 @@
 #pragma mark Static
 
 // Stores default access period duration (while granted access will be valid)
-static NSUInteger const kPNDefaulfAccessPeriodDuration = 1440;
+static NSInteger const kPNDefaulfAccessPeriodDuration = 1440;
 
 
 #pragma mark - Public interface implementation
@@ -26,17 +26,17 @@ static NSUInteger const kPNDefaulfAccessPeriodDuration = 1440;
 #pragma mark - Class methods
 
 + (PNAccessRightOptions *)accessRightOptionsForApplication:(NSString *)applicationKey withRights:(PNAccessRights)rights
-                                                  channels:(NSArray *)channels clients:(NSArray *)clientsAccessKeys
+                                                   objects:(NSArray *)objects clients:(NSArray *)clientsAccessKeys
                                               accessPeriod:(NSInteger)accessPeriodDuration {
 
-    return [[self alloc] initWithApplication:applicationKey withRights:rights channels:channels
+    return [[self alloc] initWithApplication:applicationKey withRights:rights objects:objects
                                      clients:clientsAccessKeys accessPeriod:accessPeriodDuration];
 }
 
 
 #pragma mark - Instance methods
 
-- (id)initWithApplication:(NSString *)applicationKey withRights:(PNAccessRights)rights channels:(NSArray *)channels
+- (id)initWithApplication:(NSString *)applicationKey withRights:(PNAccessRights)rights objects:(NSArray *)objects
                   clients:(NSArray *)clientsAuthorizationKeys accessPeriod:(NSInteger)accessPeriodDuration {
 
     // Check whether initialization was successful or not
@@ -45,10 +45,10 @@ static NSUInteger const kPNDefaulfAccessPeriodDuration = 1440;
         self.applicationKey = applicationKey;
         self.rights = rights;
         self.level = PNApplicationAccessRightsLevel;
-        if ([channels count]) {
+        if ([objects count]) {
 
             self.level = PNChannelAccessRightsLevel;
-            if (((PNChannel *)[channels lastObject]).isChannelGroup) {
+            if (((PNChannel *)[objects lastObject]).isChannelGroup) {
                 
                 self.level = PNChannelGroupAccessRightsLevel;
             }
@@ -57,10 +57,10 @@ static NSUInteger const kPNDefaulfAccessPeriodDuration = 1440;
                 self.level = PNUserAccessRightsLevel;
                 self.clientsAuthorizationKeys = clientsAuthorizationKeys;
             }
-            self.channels = channels;
+            self.objects = objects;
         }
 
-        self.accessPeriodDuration = accessPeriodDuration >= 0 ? accessPeriodDuration : kPNDefaulfAccessPeriodDuration;
+        self.accessPeriodDuration = (accessPeriodDuration >= 0 ? accessPeriodDuration : kPNDefaulfAccessPeriodDuration);
         if (self.rights == PNUnknownAccessRights || self.rights == PNNoAccessRights) {
 
             self.accessPeriodDuration = 0;
@@ -92,6 +92,11 @@ static NSUInteger const kPNDefaulfAccessPeriodDuration = 1440;
     return ![self isEnablingReadAccessRight] && ![self isEnablingWriteAccessRight];
 }
 
+- (NSArray *)channels {
+
+    return self.objects;
+}
+
 - (NSString *)description {
 
     NSMutableString *description = [NSMutableString stringWithFormat:@"%@ (%p) <",
@@ -101,6 +106,14 @@ static NSUInteger const kPNDefaulfAccessPeriodDuration = 1440;
     if (self.level == PNChannelAccessRightsLevel) {
 
         level = @"channel";
+    }
+    else if (self.level == PNChannelGroupAccessRightsLevel) {
+
+        level = @"channel-group";
+    }
+    else if (self.level == PNRemoteDataObjectAccessRightsLevel) {
+
+        level = @"object";
     }
     else if (self.level == PNUserAccessRightsLevel) {
 
@@ -123,11 +136,15 @@ static NSUInteger const kPNDefaulfAccessPeriodDuration = 1440;
 
     if (self.level == PNChannelAccessRightsLevel) {
 
-        [description appendFormat:@" channels: %@;", self.channels];
+        [description appendFormat:@" channels: %@;", self.objects];
     }
     else if (self.level == PNChannelGroupAccessRightsLevel) {
-        
-        [description appendFormat:@" channel-group: %@;", self.channels];
+
+        [description appendFormat:@" channel-group: %@;", self.objects];
+    }
+    else if (self.level == PNRemoteDataObjectAccessRightsLevel) {
+
+        [description appendFormat:@" object: %@;", self.objects];
     }
     else if (self.level == PNUserAccessRightsLevel) {
 
@@ -148,8 +165,12 @@ static NSUInteger const kPNDefaulfAccessPeriodDuration = 1440;
         level = @"channel-group";
     }
     else if (self.level == PNChannelAccessRightsLevel) {
-        
+
         level = @"channel";
+    }
+    else if (self.level == PNRemoteDataObjectAccessRightsLevel) {
+
+        level = @"object";
     }
     else if (self.level == PNUserAccessRightsLevel) {
         
@@ -157,11 +178,12 @@ static NSUInteger const kPNDefaulfAccessPeriodDuration = 1440;
     }
     NSMutableString *logDescription = [NSMutableString stringWithFormat:@"<%@|%@|%@|%lu", level, PNObfuscateString(self.applicationKey),
                                        @(self.rights), (unsigned long)self.accessPeriodDuration];
-    if (self.level == PNChannelGroupAccessRightsLevel || self.level == PNChannelAccessRightsLevel) {
+    if (self.level == PNChannelGroupAccessRightsLevel || self.level == PNChannelAccessRightsLevel ||
+        self.level == PNRemoteDataObjectAccessRightsLevel) {
         
         #pragma clang diagnostic push
         #pragma clang diagnostic ignored "-Wundeclared-selector"
-        [logDescription appendFormat:@"|%@", (self.channels ? [self.channels performSelector:@selector(logDescription)] : [NSNull null])];
+        [logDescription appendFormat:@"|%@", (self.objects ? [self.objects performSelector:@selector(logDescription)] : [NSNull null])];
         #pragma clang diagnostic pop
     }
     else if (self.level == PNUserAccessRightsLevel) {
@@ -170,7 +192,7 @@ static NSUInteger const kPNDefaulfAccessPeriodDuration = 1440;
         #pragma clang diagnostic ignored "-Wundeclared-selector"
         [logDescription appendFormat:@"|%@|%@",
          (self.clientsAuthorizationKeys ? [self.clientsAuthorizationKeys performSelector:@selector(logDescription)] : [NSNull null]),
-         (self.channels ? [self.channels performSelector:@selector(logDescription)] : [NSNull null])];
+         (self.objects ? [self.objects performSelector:@selector(logDescription)] : [NSNull null])];
         #pragma clang diagnostic pop
     }
     [logDescription appendString:@">"];

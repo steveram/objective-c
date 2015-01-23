@@ -32,6 +32,9 @@ static NSString * const kPNAccessChannelGroupsKey = @"channel-groups";
 // Stores reference on key under which affected channels list is stored in response
 static NSString * const kPNAccessChannelsKey = @"channels";
 
+// Stores reference on key under which affected remote data objects list is stored in response
+static NSString * const kPNAccessRemoteDataObjectKey = @"objects";
+
 /**
  Stores reference on key under which stored list of authentication keys for which access rights has been
  changed / retrieved.

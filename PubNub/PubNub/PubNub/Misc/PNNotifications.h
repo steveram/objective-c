@@ -97,6 +97,163 @@ static NSString * const kPNClientDidUpdateClientStateNotification = @"PNClientDi
 static NSString * const kPNClientStateUpdateDidFailWithErrorNotification = @"PNClientStateUpdateDidFailWithErrorNotification";
 
 /**
+ @brief Sent when \b PubNub client successfully started object synchronization with \b PubNub 
+        cloud.
+ 
+ @note \b userInfo contains reference on \b PNObjectInformation instead of \b NSDictionary which
+       hold information to identify remote object identifier and data location which has been
+       synchronized with local copy (can be \c nil in case if whole object has been synchronized).
+ 
+ @since <#version number#>
+ */
+static NSString * const kPNObjectSynchronizationDidStartNotification = @"PNObjectSynchronizationDidStartNotification";
+
+/**
+ @brief Sent when \b PubNub client did fail to start remote object synchronization with \b PubNub
+        cloud.
+ 
+ @note \b userInfo contains \b PNError instead of \a NSDictionary. Reference on object instance 
+       for which \b PubNub client was unable to start synchronization object will be stored 
+       inside of \b PNError's \a 'error.associatedObject' as \b PNObjectInformation instance.
+ 
+ @since <#version number#>
+ */
+static NSString * const kPNObjectSynchronizationStartDidFailWithErrorNotification = @"PNObjectSynchronizationStartDidFailWithErrorNotification";
+
+/**
+ @brief Sent when \b PubNub client successfully stopped object synchronization with \b PubNub
+        cloud.
+ 
+ @note \b userInfo contains reference on \b PNObjectInformation instead of \b NSDictionary which
+       hold information to identify remote object identifier and data location which has been
+       synchronized with local copy (can be \c nil in case if whole object has been synchronized).
+ 
+ @since <#version number#>
+ */
+static NSString * const kPNObjectSynchronizationDidStopNotification = @"PNObjectSynchronizationDidStopNotification";
+
+/**
+ @brief Sent when \b PubNub client did fail to stop remote object synchronization with \b PubNub
+        cloud.
+ 
+ @note \b userInfo contains \b PNError instead of \a NSDictionary. \a 'error.associatedObject' 
+       sotres reference on \b PNObjectInformation instance which allow to identify remote object
+       and data path for which client was unable to stop synchronization process.
+ 
+ @since <#version number#>
+ */
+static NSString * const kPNObjectSynchronizationStopDidFailWithErrorNotification = @"PNObjectSynchronizationStopDidFailWithErrorNotification";
+
+/**
+ @brief Sent when \b PubNub client received new remote data object modification event.
+
+ @note \b userInfo contains reference on \b PNObjectInformation instead of \b NSDictionary which
+       hold information about object (under \c object property) which has been modified and list
+       of data locations which has been changed).
+
+ @since <#version number#>
+ */
+static NSString * const kPNObjectModificationEventNotification = @"PNObjectModificationEventNotification";
+
+/**
+ @brief Sent when \b PubNub client successfully retrieved data for remote data object from
+        \b PubNub cloud.
+ 
+ @note  \b userInfo contains reference on \b PNObjectInformation instead of \b NSDictionary which
+        hold information to identify remote data object and data location which has been 
+        retrieved. Also this object has \c data property which represent data stored for object
+        in \b PubNub cloud.
+ 
+ @since <#version number#>
+ */
+static NSString * const kPNClientDidFetchObjectDataNotification = @"PNClientDidFetchObjectDataNotification";
+
+/**
+ @brief Sent when \b PubNub client did fail to retrieve remote object data from \b PubNub cloud.
+ 
+ @note  \b userInfo contains \b PNError instead of \b NSDictionary. \a 'error.associatedObject'
+        stores reference on \b PNObjectInformation which allow to identify which object client
+        tried to fetch and reference on particular data location.
+ 
+ @since <#version number#>
+ */
+static NSString * const kPNClientObjectDataFetchDidFailWithErrorNotification = @"PNClientObjectDataFetchDidFailWithErrorNotification";
+
+/**
+ @brief Sent when \b PubNub client successfully completed remote object data modification inside
+        of \b PubNub cloud.
+ 
+ @note  \b userInfo contains reference on \b PNObjectInformation instead of \b NSDictionary which
+        hold information to identify remote data object and data location which should be
+        changed. Object has \c data property which represent data which should be used to modify
+        object stored in \b PubNub cloud.
+ 
+ @since <#version number#>
+ */
+static NSString * const kPNClientDidPushDataToObjectNotification = @"PNClientDidPushDataToObjectNotification";
+
+/**
+ @brief Sent when \b PubNub client did fail to modify remote object data inside of \b PubNub 
+        cloud.
+ 
+ @note  \b userInfo contains \b PNError instead of \b NSDictionary. \a 'error.associatedObject'
+        stores reference on \b PNObjectInformation which allow to identify which object client
+        tried to modify and reference on particular data location where data should be applied.
+ 
+ @since <#version number#>
+ */
+static NSString * const kPNClientDataPushToObjectDidFailWithErrorNotification = @"PNClientDataPushToObjectDidFailWithErrorNotification";
+
+/**
+ @brief Sent when \b PubNub client successfully replaced piece of data with the one provided by
+        user.
+ 
+ @note  \b userInfo contains reference on \b PNObjectInformation instead of \b NSDictionary which
+        hold information to identify remote data object and data location which should be
+        replaced. Object has \c data property which represent data which should be used to 
+        replace existing data at specified location in \b PubNub cloud.
+ 
+ @since <#version number#>
+ */
+static NSString * const kPNClientDidReplaceObjectDataNotification = @"PNClientDidReplaceObjectDataNotification";
+
+/**
+ @brief Sent when \b PubNub client did fail to replace data at specified location for remote data
+        object stored in \b PubNub cloud.
+ 
+ @note  \b userInfo contains \b PNError instead of \b NSDictionary. \a 'error.associatedObject'
+        stores reference on \b PNObjectInformation which allow to identify for which object
+        client tried to replace piece of data.
+ 
+ @since <#version number#>
+ */
+static NSString * const kPNClientObjectDataReplaceDidFailWithErrorNotification = @"PNClientObjectDataReplaceDidFailWithErrorNotification";
+
+/**
+ @brief Sent when \b PubNub client successfully remove remote object's data at specified
+        location inside of \b PubNub cloud.
+ 
+ @note  \b userInfo contains reference on \b PNObjectInformation instead of \b NSDictionary which
+        hold information to identify remote data object and data location which \b PubNub client
+        tried to remove from \b PubNub cloud.
+ 
+ @since <#version number#>
+ */
+static NSString * const kPNClientDidRemoveObjectDataNotification = @"PNClientDidRemoveObjectDataNotification";
+
+/**
+ @brief Sent when \b PubNub client did fail to remove object's data at specified location inside
+        of \b PubNub cloud.
+ 
+ @note  \b userInfo contains \b PNError instead of \b NSDictionary. \a 'error.associatedObject'
+        stores reference on \b PNObjectInformation which allow to identify for which object
+        client tried to remove piece of data.
+ 
+ @since <#version number#>
+ */
+static NSString * const kPNClientObjectDataRemoveDidFailWithErrorNotification = @"PNClientObjectDataRemoveDidFailWithErrorNotification";
+
+/**
  Sent when \b PubNub client was able to retrieve channel groups inside namespace or application wide.
  
  \b userInfo contains reference on \b PNChannelGroup instances stored in \a NSArray in case if request has been done for application wide

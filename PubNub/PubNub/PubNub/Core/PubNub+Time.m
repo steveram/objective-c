@@ -7,7 +7,7 @@
 //
 
 #import "PubNub+Time.h"
-#import "NSObject+PNAdditions.h"
+#import "NSObject+PNPrivateAdditions.h"
 #import "PNTimeTokenRequest.h"
 #import "PNServiceChannel.h"
 #import "PubNub+Protected.h"

@@ -30,10 +30,10 @@
 @property (nonatomic, strong) PNAccessRightsInformation *applicationAccessRightsInformation;
 
 /**
- Stores dictionary of channel name - \b PNAccessRightsInformation instances pairs which represents access rights for
+ Stores dictionary of object name - \b PNAccessRightsInformation instances pairs which represents access rights for
  \a 'channel' access level.
  */
-@property (nonatomic, strong) NSMutableDictionary *channelsAccessRightsInformation;
+@property (nonatomic, strong) NSMutableDictionary *objectsAccessRightsInformation;
 
 /**
  Stores dictionary of client authorization key - \b PNAccessRightsInformation instances which represents access
@@ -102,7 +102,7 @@
  @param information
  \b PNAccessRightsInformation instance which represents \a 'application' access rights.
 
- @note Any channels which will be added using \a -storeChannelAccessRightsInformation: will be assigned to this
+ @note Any channels which will be added using \a -storeObjectAccessRightsInformation: will be assigned to this
  application information.
  */
 - (void)storeApplicationAccessRightsInformation:(PNAccessRightsInformation *)information;
@@ -110,15 +110,15 @@
 /**
  Add provided \a 'channel' access rights information to the list in \a channelsAccessRightsInformation property.
 
- @note Any client which will be added using \a -storeClientAccessRightsInformation:forChannel: will be assigned to
+ @note Any client which will be added using \a -storeClientAccessRightsInformation:forObject: will be assigned to
  this channel information.
  */
-- (void)storeChannelAccessRightsInformation:(PNAccessRightsInformation *)information;
+- (void)storeObjectAccessRightsInformation:(PNAccessRightsInformation *)information;
 
 /**
  Add provided \a 'user' access rights information to the list in \a clientsAccessRightsInformation property.
  */
-- (void)storeClientAccessRightsInformation:(PNAccessRightsInformation *)information forChannel:(PNChannel *)channel;
+- (void)storeClientAccessRightsInformation:(PNAccessRightsInformation *)information forObject:(id <PNChannelProtocol>)object;
 
 /**
  Allow to correlate access rights entries with options which has been used to fetch / grant access rights information

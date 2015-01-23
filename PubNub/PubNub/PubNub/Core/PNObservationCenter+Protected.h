@@ -80,6 +80,51 @@
 - (void)removeClientAsStateUpdateObserver;
 
 
+#pragma mark - Data synchronization observation
+
+/**
+ Add/remove observer which would like to know when PubNub client will complete remote object
+ synchronization process.
+ */
+- (void)addClientAsRemoteObjectSynchronizationStartObserverWithCallbackBlock:(PNRemoteObjectSynchronizationStartHandlerBlock)callbackBlock;
+- (void)removeClientAsRemoteObjectSynchronizationStartObserver;
+
+/**
+ Add/remove observer which would like to know when PubNub client will stop remote object
+ synchronization process.
+ */
+- (void)addClientAsRemoteObjectSynchronizationStopObserverWithCallbackBlock:(PNRemoteObjectSynchronizationStopHandlerBlock)callbackBlock;
+- (void)removeClientAsRemoteObjectSynchronizationStopObserver;
+
+/**
+ Add/remove observer which should like to know when PubNub client will receive requested object's
+ data from \b PubNub cloud.
+ */
+- (void)addClientAsRemoteObjectDataFetchObserverWithCallBackBlock:(PNRemoteObjectDataFetchHandlerBlock)callbackBlock;
+- (void)removeClientAsRemoteObjectDataFetchObserver;
+
+/**
+ Add/remove observer which would like to know when PubNub client will update object's remote data
+ in \b PubNub cloud.
+ */
+- (void)addClientAsRemoteObjectDataPushObserverWithCallBackBlock:(PNRemoteObjectDataPushHandlerBlock)callbackBlock;
+- (void)removeClientAsRemoteObjectDataPushObserver;
+
+/**
+ Add/remove observer which would like to know when PubNub client will replace object's remote
+ data in \b PubNub cloud.
+ */
+- (void)addClientAsRemoteObjectDataReplaceObserverWithCallBackBlock:(PNRemoteObjectDataReplaceHandlerBlock)callbackBlock;
+- (void)removeClientAsRemoteObjectDataReplaceObserver;
+
+/**
+ Add/remove observer which would like to know when PubNub client will remove object's remote
+ data in \b PubNub cloud.
+ */
+- (void)addClientAsRemoteObjectDataRemoveObserverWithCallBackBlock:(PNRemoteObjectDataRemoveHandlerBlock)callbackBlock;
+- (void)removeClientAsRemoteObjectDataRemoveObserver;
+
+
 #pragma mark - Client channel groups observation
 
 /**

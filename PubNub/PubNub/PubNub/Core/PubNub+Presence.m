@@ -7,7 +7,7 @@
  */
 
 #import "PubNub+Presence.h"
-#import "NSObject+PNAdditions.h"
+#import "NSObject+PNPrivateAdditions.h"
 #import "PNWhereNowRequest.h"
 #import "PNHereNowRequest.h"
 #import "PNServiceChannel.h"

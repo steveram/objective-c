@@ -68,6 +68,65 @@
 - (void)removeClientStateUpdateObserver:(id)observer;
 
 
+#pragma mark - Data synchronization observation
+
+/**
+ Add/remove observer which would like to know when PubNub client will complete remote object
+ synchronization process.
+ */
+- (void)addRemoteObjectSynchronizationStartObserver:(id)observer
+                                  withCallbackBlock:(PNRemoteObjectSynchronizationStartHandlerBlock)callbackBlock;
+- (void)removeRemoteObjectSynchronizationStartObserver:(id)observer;
+
+/**
+Add/remove observer which would like to know when PubNub client will stop remote object
+synchronization process.
+*/
+- (void)addRemoteObjectSynchronizationStopObserver:(id)observer
+                                 withCallbackBlock:(PNRemoteObjectSynchronizationStopHandlerBlock)callbackBlock;
+- (void)removeRemoteObjectSynchronizationStopObserver:(id)observer;
+
+/**
+ Add/remove observer which would like to know when PubNub client will stop remote object
+ synchronization process.
+ */
+- (void)addRemoteObjectModificationEventObserver:(id)observer
+                               withCallbackBlock:(PNRemoteObjectModificationEventHandlerBlock)callbackBlock;
+- (void)removeRemoteObjectModificationEventObserver:(id)observer;
+
+/**
+ Add/remove observer which would like to know when PubNub client will receive requested object's
+ data from \b PubNub cloud.
+ */
+- (void)addRemoteObjectDataFetchObserver:(id)observer
+                       withCallBackBlock:(PNRemoteObjectDataFetchHandlerBlock)callbackBlock;
+- (void)removeRemoteObjectDataFetchObserver:(id)observer;
+
+/**
+ Add/remove observer which would like to know when PubNub client will update object's remote data
+ in \b PubNub cloud.
+ */
+- (void)addRemoteObjectDataPushObserver:(id)observer
+                      withCallBackBlock:(PNRemoteObjectDataPushHandlerBlock)callbackBlock;
+- (void)removeRemoteObjectDataPushObserver:(id)observer;
+
+/**
+ Add/remove observer which would like to know when PubNub client will replace object's remote 
+ data in \b PubNub cloud.
+ */
+- (void)addRemoteObjectDataReplaceObserver:(id)observer
+                         withCallBackBlock:(PNRemoteObjectDataReplaceHandlerBlock)callbackBlock;
+- (void)removeRemoteObjectDataReplaceObserver:(id)observer;
+
+/**
+ Add/remove observer which would like to know when PubNub client will remove object's remote
+ data in \b PubNub cloud.
+ */
+- (void)addRemoteObjectDataRemoveObserver:(id)observer
+                        withCallBackBlock:(PNRemoteObjectDataRemoveHandlerBlock)callbackBlock;
+- (void)removeRemoteObjectDataRemoveObserver:(id)observer;
+
+
 #pragma mark - Client channel groups observation
 
 /**

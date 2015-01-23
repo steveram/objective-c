@@ -44,6 +44,13 @@
  */
 @property (nonatomic, readonly, getter = isChannelGroup) BOOL channelGroup;
 
+/**
+ @brief Stores whether receiver is capable to be used as remote object synchronization feed or not.
+ 
+ @since <#version number#>
+ */
+@property (nonatomic, readonly, assign, getter = isForDataSynchronization) BOOL forDataSynchronization;
+
 
 ///------------------------------------------------
 /// @name Presence information

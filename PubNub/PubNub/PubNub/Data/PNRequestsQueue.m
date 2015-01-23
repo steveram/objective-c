@@ -11,7 +11,7 @@
 //
 
 #import "PNRequestsQueue.h"
-#import "NSObject+PNAdditions.h"
+#import "NSObject+PNPrivateAdditions.h"
 #import "PNBaseRequest.h"
 #import "PNWriteBuffer.h"
 #import "PNHelper.h"

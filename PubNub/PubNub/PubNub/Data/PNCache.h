@@ -105,6 +105,35 @@
  */
 - (void)purgeAllState;
 
+
+#pragma mark - Data Synchronization methods
+
+/**
+ @brief Fetch all particular paths for which client synchronized local copy of object stored in
+        \b PubNub cloud.
+ 
+ @param objectIdentifier     Reference on remote object identifier for which \b PubNub client 
+                             should look up in local cache list of data paths for which 
+                             synchronization has been started.
+ @param fetchCompletionBlock Processing completion block which pass only one parameter
+                             representing list of data location key-paths for which local copy
+                             of the object has been synchronized with remote object.
+                             \c nil will be passed in case if client never tried to synchronize
+                             with remote data object. Empty array will be returned in case if
+                             whole object has been synchronized with local copy.
+ 
+ @since <#version number#>
+ */
+- (void)synchronizedDataLocationsForRemoteObject:(NSString *)objectIdentifier
+                                       withBlock:(void (^)(NSArray *dataLocations))fetchCompletionBlock;
+
+/**
+ @brief Method allow to clean up all locally cached objects.
+ 
+ @since <#version number#>
+ */
+- (void)purgeAllObjects;
+
 #pragma mark -
 
 

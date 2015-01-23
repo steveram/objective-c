@@ -114,10 +114,51 @@
                 errorCode = kPNRestrictedCharacterInChannelNameError;
             }
         }
-        // Check whether wrong key was specified for request
+            // Check whether wrong key was specified for request
         else if([errorMessage rangeOfString:@"Key" options:NSCaseInsensitiveSearch].location != NSNotFound) {
 
             errorCode = kPNInvalidSubscribeOrPublishKeyError;
+        }
+            // Check whether wrong key was specified for request
+        else if([errorMessage rangeOfString:@"path" options:NSCaseInsensitiveSearch].location != NSNotFound) {
+
+            errorCode = kPNInvalidRemoteObjectDataPathError;
+        }
+    }
+    // Check whether error because of DataSync
+    else if ([errorMessage rangeOfString:@"Datasync" options:NSCaseInsensitiveSearch].location != NSNotFound) {
+
+        // Service not available
+        if ([errorMessage rangeOfString:@"not enabled" options:NSCaseInsensitiveSearch].location != NSNotFound) {
+
+            errorCode = kPNTooLongMessageError;
+        }
+    }
+    else if ([errorMessage rangeOfString:@"Failed" options:NSCaseInsensitiveSearch].location != NSNotFound) {
+
+        if ([errorMessage rangeOfString:@"update path" options:NSCaseInsensitiveSearch].location != NSNotFound){
+
+            errorCode = kPNRemoteObjectDataUpdateError;
+        }
+        else if ([errorMessage rangeOfString:@"delete path" options:NSCaseInsensitiveSearch].location != NSNotFound){
+
+            errorCode = kPNRemoteObjectDataDeleteError;
+        }
+        else if ([errorMessage rangeOfString:@"set path" options:NSCaseInsensitiveSearch].location != NSNotFound){
+
+            errorCode = kPNRemoteObjectDataReplaceError;
+        }
+        // Malformed JSON has been provided
+        else if ([errorMessage rangeOfString:@"JSON" options:NSCaseInsensitiveSearch].location != NSNotFound) {
+
+            errorCode = kPNInvalidJSONError;
+        }
+    }
+    else if ([errorMessage rangeOfString:@"must be an object" options:NSCaseInsensitiveSearch].location != NSNotFound) {
+
+        if ([errorMessage rangeOfString:@"root" options:NSCaseInsensitiveSearch].location != NSNotFound) {
+
+            errorCode = kPNInvalidJSONError;
         }
     }
     // Check whether error caused by message content or not
@@ -206,7 +247,7 @@
 
 + (PNError *)errorWithMessage:(NSString *)errorMessage code:(NSInteger)errorCode {
     
-    return [[[self class] alloc] initWithMessage:errorMessage code:errorCode];
+    return [[self alloc] initWithMessage:errorMessage code:errorCode];
 }
 
 
@@ -273,8 +314,13 @@
             case kPNCantUpdateStateForNotSubscribedChannelsError:
             case kPNInvalidStatePayloadError:
             case kPNStorageNotEnabledError:
-
+                
                 errorDescription = @"PubNub client can't perform request";
+                break;
+            case kPNIncompatibleRemoteObjectNameError:
+            case kPNIncompatibleRemoteObjectDataLocationError:
+                
+                errorDescription = @"PubNub client can't synchronize remote object";
                 break;
             case kPNConnectionErrorOnSetup:
                 
@@ -284,6 +330,10 @@
 
                 errorDescription = @"PubNub client can't use presence API";
                 break;
+            case kPNDataSyncNotEnabledError:
+
+                errorDescription = @"PubNub client can't use DataSynch API";
+                break;
             case kPNInvalidJSONError:
 
                 errorDescription = @"PubNub service can't process JSON";
@@ -292,6 +342,11 @@
             case kPNRestrictedCharacterInChannelGroupNamespaceNameError:
             case kPNRestrictedCharacterInChannelGroupNameError:
             case kPNEmptyChannelGroupSizeExceededError:
+            case kPNInvalidRemoteObjectDataPathError:
+            case kPNRemoteObjectDataReplaceError:
+            case kPNRemoteObjectDataUpdateError:
+            case kPNRemoteObjectDataDeleteError:
+            case kPNRemoteObjectRootNodeError:
             case kPNEmptyChannelGroupError:
 
                 errorDescription = @"PubNub service can't process request";
@@ -443,6 +498,11 @@
             failureReason = @"Looks like the Presence feature is not enabled. Be sure to enable it for your keys at "
                              "http://admin.pubnub.com, and try again";
             break;
+        case kPNDataSyncNotEnabledError:
+
+            failureReason = @"Looks like the DataSync feature is not enabled. Be sure to enable it "
+                             "for your keys at http://admin.pubnub.com, and try again";
+            break;
         case kPNInvalidJSONError:
 
             failureReason = @"Looks like we sent malformed JSON or the message was changed after the signature was "
@@ -471,6 +531,21 @@
         case kPNRestrictedCharacterInChannelNameError:
             
             failureReason = @"Looks like there are invalid characters in one of the channel names";
+            break;
+        case kPNInvalidRemoteObjectDataPathError:
+
+            failureReason = @"Looks like unallowed symbols has been used for data location path";
+            break;
+        case kPNRemoteObjectDataReplaceError:
+        case kPNRemoteObjectDataUpdateError:
+        case kPNRemoteObjectDataDeleteError:
+
+            failureReason = @"Looks like there is temporarry issues because of which PubNub cloud"
+                             "can't modify remote object data.";
+            break;
+        case kPNRemoteObjectRootNodeError:
+
+            failureReason = @"Only NSArray and NSDictionary can be used in remote object root node";
             break;
         case kPNAPIUnauthorizedAccessError:
 
@@ -502,6 +577,14 @@
         case kPNCantUpdateStateForNotSubscribedChannelsError:
             
             failureReason = @"Looks like client tried to update state for channel, on which it not subscribed.";
+            break;
+        case kPNIncompatibleRemoteObjectNameError:
+            
+            failureReason = @"Looks like client tried to use incompatible name for remote object.";
+            break;
+        case kPNIncompatibleRemoteObjectDataLocationError:
+            
+            failureReason = @"Looks like client tried to use incompatible data key-path location.";
             break;
         case kPNInvalidStatePayloadError:
 
@@ -644,6 +727,10 @@
 
             fixSuggestion = @"Please visit https://admin.pubnub.com, enable Presence, and try again.";
             break;
+        case kPNDataSyncNotEnabledError:
+
+            fixSuggestion = @"Please visit https://admin.pubnub.com, enable DataSync, and try again.";
+            break;
         case kPNInvalidJSONError:
 
             fixSuggestion = @"There was an error sending the data to the origin. Be sure you didn't try to send "
@@ -673,6 +760,22 @@
         case kPNRestrictedCharacterInChannelNameError:
 
             fixSuggestion = @"Ensure that you don't use the comma char (,) in your channel names.";
+            break;
+        case kPNInvalidRemoteObjectDataPathError:
+
+            fixSuggestion = @"Ensure that only alpha-numeric characters has been used as data "
+                             "location key-path components separated by '.'";
+            break;
+        case kPNRemoteObjectDataReplaceError:
+        case kPNRemoteObjectDataUpdateError:
+        case kPNRemoteObjectDataDeleteError:
+
+            fixSuggestion = @"There is some issues. Try send the request again later.";
+            break;
+        case kPNRemoteObjectRootNodeError:
+
+            fixSuggestion = @"Ensure that data location has been specified before trying to "
+                             "push/replace with non-collection data";
             break;
         case kPNAPIUnauthorizedAccessError:
 
@@ -704,6 +807,14 @@
         case kPNCantUpdateStateForNotSubscribedChannelsError:
             
             fixSuggestion = @"Make sure that you subscribed on channel, for which you update state.";
+            break;
+        case kPNIncompatibleRemoteObjectNameError:
+            
+            fixSuggestion = @"Please, check API documentation for information about requirements for remote object name.";
+            break;
+        case kPNIncompatibleRemoteObjectDataLocationError:
+            
+            fixSuggestion = @"Please, check API documentation for information about requirements for data key-path location.";
             break;
         case kPNInvalidStatePayloadError:
 

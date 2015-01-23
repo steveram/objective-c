@@ -10,6 +10,7 @@
 #import "PNConnectionChannelDelegate.h"
 #import "PNServiceChannelDelegate.h"
 #import "PNMessageChannelDelegate.h"
+#import "PNDataSynchronization.h"
 #import "PNDelegate.h"
 #import "PNMacro.h"
 #import "PubNub.h"
@@ -84,6 +85,13 @@ typedef enum _PNPubNubClientState {
  Stores reference on crypto helper tool which is used on message encryption/descryption.
  */
 @property (nonatomic, strong) PNCryptoHelper *cryptoHelper;
+
+/**
+ @brief Stores reference on data synchronization manager.
+ 
+ @since <#version number#>
+ */
+@property (nonatomic, strong) PNDataSynchronization *dataSynchronization;
 
 /**
  Stores reference on local \b PubNub cache instance which will cache some portion of data.

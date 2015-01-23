@@ -8,7 +8,7 @@
 
 #import "PubNub+History.h"
 #import "PNMessageHistoryRequest.h"
-#import "NSObject+PNAdditions.h"
+#import "NSObject+PNPrivateAdditions.h"
 #import "PNMessagesHistory.h"
 #import "PNServiceChannel.h"
 #import "PubNub+Protected.h"

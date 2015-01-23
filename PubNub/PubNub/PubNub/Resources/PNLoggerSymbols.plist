@@ -545,6 +545,30 @@
 			<string>DID REMOVE %@ CHANNEL GROUP</string>
 			<key>0202050</key>
 			<string>%@ CHANNEL GROUP REMOVAL DID FAIL WITH ERROR: %@</string>
+			<key>0202051</key>
+			<string>REMOTE OBJECT DATA FETCHED: %@</string>
+			<key>0202052</key>
+			<string>REMOTE OBJECT DATA FETCH: %@ DID FAIL WITH ERROR: %@</string>
+			<key>0202053</key>
+			<string>REMOTE OBJECT NEXT PORTION OF DATA FETCHED: %@</string>
+			<key>0202054</key>
+			<string>REMOTE OBJECT NEXT PORTION OFDATA FETCH: %@ DID FAIL WITH ERROR: %@</string>
+			<key>0202055</key>
+			<string>DATA PUSHED TO REMOTE OBJECT: %@</string>
+			<key>0202056</key>
+			<string>DATA PUSH TO REMOTE OBJECT: %@ DID FAIL WITH ERROR: %@</string>
+			<key>0202057</key>
+			<string>DATA PUSHED TO LIST IN REMOTE OBJECT: %@</string>
+			<key>0202058</key>
+			<string>DATA PUSH TO LIST IN REMOTE OBJECT: %@ DID FAIL WITH ERROR: %@</string>
+			<key>0202059</key>
+			<string>DATA REPLACED IN REMOTE OBJECT: %@</string>
+			<key>0202060</key>
+			<string>DATA REPLACE IN REMOTE OBJECT: %@ DID FAIL WITH ERROR: %@</string>
+			<key>0202061</key>
+			<string>DATA REMOVED FROM REMOTE OBJECT: %@</string>
+			<key>0202062</key>
+			<string>DATA REMOVE FROM REMOTE OBJECT: %@ DID FAIL WITH ERROR: %@</string>
 		</dict>
 	</dict>
 	<key>03</key>
@@ -1266,6 +1290,114 @@
 		<string>RESCHEDULE CHANNEL GROUP REMOVAL (STATE: %@)</string>
 		<key>0900288</key>
 		<string>FAILED TO REMOVE CHANNEL GROUP BECAUSE OF ERROR (STATE: %@)</string>
+		<key>0900289</key>
+		<string>TRYING TO START REMOTE OBJECT SYNCHRONIZATION: %@ (DATA LOCATION: %@) (STATE: %@)</string>
+		<key>0900290</key>
+		<string>START REMOTE OBJECT SYNCHRONIZATION (STATE: %@)</string>
+		<key>0900291</key>
+		<string>CAN&apos;T START REMOTE OBJECT SYNCHRONIZATION (STATE: %@)</string>
+		<key>0900292</key>
+		<string>POSTPONE REMOTE OBJECT SYNCHRONIZATION START (STATE: %@)</string>
+		<key>0900293</key>
+		<string>STARTED REMOTE OBJECT SYNCHRONIZATION (STATE: %@)</string>
+		<key>0900294</key>
+		<string>FAILED TO START REMOTE OBJECT SYNCHRONIZATION BECAUSE OF ERROR (STATE: %@)</string>
+		<key>0900295</key>
+		<string>TRYING TO STOP REMOTE OBJECT SYNCHRONIZATION: %@ (DATA LOCATION: %@) (STATE: %@)</string>
+		<key>0900296</key>
+		<string>STOP REMOTE OBJECT SYNCHRONIZATION (STATE: %@)</string>
+		<key>0900297</key>
+		<string>CAN&apos;T STOP REMOTE OBJECT SYNCHRONIZATION (STATE: %@)</string>
+		<key>0900298</key>
+		<string>POSTPONE REMOTE OBJECT SYNCHRONIZATION STOP (STATE: %@)</string>
+		<key>0900299</key>
+		<string>STOPPED REMOTE OBJECT SYNCHRONIZATION (STATE: %@)</string>
+		<key>0900300</key>
+		<string>FAILED TO STOP REMOTE OBJECT SYNCHRONIZATION BECAUSE OF ERROR (STATE: %@)</string>
+		<key>0900301</key>
+		<string>TRYING TO FETCH REMOTE OBJECT DATA: %@ (DATA LOCATION: %@, DATE: %@, PAGE: %@) (STATE: %@)</string>
+		<key>0900302</key>
+		<string>FETCH REMOTE OBJECT DATA (STATE: %@)</string>
+		<key>0900303</key>
+		<string>CAN&apos;T FETCH REMOTE OBJECT DATA (STATE: %@)</string>
+		<key>0900304</key>
+		<string>POSTPONE REMOTE OBJECT DATA FETCH (STATE: %@)</string>
+		<key>0900305</key>
+		<string>FETCHED REMOTE OBJECT DATA (STATE: %@)</string>
+		<key>0900306</key>
+		<string>FAILED TO FETCH REMOTE OBJECT DATA BECAUSE OF ERROR (STATE: %@)</string>
+		<key>0900307</key>
+		<string>RESCHEDULE REMOTE OBJECT DATA FETCH (STATE: %@)</string>
+		<key>0900308</key>
+		<string>TRYING TO FETCH NEXT PORTION OF REMOTE OBJECT DATA: %@ (DATA LOCATION: %@, DATE: %@, PAGE: %@) (STATE: %@)</string>
+		<key>0900309</key>
+		<string>FETCH NEXT PORTION OF REMOTE OBJECT DATA (STATE: %@)</string>
+		<key>0900310</key>
+		<string>CAN&apos;T FETCH REMOTE OBJECT NEXT PORTION OF DATA (STATE: %@)</string>
+		<key>0900311</key>
+		<string>POSTPONE REMOTE OBJECT NEXT PORTION OF DATA FETCH (STATE: %@)</string>
+		<key>0900312</key>
+		<string>FETCHED NEXT PORTION OF REMOTE OBJECT DATA (STATE: %@)</string>
+		<key>0900313</key>
+		<string>FAILED TO FETCH NEXT PORTION OF REMOTE OBJECT DATA BECAUSE OF ERROR (STATE: %@)</string>
+		<key>0900314</key>
+		<string>RESCHEDULE REMOTE OBJECT NEXT PORTION OF DATA FETCH (STATE: %@)</string>
+		<key>0900315</key>
+		<string>TRYING TO PUSH DATA TO REMOTE OBJECT: %@ (DATA LOCATION: %@, DATA: %@) (STATE: %@)</string>
+		<key>0900316</key>
+		<string>PUSH DATA TO REMOTE OBJECT (STATE: %@)</string>
+		<key>0900317</key>
+		<string>CAN&apos;T PUSH DATA TO REMOTE OBJECT (STATE: %@)</string>
+		<key>0900318</key>
+		<string>POSTPONE DATA PUSH TO REMOTE OBJECT (STATE: %@)</string>
+		<key>0900319</key>
+		<string>PUSHED DATA TO REMOTE OBJECT (STATE: %@)</string>
+		<key>0900320</key>
+		<string>FAILED TO PUSH DATA TO REMOTE OBJECT BECAUSE OF ERROR (STATE: %@)</string>
+		<key>0900321</key>
+		<string>RESCHEDULE DATA PUSH TO REMOTE OBJECT (STATE: %@)</string>
+		<key>0900322</key>
+		<string>TRYING TO PUSH LIST TO REMOTE OBJECT: %@ (DATA LOCATION: %@, DATA: %@) (STATE: %@)</string>
+		<key>0900323</key>
+		<string>PUSH LIST TO REMOTE OBJECT (STATE: %@)</string>
+		<key>0900324</key>
+		<string>CAN&apos;T PUSH LIST TO REMOTE OBJECT (STATE: %@)</string>
+		<key>0900325</key>
+		<string>POSTPONE LIST PUSH TO REMOTE OBJECT (STATE: %@)</string>
+		<key>0900326</key>
+		<string>PUSHED LIST TO REMOTE OBJECT (STATE: %@)</string>
+		<key>0900327</key>
+		<string>FAILED TO PUSH LIST TO REMOTE OBJECT BECAUSE OF ERROR (STATE: %@)</string>
+		<key>0900328</key>
+		<string>RESCHEDULE LIST PUSH TO REMOTE OBJECT (STATE: %@)</string>
+		<key>0900329</key>
+		<string>TRYING TO REPLACE DATA TO REMOTE OBJECT: %@ (DATA LOCATION: %@, DATA: %@) (STATE: %@)</string>
+		<key>0900330</key>
+		<string>REPLACE DATA TO REMOTE OBJECT (STATE: %@)</string>
+		<key>0900331</key>
+		<string>CAN&apos;T PUSH LIST TO REMOTE OBJECT (STATE: %@)</string>
+		<key>0900332</key>
+		<string>POSTPONE LIST PUSH TO REMOTE OBJECT (STATE: %@)</string>
+		<key>0900333</key>
+		<string>PUSHED LIST TO REMOTE OBJECT (STATE: %@)</string>
+		<key>0900334</key>
+		<string>FAILED TO PUSH LIST TO REMOTE OBJECT BECAUSE OF ERROR (STATE: %@)</string>
+		<key>0900335</key>
+		<string>RESCHEDULE LIST PUSH TO REMOTE OBJECT (STATE: %@)</string>
+		<key>0900336</key>
+		<string>TRYING TO REMOVE DATA FROM REMOTE OBJECT: %@ (DATA LOCATION: %@) (STATE: %@)</string>
+		<key>0900337</key>
+		<string>REMOVE DATA FROM REMOTE OBJECT (STATE: %@)</string>
+		<key>0900338</key>
+		<string>CAN&apos;T REMOVE DATA FROM REMOTE OBJECT (STATE: %@)</string>
+		<key>0900339</key>
+		<string>POSTPONE DATA REMOVAL FROM REMOTE OBJECT (STATE: %@)</string>
+		<key>0900340</key>
+		<string>REMOVED DATA FROM REMOTE OBJECT (STATE: %@)</string>
+		<key>0900341</key>
+		<string>FAILED TO REMOVE DATA FROM REMOTE OBJECT BECAUSE OF ERROR (STATE: %@)</string>
+		<key>0900342</key>
+		<string>RESCHEDULE DATA REMOVAL FROM REMOTE OBJECT (STATE: %@)</string>
 	</dict>
 	<key>10</key>
 	<dict>

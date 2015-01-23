@@ -14,6 +14,7 @@
 #import "PNChannelGroup.h"
 #import "PNChannel.h"
 #import "PNHelper.h"
+#import "PNObject.h"
 
 
 #pragma mark Public interface implementation
@@ -39,7 +40,7 @@
     if ((self = [super init])) {
 
         self.applicationKey = applicationKey;
-        self.channelsAccessRightsInformation = [NSMutableDictionary dictionary];
+        self.objectsAccessRightsInformation = [NSMutableDictionary dictionary];
         self.clientsAccessRightsInformation = [NSMutableDictionary dictionary];
     }
 
@@ -53,8 +54,8 @@
     if (!self.applicationAccessRightsInformation) {
 
         applicationInformation = [PNAccessRightsInformation accessRightsInformationForLevel:PNApplicationAccessRightsLevel
-                                           rights:PNUnknownAccessRights applicationKey:self.applicationKey
-                                       forChannel:nil client:nil accessPeriod:0];
+                                  rights:PNUnknownAccessRights applicationKey:self.applicationKey
+                               forObject:nil client:nil accessPeriod:0];
     }
 
 
@@ -63,8 +64,11 @@
 
 - (NSArray *)accessRightsInformationForAllChannels {
 
-    NSPredicate *channelsPredicate = [NSPredicate predicateWithFormat:@"self.object.isChannelGroup == NO"];
-    return [[self.channelsAccessRightsInformation allValues] filteredArrayUsingPredicate:channelsPredicate];
+    NSString *format = @"self.object.isChannelGroup == NO AND self.object.isForDataSynchronization == NO";
+    NSPredicate *channelsPredicate = [NSPredicate predicateWithFormat:format];
+    
+    
+    return [[self.objectsAccessRightsInformation allValues] filteredArrayUsingPredicate:channelsPredicate];
 }
 
 - (NSArray *)accessRightsInformationForAllChannelGroups {
@@ -79,8 +83,11 @@
 
 - (NSArray *)accessRightsInformationForAllChannelGroupObjects {
     
-    NSPredicate *groupsPredicate = [NSPredicate predicateWithFormat:@"self.object.isChannelGroup == YES"];
-    return [[self.channelsAccessRightsInformation allValues] filteredArrayUsingPredicate:groupsPredicate];
+    NSString *format = @"self.object.isChannelGroup == YES AND self.object.isForDataSynchronization == NO";
+    NSPredicate *groupsPredicate = [NSPredicate predicateWithFormat:format];
+    
+    
+    return [[self.objectsAccessRightsInformation allValues] filteredArrayUsingPredicate:groupsPredicate];
 }
 
 - (NSArray *)accessRightsInformationForAllChannelGroupObjectsByClass:(Class)channelGroupObjectClass {
@@ -100,6 +107,15 @@
     return [groupObjectAccessRights copy];
 }
 
+- (NSArray *)accessRightsInformationForAllRemoteDataObjects {
+    
+    NSString *format = @"self.object.isForDataSynchronization == YES AND self.object.isChannelGroup == NO";
+    NSPredicate *channelsPredicate = [NSPredicate predicateWithFormat:format];
+    
+    
+    return [[self.objectsAccessRightsInformation allValues] filteredArrayUsingPredicate:channelsPredicate];
+}
+
 - (PNAccessRightsInformation *)accessRightsInformationForChannel:(PNChannel *)channel {
     
     return [self accessRightsInformationFor:channel];
@@ -107,15 +123,18 @@
 
 - (PNAccessRightsInformation *)accessRightsInformationFor:(id<PNChannelProtocol>)object {
     
-    PNAccessRightsInformation *channelInformation = [self.channelsAccessRightsInformation valueForKey:object.name];
+    PNAccessRightsInformation *channelInformation = [self.objectsAccessRightsInformation valueForKey:object.name];
     
     // Check whether there is no access rights information for specified channel or not.
     if (!channelInformation) {
         
         PNAccessRightsLevel level = (object.isChannelGroup ? PNChannelGroupAccessRightsLevel : PNChannelAccessRightsLevel);
+        if (object.isForDataSynchronization) {
+            
+            level = PNRemoteDataObjectAccessRightsLevel;
+        }
         channelInformation = [PNAccessRightsInformation accessRightsInformationForLevel:level rights:PNUnknownAccessRights
-                                                                         applicationKey:self.applicationKey
-                                                                             forChannel:object client:nil accessPeriod:0];
+                              applicationKey:self.applicationKey forObject:object client:nil accessPeriod:0];
         
         [self populateAccessRightsFrom:[self accessRightsInformationForApplication] to:channelInformation];
     }
@@ -152,7 +171,7 @@
     NSPredicate *filterPredicate = [NSPredicate predicateWithFormat:@"self.authorizationKey = %@", clientAuthorizationKey];
 
 
-    return [[self.channelsAccessRightsInformation allValues] filteredArrayUsingPredicate:filterPredicate];
+    return [[self.objectsAccessRightsInformation allValues] filteredArrayUsingPredicate:filterPredicate];
 }
 
 - (PNAccessRightsInformation *)accessRightsInformationClientAuthorizationKey:(NSString *)clientAuthorizationKey
@@ -165,8 +184,8 @@
     if (clientInformation == nil) {
 
         clientInformation = [PNAccessRightsInformation accessRightsInformationForLevel:PNUserAccessRightsLevel
-                                                               rights:PNUnknownAccessRights applicationKey:self.applicationKey
-                                                           forChannel:channel client:clientAuthorizationKey accessPeriod:0];
+                             rights:PNUnknownAccessRights applicationKey:self.applicationKey
+                          forObject:channel client:clientAuthorizationKey accessPeriod:0];
 
         [self populateAccessRightsFrom:[self accessRightsInformationFor:channel] to:clientInformation];
     }
@@ -180,20 +199,20 @@
     self.applicationAccessRightsInformation = information;
 }
 
-- (void)storeChannelAccessRightsInformation:(PNAccessRightsInformation *)information {
+- (void)storeObjectAccessRightsInformation:(PNAccessRightsInformation *)information {
 
     [self populateAccessRightsFrom:[self accessRightsInformationForApplication] to:information];
 
-    if (![self.channelsAccessRightsInformation objectForKey:information.object.name]) {
+    if (![self.objectsAccessRightsInformation objectForKey:information.object.name]) {
 
-        [self.channelsAccessRightsInformation setValue:information forKey:information.object.name];
+        [self.objectsAccessRightsInformation setValue:information forKey:information.object.name];
     }
 }
 
-- (void)storeClientAccessRightsInformation:(PNAccessRightsInformation *)information forChannel:(PNChannel *)channel {
+- (void)storeClientAccessRightsInformation:(PNAccessRightsInformation *)information forObject:(id <PNChannelProtocol>)object {
 
-    NSString *userInformationStoreKey = [NSString stringWithFormat:@"%@.%@", channel.name, information.authorizationKey];
-    [self populateAccessRightsFrom:[self accessRightsInformationFor:channel] to:information];
+    NSString *userInformationStoreKey = [NSString stringWithFormat:@"%@.%@", object.name, information.authorizationKey];
+    [self populateAccessRightsFrom:[self accessRightsInformationFor:object] to:information];
 
     if (![self.clientsAccessRightsInformation objectForKey:userInformationStoreKey]) {
 
@@ -208,20 +227,20 @@
 
         if (options.level != PNUserAccessRightsLevel) {
 
-            [self storeChannelAccessRightsInformation:[PNAccessRightsInformation accessRightsInformationForLevel:options.level
-                                                                rights:PNNoAccessRights applicationKey:self.applicationKey
-                                                            forChannel:object client:nil accessPeriod:options.accessPeriodDuration]];
+            [self storeObjectAccessRightsInformation:[PNAccessRightsInformation accessRightsInformationForLevel:options.level
+                                                      rights:PNNoAccessRights applicationKey:self.applicationKey
+                                                   forObject:object client:nil accessPeriod:options.accessPeriodDuration]];
         }
 
         [options.clientsAuthorizationKeys enumerateObjectsUsingBlock:^(NSString *clientAuthorizationKey,
                                                                        NSUInteger clientAuthorizationKeyIdx,
                                                                        BOOL *clientAuthorizationKeyEnumeratorStop) {
 
-                    [self storeClientAccessRightsInformation:[PNAccessRightsInformation accessRightsInformationForLevel:PNUserAccessRightsLevel
-                                                                       rights:PNNoAccessRights applicationKey:self.applicationKey
-                                                                   forChannel:object client:clientAuthorizationKey
-                                                                 accessPeriod:options.accessPeriodDuration]
-                                                  forChannel:object];
+            [self storeClientAccessRightsInformation:[PNAccessRightsInformation accessRightsInformationForLevel:PNUserAccessRightsLevel
+                                                      rights:PNNoAccessRights applicationKey:self.applicationKey
+                                                   forObject:object client:clientAuthorizationKey
+                                                accessPeriod:options.accessPeriodDuration]
+                                           forObject:object];
                 }];
     }];
     
@@ -268,7 +287,7 @@
         [descriptionString appendString:[self.applicationAccessRightsInformation description]];
     }
 
-    if ([self.channelsAccessRightsInformation count]) {
+    if ([self.objectsAccessRightsInformation count]) {
 
         NSString *oldIndent = [NSString stringWithString:indent];
         [descriptionString appendFormat:@"\n%@Channels:\n", indent];
@@ -276,7 +295,7 @@
         indent = [indent stringByAppendingString:@"    "];
         [descriptionString appendString:indent];
         NSString *channelsJoinString = [NSString stringWithFormat:@"\n%@", indent];
-        [descriptionString appendString:[[self.channelsAccessRightsInformation allValues]
+        [descriptionString appendString:[[self.objectsAccessRightsInformation allValues]
                componentsJoinedByString:channelsJoinString]];
 
         indent = oldIndent;
@@ -305,14 +324,14 @@
         #pragma clang diagnostic push
         #pragma clang diagnostic ignored "-Wundeclared-selector"
         [descriptionString appendFormat:@"%@%@", [self.applicationAccessRightsInformation performSelector:@selector(logDescription)],
-         ([self.channelsAccessRightsInformation count] || [self.clientsAccessRightsInformation count] ? @"|" : @"")];
+         ([self.objectsAccessRightsInformation count] || [self.clientsAccessRightsInformation count] ? @"|" : @"")];
         #pragma clang diagnostic pop
     }
-    if ([self.channelsAccessRightsInformation count]) {
+    if ([self.objectsAccessRightsInformation count]) {
         
         #pragma clang diagnostic push
         #pragma clang diagnostic ignored "-Wundeclared-selector"
-        [descriptionString appendFormat:@"%@%@", [[self.channelsAccessRightsInformation allValues] performSelector:@selector(logDescription)],
+        [descriptionString appendFormat:@"%@%@", [[self.objectsAccessRightsInformation allValues] performSelector:@selector(logDescription)],
          ([self.clientsAccessRightsInformation count] ? @"|" : @"")];
         #pragma clang diagnostic pop
     }

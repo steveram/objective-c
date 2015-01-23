@@ -14,7 +14,9 @@
 
 #pragma mark Class forward
 
-@class PNAccessRightsCollection, PNPresenceEvent, PNChannelGroup, PNMessage, PNClient, PubNub, PNError, PNDate;
+@class PNAccessRightsCollection, PNObjectInformation, PNPresenceEvent, PNChannelGroup, PNMessage;
+@class PNClient, PubNub, PNError, PNDate;
+@class PNObject;
 
 
 @protocol PNDelegate <NSObject>
@@ -122,6 +124,201 @@
  \b PNError instance which describe what exactly went wrong.
  */
 - (void)pubnubClient:(PubNub *)client clientStateUpdateDidFailWithError:(PNError *)error;
+
+/**
+ @brief Called on delegate when \b PubNub client completed remote object synchronization process.
+ 
+ @param client    \b PubNub instance which triggered event.
+ @param object    Reference on local copy of the object which is stored in \b PubNub cloud
+ @param locations In case if has been requested partial remote object synchronization, this
+                  value will be set to the list of particular location key-paths to the data.
+ 
+ @since <#version number#>
+ */
+- (void)pubnubClient:(PubNub *)client didStartObjectSynchronization:(PNObject *)object
+ withDataAtLocations:(NSArray *)locations;
+
+/**
+ @brief Called on delegate in case if \b PubNub client was unable to complete remote object
+        synchronization process.
+ 
+ @param client            \b PubNub instance which triggered event.
+ @param objectInformation Reference on temporary instance which represent object stored in
+                          \b PubNub cloud till object will fetched or if local copy has been 
+                          destroyed.
+ @param error             \b PNError instance which describe what exactly went wrong.
+ 
+ @since <#version number#>
+ */
+- (void)   pubnubClient:(PubNub *)client
+  objectSynchronization:(PNObjectInformation *)objectInformation
+  startDidFailWithError:(PNError *)error;
+
+/**
+ @brief Called on delegate when \b PubNub client completed remote object synchronization 
+        termination process.
+ 
+ @param client    \b PubNub instance which triggered event.
+ @param object    Reference on local copy of the object which is stored in \b PubNub cloud.
+ 
+ @since <#version number#>
+ */
+- (void)          pubnubClient:(PubNub *)client
+  didStopObjectSynchronization:(PNObjectInformation *)objectInformation;
+
+/**
+ @brief Called on delegate in case if \b PubNub client was unable to complete remote object
+        synchronization termination process.
+ 
+ @param client            \b PubNub instance which triggered event.
+ @param objectInformation Reference on temporary instance which represent object stored in
+                          \b PubNub cloud till object will fetched or if local copy has been 
+                          destroyed.
+ @param error             \b PNError instance which describe what exactly went wrong.
+ 
+ @since <#version number#>
+ */
+- (void)  pubnubClient:(PubNub *)client
+ objectSynchronization:(PNObjectInformation *)objectInformation
+  stopDidFailWithError:(PNError *)error;
+
+/**
+ @brief Called on delegate when \b PubNub client received remote object data modification event.
+
+ @param client               \b PubNub instance which triggered event.
+ @param object               Reference on instance which locally represent remote object from
+                             \b PubNub cloud and allow to receive actual stat5e using \c data
+                             property.
+ @param dataLocationKeyPaths List of data location key-paths at which data has been modified.
+
+ @since <#version number#>
+ */
+- (void)pubnubClient:(PubNub *)client didReceiveModificationEventFor:(PNObject *)object
+         atLocations:(NSArray *)dataLocationKeyPaths;
+
+/**
+ @brief Called on delegate when \b PubNub client successfully fetched object's data from 
+        \b PubNub cloud.
+ 
+ @param client            \b PubNub instance which triggered event.
+ @param objectInformation Reference on temporary instance which represent object stored in 
+                          \b PubNub cloud. Object allow to identify object identifier, particular
+                          location for data which has been requested and actual data which has 
+                          been received from \b PubNub cloud.
+ 
+ @since <#version number#>
+ */
+- (void)      pubnubClient:(PubNub *)client
+  didFetchRemoteObjectData:(PNObjectInformation *)objectInformation;
+
+/**
+ @brief Called on delegate in case if \b PubNub client was unable to fetch requested object's 
+        data from \b PubNub cloud.
+ 
+ @param client            \b PubNub instance which triggered event.
+ @param objectInformation Reference on temporary instance which represent object stored in 
+                          \b PubNub cloud. Object allow to identify object identifier and
+                          particular location for data which has been requested from \b PubNub 
+                          cloud.
+ @param error             \b PNError instance which describe what exactly went wrong.
+ 
+ @since <#version number#>
+ */
+- (void)   pubnubClient:(PubNub *)client remoteObject:(PNObjectInformation *)objectInformation
+  fetchDidFailWithError:(PNError *)error;
+
+/**
+ @brief Called on delegate when \b PubNub client successfully pushed provided data to remote
+        remote object in \b PubNub cloud.
+ 
+ @param client            \b PubNub instance which triggered event.
+ @param objectInformation Reference on temporary instance which represent object stored in 
+                          \b PubNub cloud. Object allow to identify object identifier, particular
+                          location for data which has been pushed and actual data which has
+                          been pushed to \b PubNub cloud.
+ 
+ @since <#version number#>
+ */
+- (void)       pubnubClient:(PubNub *)client
+  didPushDataToRemoteObject:(PNObjectInformation *)objectInformation;
+
+/**
+ @brief Called on delegate in case if \b PubNub client was unable to push data to remote object
+        in \b PubNub cloud.
+ 
+ @param client            \b PubNub instance which triggered event.
+ @param objectInformation Reference on temporary instance which represent object stored in 
+                          \b PubNub cloud. Object allow to identify object identifier, particular
+                          location for data which has been pushed and actual data which has
+                          been pushed to \b PubNub cloud.
+ @param error             \b PNError instance which describe what exactly went wrong.
+ 
+ @since <#version number#>
+ */
+- (void)      pubnubClient:(PubNub *)client remoteObject:(PNObjectInformation *)objectInformation
+  dataPushDidFailWithError:(PNError *)error;
+
+/**
+ @brief Called on delegate when \b PubNub client successfully replaced data inside of remote data
+        object with the one provided by user.
+ 
+ @param client            \b PubNub instance which triggered event.
+ @param objectInformation Reference on temporary instance which represent object stored in 
+                          \b PubNub cloud. Object allow to identify object identifier, particular
+                          location for data which has been replaced and actual data which has
+                          been used to replace old one in \b PubNub cloud.
+ 
+ @since <#version number#>
+ */
+- (void)        pubnubClient:(PubNub *)client
+  didReplaceRemoteObjectData:(PNObjectInformation *)objectInformation;
+
+/**
+ @brief Called on delegate in case if \b PubNub client was unable to replace remote object's data
+        in \b PubNub cloud.
+ 
+ @param client            \b PubNub instance which triggered event.
+ @param objectInformation Reference on temporary instance which represent object stored in 
+                          \b PubNub cloud. Object allow to identify object identifier, particular
+                          location for data which has been replaced and actual data which has
+                          been used to replace old one in \b PubNub cloud.
+ @param error             \b PNError instance which describe what exactly went wrong.
+ 
+ @since <#version number#>
+ */
+- (void)         pubnubClient:(PubNub *)client
+                 remoteObject:(PNObjectInformation *)objectInformation
+  dataReplaceDidFailWithError:(PNError *)error;
+
+/**
+ @brief Called on delegate when \b PubNub client successfully removed remote object's data from
+        \b PubNub cloud.
+ 
+ @param client            \b PubNub instance which triggered event.
+ @param objectInformation Reference on temporary instance which represent object stored in 
+                          \b PubNub cloud. Object allow to identify object identifier, particular
+                          location for data which has been removed.
+ 
+ @since <#version number#>
+ */
+- (void)       pubnubClient:(PubNub *)client
+  didRemoveRemoteObjectData:(PNObjectInformation *)objectInformation;
+
+/**
+ @brief Called on delegate in case if \b PubNub client was unable to remove remote object's data
+        from \b PubNub cloud.
+ 
+ @param client            \b PubNub instance which triggered event.
+ @param objectInformation Reference on temporary instance which represent object stored in 
+                          \b PubNub cloud. Object allow to identify object identifier, particular
+                          location for data which should be removed.
+ @param error             \b PNError instance which describe what exactly went wrong.
+ 
+ @since <#version number#>
+ */
+- (void)        pubnubClient:(PubNub *)client
+                remoteObject:(PNObjectInformation *)objectInformation
+  dataRemoveDidFailWithError:(PNError *)error;
 
 /**
  Called on delegate when client successfully received list of channel groups which has been created earlier.

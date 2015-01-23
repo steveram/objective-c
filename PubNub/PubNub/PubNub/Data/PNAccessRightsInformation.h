@@ -41,10 +41,14 @@
 @property (nonatomic, readonly, strong) PNChannel *channel DEPRECATED_MSG_ATTRIBUTE(" Use 'object' property instead");
 
 /**
- Stores reference on data feed object for which access rights has been granted or retrieved.
+ @brief Stores reference on data feed object for which access rights has been granted or retrieved.
+
+ @discussion In case if access rights has been changed/requested for data synchronization object,
+             then \b PNObject will be stored there and \c identifier property will provide
+             information about actual remote object identifier.
  
  @note This property will be set only if \a level is set to: \a PNChannelAccessRightsLevel, 
- \a PNChannelGroupAccessRightsLevel or \a PNUserAccessRightsLevel.
+       \a PNChannelGroupAccessRightsLevel or \a PNUserAccessRightsLevel.
  */
 @property (nonatomic, readonly, strong) id <PNChannelProtocol> object;
 

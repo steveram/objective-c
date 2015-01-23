@@ -29,11 +29,11 @@
 #pragma mark - Class methods
 
 + (PNAccessRightsInformation *)accessRightsInformationForLevel:(PNAccessRightsLevel)level rights:(PNAccessRights)rights
-                                                applicationKey:(NSString *)subscriptionKey forChannel:(PNChannel *)channel
+                                                applicationKey:(NSString *)subscriptionKey forObject:(id <PNChannelProtocol>)object
                                                         client:(NSString *)clientAuthorizationKey
                                                   accessPeriod:(NSUInteger)accessPeriodDuration {
 
-    return [[self alloc] initWithAccessLevel:level rights:rights applicationKey:subscriptionKey channel:channel
+    return [[self alloc] initWithAccessLevel:level rights:rights applicationKey:subscriptionKey object:object
                                       client:clientAuthorizationKey accessPeriod:accessPeriodDuration];
 }
 
@@ -46,7 +46,7 @@
 #pragma mark - Instance methods
 
 - (id)initWithAccessLevel:(PNAccessRightsLevel)level rights:(PNAccessRights)rights
-           applicationKey:(NSString *)subscriptionKey channel:(PNChannel *)channel
+           applicationKey:(NSString *)subscriptionKey object:(id <PNChannelProtocol>)object
                    client:(NSString *)clientAuthorizationKey accessPeriod:(NSUInteger)accessPeriodDuration {
 
     // Check whether initialization was successful or not
@@ -55,7 +55,7 @@
         self.level = level;
         self.rights = rights;
         self.subscriptionKey = subscriptionKey;
-        self.object = channel;
+        self.object = object;
         self.authorizationKey = clientAuthorizationKey;
         self.accessPeriodDuration = accessPeriodDuration;
     }

@@ -14,8 +14,7 @@
 
 #pragma mark Class forward
 
-@class PNMessagingChannel, PNMessage;
-@class PNPresenceEvent;
+@class PNDataSynchronizationEvent, PNMessagingChannel,  PNPresenceEvent, PNMessage;
 
 
 @protocol PNMessageChannelDelegate <NSObject>
@@ -120,6 +119,40 @@
                withError:(PNError *)error sequenced:(BOOL)isSequenced;
 
 /**
+ @brief Sent to the delegate when client successfully completed subscription on remote data
+        object synchronization feed channels.
+ 
+ @param messagingChannel Reference on \b PNMessagingChannel instance which triggered event
+ @param channelObjects   List of \b PNSynchronizationChannel instances on which client subscribed
+                         to observe remote objects changes.
+ @param isSequenced      Whether this callback should be called as part of single sequence (few 
+                         operations has been completed at once and only lest one will release
+                         procedural lock.
+ 
+ @since <#version number#>
+ */
+- (void)messagingChannel:(PNMessagingChannel *)messagingChannel didSubscribeOnRemoteObjectsChangesFeed:(NSArray *)channelObjects
+               sequenced:(BOOL)isSequenced;
+
+/**
+ @brief Sent to the delegate when client failed to subscribe on remote object data object
+        synchronization feed channels because of error.
+ 
+ @param messagingChannel Reference on \b PNMessagingChannel instance which triggered event
+ @param channelObjects   List of \b PNSynchronizationChannel instances on which client subscribed
+                         to observe remote objects changes.
+ @param error            Reference on \b PNError which contains information about what exactly 
+                         went wrong
+ @param isSequenced      Whether this callback should be called as part of single sequence (few 
+                         operations has been completed at once and only lest one will release
+                         procedural lock.
+ 
+ @since <#version number#>
+ */
+- (void)messagingChannel:(PNMessagingChannel *)messagingChannel didFailSubscribeOnRemoteObjectsChangesFeed:(NSArray *)channelObjects
+               withError:(PNError *)error sequenced:(BOOL)isSequenced;
+
+/**
  * Sent to the delegate when client is about to unsubscribe from specified list of channels
  */
 - (void)messagingChannel:(PNMessagingChannel *)messagingChannel willUnsubscribeFrom:(NSArray *)channelObjects
@@ -136,6 +169,45 @@
  */
 - (void)messagingChannel:(PNMessagingChannel *)messagingChannel didFailUnsubscribeFrom:(NSArray *)channelObjects
                withError:(PNError *)error sequenced:(BOOL)isSequenced;
+
+/**
+ @brief      Sent to the delegate when client successfully completed unsubscription from remote
+             data object synchronization feed channels.
+ 
+ @discussion Unsubscription from data feed channel is last step before object's local copy 
+             invalidation.
+ 
+ @param messagingChannel Reference on \b PNMessagingChannel instance which triggered event
+ @param channelObjects   List of \b PNSynchronizationChannel instances from which client 
+                         unsubscribed to stop remote objects changes observation.
+ @param isSequenced      Whether this callback should be called as part of single sequence (few 
+                         operations has been completed at once and only lest one will release
+                         procedural lock.
+ 
+ @since <#version number#>
+ */
+- (void)                    messagingChannel:(PNMessagingChannel *)messagingChannel
+  didUnsubscribeFromRemoteObjectsChangesFeed:(NSArray *)channelObjects
+                                   sequenced:(BOOL)isSequenced;
+
+/**
+ @brief Sent to the delegate when client failed to unsubscribe from remote object data object
+        synchronization feed channels because of error.
+ 
+ @param messagingChannel Reference on \b PNMessagingChannel instance which triggered event
+ @param channelObjects   List of \b PNSynchronizationChannel instances from which client 
+                         unsubscribed to stop remote objects changes observation.
+ @param error            Reference on \b PNError which contains information about what exactly 
+                         went wrong
+ @param isSequenced      Whether this callback should be called as part of single sequence (few 
+                         operations has been completed at once and only lest one will release
+                         procedural lock.
+ 
+ @since <#version number#>
+ */
+- (void)                        messagingChannel:(PNMessagingChannel *)messagingChannel
+  didFailUnsubscribeFromRemoteObjectsChangesFeed:(NSArray *)channelObjects
+                                       withError:(PNError *)error sequenced:(BOOL)isSequenced;
 
 /**
  * Sent to the delegate when client is about to enable presence observation on specified set of channels
@@ -177,6 +249,20 @@
  * Sent to delegate when client received message from channel on which it subscribed
  */
 - (void)messagingChannel:(PNMessagingChannel *)messagingChannel didReceiveMessage:(PNMessage *)message;
+
+/**
+ Sent to the delegate each time when new synchronization event arrive to the client.
+ */
+/**
+ @brief Sent to the delegate each time when new synchronizatino event arrive to the client.
+ 
+ @param messagingChannel Reference on \b PNMessagingChannel instance which triggered event
+ @param event            Reference on synchronization event information which arrived along with
+                         event.
+ 
+ @since <#version number#>
+ */
+- (void)messagingChannel:(PNMessagingChannel *)messagingChannel didReceiveSynchronizationEvent:(PNDataSynchronizationEvent *)event;
 
 /**
  * Sent to delegate when client received presence event from channel on which it subscribed

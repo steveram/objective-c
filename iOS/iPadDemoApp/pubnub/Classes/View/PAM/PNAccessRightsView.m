@@ -13,9 +13,9 @@
 #import "PNClientIdentifierAddView.h"
 #import "PNObjectInformationView.h"
 #import "NSString+PNLocalization.h"
+#import "NSObject+PNDemoAddition.h"
 #import "PNNamespaceAddDelegate.h"
 #import "PNAccessRightsHelper.h"
-#import "NSObject+PNAddition.h"
 #import "PNNamespaceAddView.h"
 #import "UIView+PNAddition.h"
 #import "PNObjectCell.h"
@@ -203,6 +203,9 @@ static NSTimeInterval const kPNViewDisappearAnimationDuration = 0.2f;
                 
                 view = [self viewFromNibForUserGrantOnChannel];
             }
+            break;
+        default:
+            
             break;
     }
     [view updateLayoutForAccessRightsInformation:information];

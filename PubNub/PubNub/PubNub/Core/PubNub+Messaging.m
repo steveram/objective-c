@@ -7,7 +7,7 @@
  */
 
 #import "PubNub+Messaging.h"
-#import "NSObject+PNAdditions.h"
+#import "NSObject+PNPrivateAdditions.h"
 #import "PNMessage+Protected.h"
 #import "PNServiceChannel.h"
 #import "PubNub+Protected.h"

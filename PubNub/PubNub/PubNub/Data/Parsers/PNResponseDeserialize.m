@@ -14,7 +14,7 @@
 //
 
 #import "PNResponseDeserialize.h"
-#import "NSObject+PNAdditions.h"
+#import "NSObject+PNPrivateAdditions.h"
 #import "NSData+PNAdditions.h"
 #import "PNLogger+Protected.h"
 #import "PNLoggerSymbols.h"

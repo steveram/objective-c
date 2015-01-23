@@ -9,8 +9,10 @@
 #import "PNResponseParser.h"
 #import "PNChannelGroupNamespaceRemoveResponseParser.h"
 #import "PNPushNotificationsEnabledChannelsParser.h"
+#import "PNRemoteObjectDataModificationResponseParser.h"
 #import "PNAccessRightsResponseParser+Protected.h"
 #import "PNChannelGroupNamespacesResponseParser.h"
+#import "PNRemoteObjectDataFetchResponseParser.h"
 #import "PNChannelGroupRemoveResponseParser.h"
 #import "PNClientStateUpdateResponseParser.h"
 #import "PNChannelsForGroupResponseParser.h"
@@ -157,8 +159,20 @@
     }
     // Check whether result is result for "State update" request or not.
     else if ([response.callbackMethod isEqualToString:PNServiceResponseCallbacks.stateUpdateCallback]) {
-
+        
         parserClass = [PNClientStateUpdateResponseParser class];
+    }
+    // Check whether result is result for "Remote object data fetch" request or not.
+    else if ([response.callbackMethod isEqualToString:PNServiceResponseCallbacks.remoteObjectDataFetchCallback]) {
+        
+        parserClass = [PNRemoteObjectDataFetchResponseParser class];
+    }
+    // Check whether result is result for "Remote object data modification" request or not.
+    else if ([response.callbackMethod isEqualToString:PNServiceResponseCallbacks.remoteObjectDataPushCallback] ||
+             [response.callbackMethod isEqualToString:PNServiceResponseCallbacks.remoteObjectDataReplaceCallback] ||
+             [response.callbackMethod isEqualToString:PNServiceResponseCallbacks.remoteObjectDataRemoveCallback]) {
+        
+        parserClass = [PNRemoteObjectDataModificationResponseParser class];
     }
     // Check whether result is result for "Channel Groups" request or not.
     else if ([response.callbackMethod isEqualToString:PNServiceResponseCallbacks.channelGroupsRequestCallback]) {

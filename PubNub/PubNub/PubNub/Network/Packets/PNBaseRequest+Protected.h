@@ -26,14 +26,38 @@
 typedef NS_OPTIONS(NSInteger , PNRequestHTTPMethod) {
     
     /**
-     Request will be sent as plain GET request and all data will be sent via request URL
+     @brief Request will be sent as plain GET request and all data will be sent via request URL
      */
     PNRequestGETMethod,
     
     /**
-     Request will be sent as POST request which may split parameters which should be send between POST body and URL string
+     @brief Request will be sent as POST request which may split parameters which should be send between
+            POST body and URL string
      */
-    PNRequestPOSTMethod
+    PNRequestPOSTMethod,
+
+    /**
+     @brief Request will be sent as PATCH request which may split parameters which should be send
+            between POST body and URL string
+
+     @since <#version number#>
+     */
+    PNRequestPATCHMethod,
+
+    /**
+     @brief Request will be sent as DELETE request.
+
+     @since <#version number#>
+     */
+    PNRequestDELETEMethod,
+
+    /**
+     @brief Request will be sent as PUT request which may split parameters which should be send
+            between POST body and URL string
+
+     @since <#version number#>
+     */
+    PNRequestPUTMethod
 };
 
 

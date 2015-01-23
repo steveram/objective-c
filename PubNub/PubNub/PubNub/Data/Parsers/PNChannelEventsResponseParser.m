@@ -7,6 +7,8 @@
  */
 
 #import "PNPrivateImports.h"
+#import "PNDataSynchronizationEvent+Protected.h"
+#import "PNSynchronizationChannel+Protected.h"
 #import "PNChannelEventsResponseParser.h"
 #import "PNChannelPresence+Protected.h"
 #import "PNPresenceEvent+Protected.h"
@@ -163,19 +165,27 @@ static NSUInteger const kPNResponseTimeTokenElementIndexForEvent = 1;
             [events enumerateObjectsUsingBlock:^(id event, NSUInteger eventIdx, BOOL *eventEnumeratorStop) {
 
                 __block BOOL isPresenceObservationChannel = NO;
+                __block BOOL isDataSynchronizationChannel = NO;
                 PNChannel* (^channelExtractBlock)(NSString *) = ^(NSString *channelName) {
-                    
-                    // Retrieve reference on channel on which event is occurred
-                    PNChannel *channel = [PNChannel channelWithName:channelName];
-                    
-                    // Checking whether event occurred on presence observing channel or no and retrieve reference on
-                    // original channel
-                    isPresenceObservationChannel = ([channel isPresenceObserver]);
-                    if (isPresenceObservationChannel) {
-                        
-                        channel = [(PNChannelPresence *)channel observedChannel];
+
+                    PNChannel *channel = nil;
+
+                    isDataSynchronizationChannel = ([PNSynchronizationChannel isObjectSynchronizationChannel:channelName]);
+                    if (!isDataSynchronizationChannel) {
+
+                        // Retrieve reference on channel on which event is occurred
+                        channel = [PNChannel channelWithName:channelName];
+
+                        // Checking whether event occurred on presence observing channel or no and retrieve reference on
+                        // original channel
+                        isPresenceObservationChannel = ([channel isPresenceObserver]);
+                        if (isPresenceObservationChannel) {
+
+                            channel = [(PNChannelPresence *)channel observedChannel];
+                        }
                     }
-                    
+
+
                     return channel;
                 };
                 
@@ -194,12 +204,17 @@ static NSUInteger const kPNResponseTimeTokenElementIndexForEvent = 1;
                 }
 
                 // Checking whether event presence event or not
-                if (isPresenceObservationChannel && [event isKindOfClass:[NSDictionary class]] &&
-                    [PNPresenceEvent isPresenceEventObject:event]) {
+                if (isPresenceObservationChannel && [PNPresenceEvent isPresenceEventObject:event]) {
                     
                     eventObject = [PNPresenceEvent presenceEventForResponse:event
                                                                   onChannel:targetChannel
                                                                channelGroup:group];
+                }
+                else if (isDataSynchronizationChannel &&
+                        [PNDataSynchronizationEvent isDataSynchronizationEvent:event]) {
+
+                    eventObject = [PNDataSynchronizationEvent eventAt:[channelDetails objectAtIndex:eventIdx]
+                                                          withPayload:event];
                 }
                 else {
 

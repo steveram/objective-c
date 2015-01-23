@@ -1,18 +1,18 @@
 //
-//  NSObject+PNAddition.m
+//  NSObject+PNDemoAddition.m
 //  pubnub
 //
 //  Created by Sergey Mamontov on 3/29/14.
 //  Copyright (c) 2014 PubNub Inc. All rights reserved.
 //
 
-#import "NSObject+PNAddition.h"
+#import "NSObject+PNDemoAddition.h"
 #import <objc/runtime.h>
 
 
 #pragma mark Category methods implementation
 
-@implementation NSObject (PNAddition)
+@implementation NSObject (PNDemoAddition)
 
 
 #pragma mark - Class methods

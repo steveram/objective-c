@@ -8,7 +8,7 @@
 
 #import "PNClientStateView.h"
 #import "NSString+PNLocalization.h"
-#import "NSObject+PNAddition.h"
+#import "NSObject+PNDemoAddition.h"
 #import "PNClientStateHelper.h"
 #import "UIView+PNAddition.h"
 #import "PNObjectCell.h"

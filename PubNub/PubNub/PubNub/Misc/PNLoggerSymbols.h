@@ -811,6 +811,45 @@ struct PNLoggerSymbolsStructure {
             
             // Parameters requirements: [code, connection channel name, PNChannelGroup instance, PNError instance]
             __unsafe_unretained NSString *channelGroupRemovalRequestFailed;
+            
+            
+            
+            
+            // Parameters requirements: [code, connection channel name, PNObjectInformation instance]
+            __unsafe_unretained NSString *remoteObjectDataFetchRequestCompleted;
+            
+            // Parameters requirements: [code, connection channel name, PNObjectInformation instance, PNError instance]
+            __unsafe_unretained NSString *remoteObjectDataFetchRequestFailed;
+            
+            // Parameters requirements: [code, connection channel name, PNObjectInformation instance]
+            __unsafe_unretained NSString *remoteObjectNextPortionOfDataFetchRequestCompleted;
+            
+            // Parameters requirements: [code, connection channel name, PNObjectInformation instance, PNError instance]
+            __unsafe_unretained NSString *remoteObjectNextPortionOfDataFetchRequestFailed;
+            
+            // Parameters requirements: [code, connection channel name, PNObjectInformation instance]
+            __unsafe_unretained NSString *remoteObjectDataPushRequestCompleted;
+            
+            // Parameters requirements: [code, connection channel name, PNObjectInformation instance, PNError instance]
+            __unsafe_unretained NSString *remoteObjectDataPushRequestFailed;
+            
+            // Parameters requirements: [code, connection channel name, PNObjectInformation instance]
+            __unsafe_unretained NSString *remoteObjectDataPushToListRequestCompleted;
+            
+            // Parameters requirements: [code, connection channel name, PNObjectInformation instance, PNError instance]
+            __unsafe_unretained NSString *remoteObjectDataPushToListRequestFailed;
+            
+            // Parameters requirements: [code, connection channel name, PNObjectInformation instance]
+            __unsafe_unretained NSString *remoteObjectDataReplaceRequestCompleted;
+            
+            // Parameters requirements: [code, connection channel name, PNObjectInformation instance, PNError instance]
+            __unsafe_unretained NSString *remoteObjectDataReplaceRequestFailed;
+            
+            // Parameters requirements: [code, connection channel name, PNObjectInformation instance]
+            __unsafe_unretained NSString *remoteObjectDataRemoveRequestCompleted;
+            
+            // Parameters requirements: [code, connection channel name, PNObjectInformation instance, PNError instance]
+            __unsafe_unretained NSString *remoteObjectDataRemoveRequestFailed;
         } service;
         
     } connectionChannel;
@@ -1827,6 +1866,180 @@ struct PNLoggerSymbolsStructure {
         
         // Parameters requirements: [code, stringified state]
         __unsafe_unretained NSString *channelGroupRemovalFailed;
+        
+        
+        
+        
+        
+        // Parameters requirements: [code, remote object identifier, data location, stringified state]
+        __unsafe_unretained NSString *remoteObjectSynchronizationStartAttempt;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *remoteObjectSynchronizationStart;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *remoteObjectSynchronizationStartImpossible;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *postponeRemoteObjectSynchronizationStart;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *remoteObjectSynchronizationStartCompleted;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *remoteObjectSynchronizationStartFailed;
+        
+        
+        // Parameters requirements: [code, remote object identifier, data location, stringified state]
+        __unsafe_unretained NSString *remoteObjectSynchronizationStopAttempt;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *remoteObjectSynchronizationStop;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *remoteObjectSynchronizationStopImpossible;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *postponeRemoteObjectSynchronizationStop;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *remoteObjectSynchronizationStopCompleted;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *remoteObjectSynchronizationStopFailed;
+        
+        
+        // Parameters requirements: [code, remote object identifier, data location, snapshot date, next page token, stringified state]
+        __unsafe_unretained NSString *remoteObjectDataFetchAttempt;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *remoteObjectDataFetch;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *remoteObjectDataFetchImpossible;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *postponeRemoteObjectDataFetch;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *remoteObjectDataFetchCompleted;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *remoteObjectDataFetchFailed;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *rescheduleRemoteObjectDataFetch;
+        
+        
+        // Parameters requirements: [code, remote object identifier, data location, snapshot date, next page token, stringified state]
+        __unsafe_unretained NSString *remoteObjectDataPortionFetchAttempt;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *remoteObjectDataPortionFetch;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *remoteObjectDataPortionFetchImpossible;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *postponeRemoteObjectDataPortionFetch;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *remoteObjectDataPortionFetchCompleted;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *remoteObjectDataPortionFetchFailed;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *rescheduleRemoteObjectDataPortionFetch;
+        
+        
+        // Parameters requirements: [code, remote object identifier, data location, data, stringified state]
+        __unsafe_unretained NSString *remoteObjectDataPushAttempt;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *remoteObjectDataPush;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *remoteObjectDataPushImpossible;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *postponeRemoteObjectDataPush;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *remoteObjectDataPushCompleted;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *remoteObjectDataPushFailed;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *rescheduleRemoteObjectDataPush;
+        
+        
+        // Parameters requirements: [code, remote object identifier, data location, list of entries, stringified state]
+        __unsafe_unretained NSString *remoteObjectDataPushToListAttempt;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *remoteObjectDataPushToList;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *remoteObjectDataPushToListImpossible;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *postponeRemoteObjectDataPushToList;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *remoteObjectDataPushToListCompleted;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *remoteObjectDataPushToListFailed;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *rescheduleRemoteObjectDataPushToList;
+        
+        
+        // Parameters requirements: [code, remote object identifier, data location, data, stringified state]
+        __unsafe_unretained NSString *remoteObjectDataReplaceAttempt;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *remoteObjectDataReplace;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *remoteObjectDataReplaceImpossible;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *postponeRemoteObjectDataReplace;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *remoteObjectDataReplaceCompleted;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *remoteObjectDataReplaceFailed;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *rescheduleRemoteObjectDataReplace;
+        
+        
+        // Parameters requirements: [code, remote object identifier, data location, stringified state]
+        __unsafe_unretained NSString *remoteObjectDataRemoveAttempt;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *remoteObjectDataRemove;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *remoteObjectDataRemoveImpossible;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *postponeRemoteObjectDataRemove;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *remoteObjectDataRemoveCompleted;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *remoteObjectDataRemoveFailed;
+        
+        // Parameters requirements: [code, stringified state]
+        __unsafe_unretained NSString *rescheduleRemoteObjectDataRemove;
+        
     } api;
     
     // Observation center symbols. Group code: 10xxyyy

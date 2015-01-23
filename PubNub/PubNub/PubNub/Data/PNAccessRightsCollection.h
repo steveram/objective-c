@@ -66,6 +66,16 @@
 - (NSArray *)accessRightsInformationForAllChannelGroupNamespaces;
 
 /**
+ @brief Fetch access rights information for all remote data objects (data synchronization).
+ 
+ @return List of \b PNAccessRightsInformation instances each of which describes it's own object
+         (\b PNObject instance stored inside of \c object property).
+ 
+ @since <#version number#>
+ */
+- (NSArray *)accessRightsInformationForAllRemoteDataObjects;
+
+/**
  Fetch access rights information for specific \a 'channel'.
 
  @param channel

@@ -26,6 +26,18 @@ struct PNServiceResponseCallbacksStruct {
     // Name of the function which is used for state update request.
     __unsafe_unretained NSString *stateUpdateCallback;
     
+    // Name of the function which is used for remote data object fetch request.
+    __unsafe_unretained NSString *remoteObjectDataFetchCallback;
+    
+    // Name of the function which is used for remote data object data push request.
+    __unsafe_unretained NSString *remoteObjectDataPushCallback;
+    
+    // Name of the function which is used for remote data object data replace request.
+    __unsafe_unretained NSString *remoteObjectDataReplaceCallback;
+    
+    // Name of the function which is used for remote data object data replace request.
+    __unsafe_unretained NSString *remoteObjectDataRemoveCallback;
+    
     // Name of the function which is used for channel groups request.
     __unsafe_unretained NSString *channelGroupsRequestCallback;
     

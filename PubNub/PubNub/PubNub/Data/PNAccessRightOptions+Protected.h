@@ -21,7 +21,8 @@
 @property (nonatomic, assign) PNAccessRightsLevel level;
 @property (nonatomic, assign) PNAccessRights rights;
 @property (nonatomic, copy) NSString *applicationKey;
-@property (nonatomic, strong) NSArray *channels;
+@property (nonatomic, strong) NSArray *channels DEPRECATED_MSG_ATTRIBUTE(" Use 'objects' property instead.");
+@property (nonatomic, strong) NSArray *objects;
 @property (nonatomic, strong) NSArray *clientsAuthorizationKeys;
 @property (nonatomic, assign) NSUInteger accessPeriodDuration;
 
@@ -53,7 +54,7 @@
  request options.
  */
 + (PNAccessRightOptions *)accessRightOptionsForApplication:(NSString *)applicationKey withRights:(PNAccessRights)rights
-                                                  channels:(NSArray *)channels clients:(NSArray *)clientsAuthorizationKeys
+                                                                                         objects:(NSArray *)objects clients:(NSArray *)clientsAuthorizationKeys
                                               accessPeriod:(NSInteger)accessPeriodDuration;
 
 
@@ -83,7 +84,7 @@
  @return reference on initialized \b PNAccessRightOptions instance which will allow to identify and review
  request options.
  */
-- (id)initWithApplication:(NSString *)applicationKey withRights:(PNAccessRights)rights channels:(NSArray *)channels
+- (id)initWithApplication:(NSString *)applicationKey withRights:(PNAccessRights)rights objects:(NSArray *)objects
                   clients:(NSArray *)clientsAuthorizationKeys accessPeriod:(NSInteger)accessPeriodDuration;
 
 #pragma mark -

@@ -6,7 +6,7 @@
  */
 
 #import "PNCache.h"
-#import "NSObject+PNAdditions.h"
+#import "NSObject+PNPrivateAdditions.h"
 #import "PNHelper.h"
 #import "PNChannel.h"
 
@@ -15,12 +15,21 @@
 
 @interface PNCache ()
 
+
 #pragma mark - Properties
 
 /**
  Unified storage for cached data across all channels which is in use by client and developer.
  */
 @property (nonatomic, strong) NSMutableDictionary *stateCache;
+
+/**
+ @brief Stores reference on linkage between remote object name and it's local representation with
+        \b PNObject instance which provide access to cached data.
+ 
+ @since <#version number#>
+ */
+@property (nonatomic, strong) NSMutableDictionary *remoteObjects;
 
 #pragma mark -
 
@@ -41,7 +50,8 @@
     if ((self = [super init])) {
 
         self.stateCache = [NSMutableDictionary dictionary];
-        [self pn_setupPrivateSerialQueueWithIdentifier:@"state-cache" andPriority:DISPATCH_QUEUE_PRIORITY_DEFAULT];
+        self.remoteObjects = [NSMutableDictionary dictionary];
+        [self pn_setupPrivateSerialQueueWithIdentifier:@"client-cache" andPriority:DISPATCH_QUEUE_PRIORITY_DEFAULT];
     }
 
     return self;
@@ -195,6 +205,40 @@
         [self.stateCache removeAllObjects];
     }];
 }
+
+
+#pragma mark - Data Synchronization methods
+
+- (void)synchronizedDataLocationsForRemoteObject:(NSString *)objectIdentifier
+                                       withBlock:(void (^)(NSArray *dataLocations))fetchCompletionBlock {
+    
+    [self pn_dispatchBlock:^{
+        
+        NSDictionary *objectInformation = [self.remoteObjects valueForKey:objectIdentifier];
+        if (objectInformation) {
+            
+        }
+        else {
+            
+            fetchCompletionBlock(nil);
+        }
+    }];
+}
+
+- (void)purgeAllObjects {
+    
+    [self pn_dispatchBlock:^{
+        
+        NSArray *objects = [self.remoteObjects allValues];
+        if ([objects count]) {
+            
+//            [[objects valueForKey:PNRemoteObjectsCache.object] makeObjectsPerformSelector:@selector(invalidate)];
+        }
+        [self.remoteObjects removeAllObjects];
+    }];
+}
+
+#pragma mark - Misc
 
 - (void)dealloc {
 

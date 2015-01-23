@@ -11,7 +11,7 @@
 
 #import "PNConnectionChannel.h"
 #import "PNConnection+Protected.h"
-#import "NSObject+PNAdditions.h"
+#import "NSObject+PNPrivateAdditions.h"
 #import "PNLogger+Protected.h"
 #import "PNNotifications.h"
 #import "PNRequestsQueue.h"
@@ -1902,7 +1902,7 @@ struct PNStoredRequestKeysStruct PNStoredRequestKeys = {
         }
 
         // Check whether request successfully received and can be used or not
-        BOOL shouldResendRequest = response.error.code == kPNResponseMalformedJSONError || response.statusCode >= 500;
+        __block BOOL shouldResendRequest = response.error.code == kPNResponseMalformedJSONError || response.statusCode >= 500;
         BOOL isRequestSentByUser = request != nil && request.isSendingByUserRequest;
         BOOL shouldHandleResponse = [self shouldHandleResponse:response];
 
@@ -1981,7 +1981,12 @@ struct PNStoredRequestKeysStruct PNStoredRequestKeys = {
                 else {
 
                     shouldResendRequest = NO;
-                    [self requestsQueue:nil didFailRequestSend:request error:response.error
+                    PNError *malformedResponseError = response.error;
+                    if (!malformedResponseError) {
+                        
+                        malformedResponseError = [PNError errorWithCode:kPNResponseMalformedJSONError];
+                    }
+                    [self requestsQueue:nil didFailRequestSend:request error:malformedResponseError
                               withBlock:responseProcessingCompletionBlock];
                 }
             }

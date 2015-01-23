@@ -21,15 +21,18 @@
 //
 
 #import "PNServiceChannel.h"
+#import "PNRemoteObjectDataModificationRequest+Protected.h"
+#import "PNRemoteObjectDataFetchRequest+Protected.h"
 #import "PNAccessRightsCollection+Protected.h"
 #import "PNMessageHistoryRequest+Protected.h"
+#import "PNObjectInformation+Protected.h"
 #import "PNConnectionChannel+Protected.h"
 #import "PNOperationStatus+Protected.h"
 #import "NSInvocation+PNAdditions.h"
 #import "PNServiceChannelDelegate.h"
 #import "PNConnection+Protected.h"
 #import "PNChannelGroupChange.h"
-#import "NSObject+PNAdditions.h"
+#import "NSObject+PNPrivateAdditions.h"
 #import "PNResponse+Protected.h"
 #import "PNMessage+Protected.h"
 #import "PNHereNow+Protected.h"
@@ -78,6 +81,10 @@
     return ([response.callbackMethod hasPrefix:PNServiceResponseCallbacks.latencyMeasureMessageCallback] ||
             [response.callbackMethod hasPrefix:PNServiceResponseCallbacks.stateRetrieveCallback] ||
             [response.callbackMethod hasPrefix:PNServiceResponseCallbacks.stateUpdateCallback] ||
+            [response.callbackMethod hasPrefix:PNServiceResponseCallbacks.remoteObjectDataFetchCallback] ||
+            [response.callbackMethod hasPrefix:PNServiceResponseCallbacks.remoteObjectDataPushCallback] ||
+            [response.callbackMethod hasPrefix:PNServiceResponseCallbacks.remoteObjectDataReplaceCallback] ||
+            [response.callbackMethod hasPrefix:PNServiceResponseCallbacks.remoteObjectDataRemoveCallback] ||
             [response.callbackMethod hasPrefix:PNServiceResponseCallbacks.channelGroupsRequestCallback] ||
             [response.callbackMethod hasPrefix:PNServiceResponseCallbacks.channelGroupNamespacesRequestCallback] ||
             [response.callbackMethod hasPrefix:PNServiceResponseCallbacks.channelGroupNamespaceRemoveCallback] ||
@@ -139,6 +146,11 @@
             NSDictionary *clientData = ([request isKindOfClass:[PNClientStateUpdateRequest class]] ? [request valueForKey:@"state"] : nil);
             response.additionalData = [PNClient clientForIdentifier:identifier channel:channel andData:clientData];
         }
+        else if ([request isKindOfClass:[PNRemoteObjectDataFetchRequest class]] ||
+                 [request isKindOfClass:[PNRemoteObjectDataModificationRequest class]]) {
+            
+            response.additionalData = [request valueForKey:@"objectInformation"];
+        }
         else if ([request isKindOfClass:[PNChannelGroupRemoveRequest class]]) {
             
             response.additionalData = [request valueForKey:@"group"];
@@ -181,7 +193,189 @@
                     [self.serviceDelegate serviceChannel:self receiveTimeTokenDidFailWithError:parsedData];
                 }
             }
-                // Check whether request was sent for state retrieval
+            else if ([request isKindOfClass:[PNRemoteObjectDataFetchRequest class]]) {
+                
+                PNRemoteObjectDataFetchRequest *fetchRequets = (PNRemoteObjectDataFetchRequest *)request;
+                PNObjectInformation *objectInformation = fetchRequets.objectInformation;
+                
+                if (objectInformation.nextDataPageToken) {
+                    
+                    // Check whether there is no error while loading participants list
+                    if (![parsedData isKindOfClass:[PNError class]]) {
+                        
+                        [PNLogger logCommunicationChannelInfoMessageFrom:self withParametersFromBlock:^NSArray * {
+                            
+                            return @[PNLoggerSymbols.connectionChannel.service.remoteObjectNextPortionOfDataFetchRequestCompleted,
+                                     (self.name ? self.name : self), objectInformation];
+                        }];
+                        
+                        [self.serviceDelegate serviceChannel:self
+                       didFetchRemoteObjectNextPortionOfData:objectInformation];
+                    }
+                    else {
+                        
+                        [(PNError *) parsedData replaceAssociatedObject:objectInformation];
+                        [PNLogger logCommunicationChannelErrorMessageFrom:self withParametersFromBlock:^NSArray * {
+                            
+                            return @[PNLoggerSymbols.connectionChannel.service.remoteObjectDataFetchRequestFailed,
+                                     (self.name ? self.name : self), objectInformation,
+                                     (parsedData ? parsedData : [NSNull null])];
+                        }];
+                        
+                        [self.serviceDelegate serviceChannel:self remoteObject:objectInformation
+                      nextPortionOfDatafetchDidFailWithError:parsedData];
+                    }
+                }
+                else {
+                    
+                    // Check whether there is no error while loading participants list
+                    if (![parsedData isKindOfClass:[PNError class]]) {
+                        
+                        [PNLogger logCommunicationChannelInfoMessageFrom:self withParametersFromBlock:^NSArray * {
+                            
+                            return @[PNLoggerSymbols.connectionChannel.service.remoteObjectDataFetchRequestCompleted,
+                                     (self.name ? self.name : self), objectInformation];
+                        }];
+                        
+                        [self.serviceDelegate serviceChannel:self didFetchRemoteObjectData:objectInformation];
+                    }
+                    else {
+                        
+                        [(PNError *) parsedData replaceAssociatedObject:objectInformation];
+                        [PNLogger logCommunicationChannelErrorMessageFrom:self withParametersFromBlock:^NSArray * {
+                            
+                            return @[PNLoggerSymbols.connectionChannel.service.remoteObjectDataFetchRequestFailed,
+                                     (self.name ? self.name : self), objectInformation,
+                                     (parsedData ? parsedData : [NSNull null])];
+                        }];
+                        
+                        [self.serviceDelegate serviceChannel:self remoteObject:objectInformation
+                                       fetchDidFailWithError:parsedData];
+                    }
+                }
+            }
+            else if ([request isKindOfClass:[PNRemoteObjectDataModificationRequest class]]) {
+                
+                PNRemoteObjectDataModificationRequest *modificationRequets = (PNRemoteObjectDataModificationRequest *)request;
+                PNRemoteObjectModificationType modificationType = modificationRequets.modificationType;
+                PNObjectInformation *objectInformation = modificationRequets.objectInformation;
+                
+                if (modificationType == PNRemoteObjectPushModificationType) {
+                    
+                    // Check whether there is no error while loading participants list
+                    if (![parsedData isKindOfClass:[PNError class]]) {
+                        
+                        [PNLogger logCommunicationChannelInfoMessageFrom:self withParametersFromBlock:^NSArray * {
+                            
+                            return @[PNLoggerSymbols.connectionChannel.service.remoteObjectDataPushRequestCompleted,
+                                     (self.name ? self.name : self), objectInformation];
+                        }];
+                        
+                        [self.serviceDelegate serviceChannel:self
+                                   didPushDataToRemoteObject:objectInformation];
+                    }
+                    else {
+                        
+                        [(PNError *) parsedData replaceAssociatedObject:objectInformation];
+                        [PNLogger logCommunicationChannelErrorMessageFrom:self withParametersFromBlock:^NSArray * {
+                            
+                            return @[PNLoggerSymbols.connectionChannel.service.remoteObjectDataPushRequestFailed,
+                                     (self.name ? self.name : self), objectInformation,
+                                     (parsedData ? parsedData : [NSNull null])];
+                        }];
+                        
+                        [self.serviceDelegate serviceChannel:self remoteObject:objectInformation
+                                    dataPushDidFailWithError:parsedData];
+                    }
+                }
+                else if (modificationType == PNRemoteObjectPushToListModificationType) {
+                    
+                    // Check whether there is no error while loading participants list
+                    if (![parsedData isKindOfClass:[PNError class]]) {
+                        
+                        [PNLogger logCommunicationChannelInfoMessageFrom:self withParametersFromBlock:^NSArray * {
+                            
+                            return @[PNLoggerSymbols.connectionChannel.service.remoteObjectDataPushToListRequestCompleted,
+                                     (self.name ? self.name : self), objectInformation];
+                        }];
+                        
+                        [self.serviceDelegate serviceChannel:self
+                             didPushDataToListInRemoteObject:objectInformation
+                                              withSortingKey:modificationRequets.entriesSortingKey];
+                    }
+                    else {
+                        
+                        [(PNError *) parsedData replaceAssociatedObject:objectInformation];
+                        [PNLogger logCommunicationChannelErrorMessageFrom:self withParametersFromBlock:^NSArray * {
+                            
+                            return @[PNLoggerSymbols.connectionChannel.service.remoteObjectDataPushToListRequestFailed,
+                                     (self.name ? self.name : self), objectInformation,
+                                     (parsedData ? parsedData : [NSNull null])];
+                        }];
+                        
+                        [self.serviceDelegate serviceChannel:self remoteObject:objectInformation
+                              dataPushToListDidFailWithError:parsedData
+                                               andSortingKey:modificationRequets.entriesSortingKey];
+                    }
+                }
+                else if (modificationType == PNRemoteObjectReplaceModificationType) {
+                    
+                    // Check whether there is no error while loading participants list
+                    if (![parsedData isKindOfClass:[PNError class]]) {
+                        
+                        [PNLogger logCommunicationChannelInfoMessageFrom:self withParametersFromBlock:^NSArray * {
+                            
+                            return @[PNLoggerSymbols.connectionChannel.service.remoteObjectDataReplaceRequestCompleted,
+                                     (self.name ? self.name : self), objectInformation];
+                        }];
+                        
+                        [self.serviceDelegate serviceChannel:self
+                                  didReplaceRemoteObjectData:objectInformation];
+                    }
+                    else {
+                        
+                        [(PNError *) parsedData replaceAssociatedObject:objectInformation];
+                        [PNLogger logCommunicationChannelErrorMessageFrom:self withParametersFromBlock:^NSArray * {
+                            
+                            return @[PNLoggerSymbols.connectionChannel.service.remoteObjectDataReplaceRequestFailed,
+                                     (self.name ? self.name : self), objectInformation,
+                                     (parsedData ? parsedData : [NSNull null])];
+                        }];
+                        
+                        [self.serviceDelegate serviceChannel:self remoteObject:objectInformation
+                                 dataReplaceDidFailWithError:parsedData];
+                    }
+                }
+                else if (modificationType == PNRemoteObjectRemoveModificationType) {
+                    
+                    // Check whether there is no error while loading participants list
+                    if (![parsedData isKindOfClass:[PNError class]]) {
+                        
+                        [PNLogger logCommunicationChannelInfoMessageFrom:self withParametersFromBlock:^NSArray * {
+                            
+                            return @[PNLoggerSymbols.connectionChannel.service.remoteObjectDataRemoveRequestCompleted,
+                                     (self.name ? self.name : self), objectInformation];
+                        }];
+                        
+                        [self.serviceDelegate serviceChannel:self
+                                   didRemoveRemoteObjectData:objectInformation];
+                    }
+                    else {
+                        
+                        [(PNError *) parsedData replaceAssociatedObject:objectInformation];
+                        [PNLogger logCommunicationChannelErrorMessageFrom:self withParametersFromBlock:^NSArray * {
+                            
+                            return @[PNLoggerSymbols.connectionChannel.service.remoteObjectDataRemoveRequestFailed,
+                                     (self.name ? self.name : self), objectInformation,
+                                     (parsedData ? parsedData : [NSNull null])];
+                        }];
+                        
+                        [self.serviceDelegate serviceChannel:self remoteObject:objectInformation
+                                  dataRemoveDidFailWithError:parsedData];
+                    }
+                }
+            }
+            // Check whether request was sent for state retrieval
             else if ([request isKindOfClass:[PNClientStateRequest class]]) {
 
                 // Check whether there is no error while loading participants list
@@ -790,6 +984,58 @@
         [self.delegate performSelector:errorSelector withObject:self withObject:error];
         #pragma clang diagnostic pop
     }
+    else if ([request isKindOfClass:[PNRemoteObjectDataFetchRequest class]]) {
+        
+        PNObjectInformation *objectInformation = ((PNRemoteObjectDataFetchRequest *)request).objectInformation;
+        if (error.code == kPNRequestCantBeProcessedWithOutRescheduleError) {
+            
+            [error replaceAssociatedObject:objectInformation];
+        }
+        
+        if (objectInformation.nextDataPageToken) {
+            
+            [self.serviceDelegate serviceChannel:self remoteObject:objectInformation
+          nextPortionOfDatafetchDidFailWithError:error];
+        }
+        else {
+            
+            [self.serviceDelegate serviceChannel:self remoteObject:objectInformation
+                           fetchDidFailWithError:error];
+        }
+    }
+    else if ([request isKindOfClass:[PNRemoteObjectDataModificationRequest class]]) {
+        
+        PNRemoteObjectDataModificationRequest *modificationRequets = (PNRemoteObjectDataModificationRequest *)request;
+        PNRemoteObjectModificationType modificationType = modificationRequets.modificationType;
+        PNObjectInformation *objectInformation = modificationRequets.objectInformation;
+        
+        if (error.code == kPNRequestCantBeProcessedWithOutRescheduleError) {
+            
+            [error replaceAssociatedObject:objectInformation];
+        }
+        
+        if (modificationType == PNRemoteObjectPushModificationType) {
+            
+            [self.serviceDelegate serviceChannel:self remoteObject:objectInformation
+                        dataPushDidFailWithError:error];
+        }
+        else if (modificationType == PNRemoteObjectReplaceModificationType) {
+            
+            [self.serviceDelegate serviceChannel:self remoteObject:objectInformation
+                  dataPushToListDidFailWithError:error
+                                   andSortingKey:modificationRequets.entriesSortingKey];
+        }
+        else if (modificationType == PNRemoteObjectReplaceModificationType) {
+            
+            [self.serviceDelegate serviceChannel:self remoteObject:objectInformation
+                     dataReplaceDidFailWithError:error];
+        }
+        else if (modificationType == PNRemoteObjectRemoveModificationType) {
+            
+            [self.serviceDelegate serviceChannel:self remoteObject:objectInformation
+                      dataRemoveDidFailWithError:error];
+        }
+    }
     // Check whether request was sent for channel groups request / channels list for group request / remove
     else if ([request isKindOfClass:[PNChannelGroupsRequest class]] || [request isKindOfClass:[PNChannelsForGroupRequest class]] ||
              [request isKindOfClass:[PNChannelGroupNamespaceRemoveRequest class]] ||
@@ -1216,6 +1462,71 @@
         #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
         [self.delegate performSelector:errorSelector withObject:self withObject:error];
         #pragma clang diagnostic pop
+    }
+    else if ([request isKindOfClass:[PNRemoteObjectDataFetchRequest class]]) {
+        
+        PNObjectInformation *objectInformation = ((PNRemoteObjectDataFetchRequest *)request).objectInformation;
+        errorMessage = @"Remote object data fetch request failed by timeout";
+        if (objectInformation.lastSnaphostTimeToken) {
+            
+            errorMessage = @"Remote object next portion of data fetch request failed by timeout";
+        }
+        PNError *error = [PNError errorWithMessage:errorMessage code:errorCode];
+        error.associatedObject = objectInformation;
+        
+        if (objectInformation.nextDataPageToken) {
+            
+            [self.serviceDelegate serviceChannel:self remoteObject:objectInformation
+          nextPortionOfDatafetchDidFailWithError:error];
+        }
+        else {
+            
+            [self.serviceDelegate serviceChannel:self remoteObject:objectInformation
+                           fetchDidFailWithError:error];
+        }
+    }
+    else if ([request isKindOfClass:[PNRemoteObjectDataModificationRequest class]]) {
+        
+        PNRemoteObjectDataModificationRequest *modificationRequets = (PNRemoteObjectDataModificationRequest *)request;
+        PNRemoteObjectModificationType modificationType = modificationRequets.modificationType;
+        PNObjectInformation *objectInformation = modificationRequets.objectInformation;
+        errorMessage = @"Remote object data push request failed by timeout";
+        if (modificationType == PNRemoteObjectPushToListModificationType) {
+            
+            errorMessage = @"Remote object data push to list request failed by timeout";
+        }
+        else if (modificationType == PNRemoteObjectReplaceModificationType) {
+            
+            errorMessage = @"Remote object data replace request failed by timeout";
+        }
+        else if (modificationType == PNRemoteObjectRemoveModificationType) {
+            
+            errorMessage = @"Remote object data removal request failed by timeout";
+        }
+        PNError *error = [PNError errorWithMessage:errorMessage code:errorCode];
+        error.associatedObject = objectInformation;
+        
+        if (modificationType == PNRemoteObjectPushModificationType) {
+            
+            [self.serviceDelegate serviceChannel:self remoteObject:objectInformation
+                        dataPushDidFailWithError:error];
+        }
+        else if (modificationType == PNRemoteObjectReplaceModificationType) {
+            
+            [self.serviceDelegate serviceChannel:self remoteObject:objectInformation
+                  dataPushToListDidFailWithError:error
+                                   andSortingKey:modificationRequets.entriesSortingKey];
+        }
+        else if (modificationType == PNRemoteObjectReplaceModificationType) {
+            
+            [self.serviceDelegate serviceChannel:self remoteObject:objectInformation
+                     dataReplaceDidFailWithError:error];
+        }
+        else if (modificationType == PNRemoteObjectRemoveModificationType) {
+            
+            [self.serviceDelegate serviceChannel:self remoteObject:objectInformation
+                      dataRemoveDidFailWithError:error];
+        }
     }
     // Check whether request was sent for channel groups request / channels list for group request / remove
     else if ([request isKindOfClass:[PNChannelGroupsRequest class]] || [request isKindOfClass:[PNChannelsForGroupRequest class]] ||

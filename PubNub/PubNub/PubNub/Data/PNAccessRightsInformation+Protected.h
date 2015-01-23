@@ -61,7 +61,7 @@
  access rights information.
  */
 + (PNAccessRightsInformation *)accessRightsInformationForLevel:(PNAccessRightsLevel)level rights:(PNAccessRights)rights
-                                                applicationKey:(NSString *)subscriptionKey forChannel:(PNChannel *)channel
+                                                applicationKey:(NSString *)subscriptionKey forObject:(id <PNChannelProtocol>)object
                                                         client:(NSString *)clientAuthorizationKey
                                                   accessPeriod:(NSUInteger)accessPeriodDuration;
 
@@ -75,7 +75,8 @@
  Array of \b PNAccessRightsInformation instances which should be filtered to find list of items with corresponding
  access right level.
  */
-+ (NSArray *)accessRightsInformationForLevel:(PNAccessRightsLevel)accessRightsLevel fromList:(NSArray *)accessRightsInformation;
++ (NSArray *)accessRightsInformationForLevel:(PNAccessRightsLevel)accessRightsLevel
+                                    fromList:(NSArray *)accessRightsInformation;
 
 
 #pragma mark - Instance methods
@@ -113,7 +114,8 @@
  access rights information.
  */
 - (id)initWithAccessLevel:(PNAccessRightsLevel)level rights:(PNAccessRights)rights
-           applicationKey:(NSString *)subscriptionKey channel:(PNChannel *)channel client:(NSString *)clientAuthorizationKey
+           applicationKey:(NSString *)subscriptionKey object:(id <PNChannelProtocol>)object
+                   client:(NSString *)clientAuthorizationKey
              accessPeriod:(NSUInteger)accessPeriodDuration;
 
 #pragma mark -

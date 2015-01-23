@@ -13,6 +13,7 @@
 #import "PNResponse.h"
 #import "PNChannel.h"
 #import "PNHelper.h"
+#import "PNObject.h"
 
 
 // ARC check
@@ -36,6 +37,12 @@ struct PNAccessLevelsStruct {
     // Used to identify user in channel-group access level.
     __unsafe_unretained NSString *userInChannelGroup;
     
+    // Used to identify remote data object wide access level.
+    __unsafe_unretained NSString *remoteDataObject;
+    
+    // Used to identify remote data object user access level.
+    __unsafe_unretained NSString *remoteDataObjectUser;
+    
     // Used to identify channel wide access level.
     __unsafe_unretained NSString *channel;
 
@@ -48,6 +55,8 @@ struct PNAccessLevelsStruct PNAccessLevels = {
     .application = @"subkey",
     .channelGroup = @"channel-group",
     .userInChannelGroup = @"channel-group+auth",
+    .remoteDataObject = @"datasync",
+    .remoteDataObjectUser = @"datasync+auth",
     .channel = @"channel",
     .user = @"user"
 };
@@ -89,6 +98,16 @@ struct PNAccessLevelsStruct PNAccessLevels = {
 - (void)parseChannelAccessInformationFromDictionary:(NSDictionary *)channelInformationDictionary;
 
 /**
+ @brief Parse a \a 'datasync' access rights information from provided dictionary.
+ 
+ @param objectInformationDictionary \a NSDictionary instance which hold information from server 
+                                     about access rights configuration for channel(s).
+ 
+ @since <#version number#>
+ */
+- (void)parseObjectAccessInformationFromDictionary:(NSDictionary *)objectInformationDictionary;
+
+/**
  @brief Parse channels from different sources (simple chanels list of channel groups).
  
  @param objectTypeHolderKey         Key can be one of: \c channel-groups or \c channels
@@ -119,7 +138,8 @@ struct PNAccessLevelsStruct PNAccessLevels = {
 
 #pragma mark - Public interface implementation
 
-@implementation PNAccessRightsResponseParser
+@implementation
+PNAccessRightsResponseParser
 
 
 #pragma mark - Class methods
@@ -255,8 +275,8 @@ struct PNAccessLevelsStruct PNAccessLevels = {
 
             // Construct \a root of the access rights tree.
             PNAccessRightsInformation *applicationInformation = [PNAccessRightsInformation accessRightsInformationForLevel:accessLevel
-                                                                          rights:accessRights applicationKey:application
-                                                                      forChannel:nil client:nil accessPeriod:accessPeriod];
+                                                                 rights:accessRights applicationKey:application
+                                                              forObject:nil client:nil accessPeriod:accessPeriod];
             [self.information storeApplicationAccessRightsInformation:applicationInformation];
 
             
@@ -282,6 +302,10 @@ struct PNAccessLevelsStruct PNAccessLevels = {
             
             [self parseChannelAccessInformationFromDictionary:accessInformation];
         }
+        else if (accessLevel == PNRemoteDataObjectAccessRightsLevel) {
+            
+            [self parseObjectAccessInformationFromDictionary:accessInformation];
+        }
         else {
 
             [self parseClientAccessInformationFromDictionary:accessInformation];
@@ -302,12 +326,21 @@ struct PNAccessLevelsStruct PNAccessLevels = {
     [self parseObjectType:kPNAccessChannelsKey accessInformationFromDictionary:channelInformationDictionary];
 }
 
+- (void)parseObjectAccessInformationFromDictionary:(NSDictionary *)objectInformationDictionary {
+    
+    [self parseObjectType:kPNAccessRemoteDataObjectKey accessInformationFromDictionary:objectInformationDictionary];
+}
+
 - (void)          parseObjectType:(NSString *)objectTypeHolderKey
   accessInformationFromDictionary:(NSDictionary *)objectInformationDictionary {
     
     // Stores reference on actual access rights
     PNAccessRightsLevel level = ([objectTypeHolderKey isEqualToString:kPNAccessChannelsKey] ?
                                  PNChannelAccessRightsLevel : PNChannelGroupAccessRightsLevel);
+    if ([objectTypeHolderKey isEqualToString:kPNAccessRemoteDataObjectKey]) {
+        
+        level = PNRemoteDataObjectAccessRightsLevel;
+    }
     
     // Fetch access rights period (time during which they will be valid)
     __block NSUInteger accessPeriod = [[objectInformationDictionary valueForKeyPath:kPNAccessRightsPeriodKey] unsignedIntegerValue];
@@ -325,9 +358,13 @@ struct PNAccessLevelsStruct PNAccessLevels = {
             
             object = [PNChannel channelWithName:objectName];
         }
-        else {
+        else if (level == PNChannelGroupAccessRightsLevel) {
             
             object = [PNChannelGroup channelGroupWithName:objectName];
+        }
+        else {
+            
+            object = [PNObject objectWithIdentifier:objectName];
         }
         
         // Fetch access period.
@@ -338,11 +375,11 @@ struct PNAccessLevelsStruct PNAccessLevels = {
         
         // Fetch granted access rights.
         accessRights = [self accessRightsFromDictionary:objectInformation];
-        
-        
-        [self.information storeChannelAccessRightsInformation:[PNAccessRightsInformation accessRightsInformationForLevel:level
-                                                                rights:accessRights applicationKey:self.information.applicationKey
-                                                                forChannel:object client:nil accessPeriod:accessPeriod]];
+
+
+        [self.information storeObjectAccessRightsInformation:[PNAccessRightsInformation accessRightsInformationForLevel:level
+                                                              rights:accessRights applicationKey:self.information.applicationKey
+                                                           forObject:object client:nil accessPeriod:accessPeriod]];
         
         // Checking whether \a 'channel' level access rights has been changes as well or not.
         if ([objectInformation valueForKeyPath:kPNAccessChannelsAuthorizationKey] != nil &&
@@ -358,12 +395,11 @@ struct PNAccessLevelsStruct PNAccessLevels = {
                 
                 // Fetch granted access rights.
                 accessRights = [self accessRightsFromDictionary:clientAccessInformation];
-                
+
                 [self.information storeClientAccessRightsInformation:[PNAccessRightsInformation accessRightsInformationForLevel:PNUserAccessRightsLevel
                                                                        rights:accessRights applicationKey:self.information.applicationKey
-                                                                       forChannel:object client:clientAuthorizationKey
-                                                                       accessPeriod:accessPeriod]
-                                                          forChannel:object];
+                                                                    forObject:object client:clientAuthorizationKey accessPeriod:accessPeriod]
+                                                           forObject:object];
             }];
         }
     }];
@@ -394,10 +430,9 @@ struct PNAccessLevelsStruct PNAccessLevels = {
         accessRights = [self accessRightsFromDictionary:clientInformation];
 
         [self.information storeClientAccessRightsInformation:[PNAccessRightsInformation accessRightsInformationForLevel:PNUserAccessRightsLevel
-                                                                                        rights:accessRights applicationKey:self.information.applicationKey
-                                                                                    forChannel:channel client:clientAuthorizationKey
-                                                                                  accessPeriod:accessPeriod]
-                                                  forChannel:channel];
+                                                              rights:accessRights applicationKey:self.information.applicationKey
+                                                           forObject:channel client:clientAuthorizationKey accessPeriod:accessPeriod]
+                                                   forObject:channel];
     }];
 }
 
@@ -421,8 +456,13 @@ struct PNAccessLevelsStruct PNAccessLevels = {
         
         level = PNChannelAccessRightsLevel;
     }
+    else if ([stringifiedAccessLevel isEqualToString:PNAccessLevels.remoteDataObject]) {
+        
+        level = PNRemoteDataObjectAccessRightsLevel;
+    }
     else if ([stringifiedAccessLevel isEqualToString:PNAccessLevels.user] ||
-             [stringifiedAccessLevel isEqualToString:PNAccessLevels.userInChannelGroup]) {
+             [stringifiedAccessLevel isEqualToString:PNAccessLevels.userInChannelGroup] ||
+             [stringifiedAccessLevel isEqualToString:PNAccessLevels.remoteDataObjectUser]) {
         
         level = PNUserAccessRightsLevel;
     }

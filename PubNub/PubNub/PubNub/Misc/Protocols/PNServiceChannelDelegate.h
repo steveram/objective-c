@@ -75,6 +75,233 @@
  */
 - (void)serviceChannel:(PNServiceChannel *)channel clientStateUpdateDidFailWithError:(PNError *)error;
 
+
+
+/**
+ @brief Called on delegate when \b PubNub client successfully fetched object's data from 
+        \b PubNub cloud.
+ 
+ @param client            Communication channel over which request has been sent and processed 
+                          response from \b PubNub services.
+ @param objectInformation Reference on temporary instance which represent object stored in 
+                          \b PubNub cloud. Object allow to identify object identifier, particular
+                          location for data which has been requested and actual data which has 
+                          been received from \b PubNub cloud.
+ 
+ @since <#version number#>
+ */
+- (void)    serviceChannel:(PNServiceChannel *)channel
+  didFetchRemoteObjectData:(PNObjectInformation *)objectInformation;
+
+/**
+ @brief Called on delegate in case if \b PubNub client was unable to fetch requested object's 
+        data from \b PubNub cloud.
+ 
+ @param client            Communication channel over which request has been sent and processed 
+                          response from \b PubNub services.
+ @param objectInformation Reference on temporary instance which represent object stored in 
+                          \b PubNub cloud. Object allow to identify object identifier and
+                          particular location for data which has been requested from \b PubNub 
+                          cloud.
+ @param error             \b PNError instance which describe what exactly went wrong.
+ 
+ @since <#version number#>
+ */
+- (void) serviceChannel:(PNServiceChannel *)channel
+           remoteObject:(PNObjectInformation *)objectInformation
+  fetchDidFailWithError:(PNError *)error;
+
+/**
+ @brief Called on delegate when \b PubNub client successfully fetched next portion of remote
+        object's data from \b PubNub cloud.
+ 
+ @param client            Communication channel over which request has been sent and processed 
+                          response from \b PubNub services.
+ @param objectInformation Reference on temporary instance which represent object stored in 
+                          \b PubNub cloud. Object allow to identify object identifier, particular
+                          location for data which has been requested and actual data which has 
+                          been received from \b PubNub cloud.
+ 
+ @since <#version number#>
+ */
+- (void)                 serviceChannel:(PNServiceChannel *)channel
+  didFetchRemoteObjectNextPortionOfData:(PNObjectInformation *)objectInformation;
+
+/**
+ @brief Called on delegate in case if \b PubNub client was unable to fetch next portion of 
+        data for requested remote object from \b PubNub cloud.
+ 
+ @param client            Communication channel over which request has been sent and processed 
+                          response from \b PubNub services.
+ @param objectInformation Reference on temporary instance which represent object stored in 
+                          \b PubNub cloud. Object allow to identify object identifier and
+                          particular location for data which has been requested from \b PubNub 
+                          cloud.
+ @param error             \b PNError instance which describe what exactly went wrong.
+ 
+ @since <#version number#>
+ */
+- (void)                  serviceChannel:(PNServiceChannel *)channel
+                            remoteObject:(PNObjectInformation *)objectInformation
+  nextPortionOfDatafetchDidFailWithError:(PNError *)error;
+
+/**
+ @brief Sent to the delegate when \b PubNub client successfully pushed data to remote object.
+
+ @param channel           Communication channel over which request has been sent and processed 
+                          response from \b PubNub services.
+ @param objectInformation Reference on temporary instance which represent object stored in 
+                          \b PubNub cloud. Object allow to identify object identifier, particular
+                          location for data which has been pushed and actual data which has
+                          been pushed to \b PubNub cloud.
+ 
+ @since <#version number#>
+ */
+- (void)     serviceChannel:(PNServiceChannel *)channel
+  didPushDataToRemoteObject:(PNObjectInformation *)objectInformation;
+
+/**
+ @brief Sent to the delegate when \b PubNub client did fail to push data to remote object.
+
+ @param channel           Communication channel over which request has been sent and processed 
+                          response from \b PubNub services.
+ @param objectInformation Reference on temporary instance which represent object stored in 
+                          \b PubNub cloud. Object allow to identify object identifier, particular
+                          location for data which has been pushed and actual data which has
+                          been pushed to \b PubNub cloud.
+ @param error             \b PNError instance which describe what exactly went wrong.
+
+ @note Always check \a error.code to find out what caused error (check PNErrorCodes header file 
+       and use \a -localizedDescription / \a -localizedFailureReason and 
+       \a -localizedRecoverySuggestion to get human readable description for error).
+ 
+ @since <#version number#>
+ */
+- (void)    serviceChannel:(PNServiceChannel *)channel
+              remoteObject:(PNObjectInformation *)objectInformation
+  dataPushDidFailWithError:(PNError *)error;
+
+/**
+ @brief Sent to the delegate when \b PubNub client successfully pushed data to list in remote 
+        object.
+
+ @param channel           Communication channel over which request has been sent and processed 
+                          response from \b PubNub services.
+ @param objectInformation Reference on temporary instance which represent object stored in 
+                          \b PubNub cloud. Object allow to identify object identifier, particular
+                          location for data which has been pushed and actual data which has
+                          been pushed to \b PubNub cloud.
+ @param entriesSortingKey Allow to manage lexigraphical sorting mechanism by specifying char or
+                          word with which will be used during output of sorted list. Only
+                          \b [A-Za-z] can be used.
+                          If \c nil is passed, then object(s) will be added to the end of the 
+                          list.
+ 
+ @since <#version number#>
+ */
+- (void)           serviceChannel:(PNServiceChannel *)channel
+  didPushDataToListInRemoteObject:(PNObjectInformation *)objectInformation
+                   withSortingKey:(NSString *)entriesSortingKey;
+
+/**
+ @brief Sent to the delegate when \b PubNub client did fail to push data to list in remote object.
+
+ @param channel           Communication channel over which request has been sent and processed 
+                          response from \b PubNub services.
+ @param objectInformation Reference on temporary instance which represent object stored in 
+                          \b PubNub cloud. Object allow to identify object identifier, particular
+                          location for data which has been pushed and actual data which has
+                          been pushed to \b PubNub cloud.
+ @param error             \b PNError instance which describe what exactly went wrong.
+ @param entriesSortingKey Allow to manage lexigraphical sorting mechanism by specifying char or
+                          word with which will be used during output of sorted list. Only
+                          \b [A-Za-z] can be used.
+                          If \c nil is passed, then object(s) will be added to the end of the 
+                          list.
+
+ @note Always check \a error.code to find out what caused error (check PNErrorCodes header file 
+       and use \a -localizedDescription / \a -localizedFailureReason and 
+       \a -localizedRecoverySuggestion to get human readable description for error).
+ 
+ @since <#version number#>
+ */
+- (void)          serviceChannel:(PNServiceChannel *)channel
+                    remoteObject:(PNObjectInformation *)objectInformation
+  dataPushToListDidFailWithError:(PNError *)error
+                   andSortingKey:(NSString *)entriesSortingKey;
+
+/**
+ @brief Sent to the delegate when \b PubNub client successfully replaced remote object data.
+
+ @param channel           Communication channel over which request has been sent and processed
+                          response from \b PubNub services.
+ @param objectInformation Reference on temporary instance which represent object stored in 
+                          \b PubNub cloud. Object allow to identify object identifier, particular
+                          location for data which has been replaced and actual data which has
+                          been used to replace old one in \b PubNub cloud.
+ 
+ @since <#version number#>
+ */
+- (void)      serviceChannel:(PNServiceChannel *)channel
+  didReplaceRemoteObjectData:(PNObjectInformation *)objectInformation;
+
+/**
+ @brief Sent to the delegate when \b PubNub client did fail to replace remote object data.
+
+ @param channel           Communication channel over which request has been sent and processed 
+                          response from \b PubNub services.
+ @param objectInformation Reference on temporary instance which represent object stored in 
+                          \b PubNub cloud. Object allow to identify object identifier, particular
+                          location for data which has been replaced and actual data which has
+                          been used to replace old one in \b PubNub cloud.
+ @param error             \b PNError instance which describe what exactly went wrong.
+ 
+ @note Always check \a error.code to find out what caused error (check PNErrorCodes header file 
+       and use \a -localizedDescription / \a -localizedFailureReason and 
+       \a -localizedRecoverySuggestion to get human readable description for error).
+ 
+ @since <#version number#>
+ */
+- (void)       serviceChannel:(PNServiceChannel *)channel
+                 remoteObject:(PNObjectInformation *)objectInformation
+  dataReplaceDidFailWithError:(PNError *)error;
+
+/**
+ @brief Sent to the delegate when \b PubNub client successfully removed remote object data.
+
+ @param channel           Communication channel over which request has been sent and processed 
+                          response from \b PubNub services.
+ @param objectInformation Reference on temporary instance which represent object stored in 
+                          \b PubNub cloud. Object allow to identify object identifier, particular
+                          location for data which has been removed.
+ 
+ @since <#version number#>
+ */
+- (void)     serviceChannel:(PNServiceChannel *)channel
+  didRemoveRemoteObjectData:(PNObjectInformation *)objectInformation;
+
+/**
+ @brief Sent to the delegate when \b PubNub client did fail to remove remote object data.
+
+ @param channel           Communication channel over which request has been sent and processed
+                          response from \b PubNub services.
+ @param objectInformation Reference on temporary instance which represent object stored in 
+                          \b PubNub cloud. Object allow to identify object identifier, particular
+                          location for data which should be removed.
+ @param error             \b PNError instance which describe what exactly went wrong.
+
+ @note Always check \a error.code to find out what caused error (check PNErrorCodes header file 
+       and use \a -localizedDescription / \a -localizedFailureReason and
+       \a -localizedRecoverySuggestion to get human readable description for error).
+ 
+ @since <#version number#>
+ */
+- (void)      serviceChannel:(PNServiceChannel *)channel
+                remoteObject:(PNObjectInformation *)objectInformation
+  dataRemoveDidFailWithError:(PNError *)error;
+
+
+
 /**
  Sent to the delegate when \b PubNub client successfully retrieved channel groups.
  

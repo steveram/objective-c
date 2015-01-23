@@ -1,5 +1,5 @@
 //
-//  NSObject+PNAddition.h
+//  NSObject+PNDemoAddition.h
 //  pubnub
 //
 //  Created by Sergey Mamontov on 3/29/14.
@@ -11,7 +11,7 @@
 
 #pragma mark Category methods declaration
 
-@interface NSObject (PNAddition)
+@interface NSObject (PNDemoAddition)
 
 
 #pragma mark - Class methods

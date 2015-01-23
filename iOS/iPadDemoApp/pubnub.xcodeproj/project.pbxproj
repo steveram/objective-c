@@ -39,7 +39,7 @@
 		79765F3218E58BA70058CE47 /* PNClientStateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 79765F3118E58BA70058CE47 /* PNClientStateView.m */; };
 		79765F3418E590540058CE47 /* PNClientStateGetView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79765F3318E590540058CE47 /* PNClientStateGetView~ipad.xib */; };
 		79765F3718E6DCB10058CE47 /* PNClientStateHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 79765F3618E6DCB10058CE47 /* PNClientStateHelper.m */; };
-		79765F3C18E6EE060058CE47 /* NSObject+PNAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 79765F3B18E6EE060058CE47 /* NSObject+PNAddition.m */; };
+		79765F3C18E6EE060058CE47 /* NSObject+PNDemoAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 79765F3B18E6EE060058CE47 /* NSObject+PNDemoAddition.m */; };
 		79765F4218E84BBC0058CE47 /* PNClientStateSetView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79765F4118E84BBC0058CE47 /* PNClientStateSetView~ipad.xib */; };
 		79765F4618E85ACF0058CE47 /* NSString+PNLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = 79765F4518E85ACF0058CE47 /* NSString+PNLocalization.m */; };
 		79765F4918E85CDF0058CE47 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 79765F4B18E85CDF0058CE47 /* Localizable.strings */; };
@@ -65,8 +65,6 @@
 		797B6FF018E45B3100D88AAF /* PNUnsubscribeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 797B6FEF18E45B3100D88AAF /* PNUnsubscribeView.m */; };
 		797B6FF318E4616700D88AAF /* PNUnsubscribeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 797B6FF218E4616700D88AAF /* PNUnsubscribeHelper.m */; };
 		797B86511A2F48BD00BC7D47 /* NSDictionary+PNDemoAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 797B86501A2F48BD00BC7D47 /* NSDictionary+PNDemoAddition.m */; };
-		7997787B1A30B6C00097A61C /* libPubNub.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 797B867B1A2F5C0E00BC7D47 /* libPubNub.a */; };
-		7997787C1A30B6D80097A61C /* PubNub.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 797B867D1A2F5C0E00BC7D47 /* PubNub.bundle */; };
 		799C3B3018F45B2E002BC638 /* PNInformationView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 799C3B2F18F45B2E002BC638 /* PNInformationView~ipad.xib */; };
 		799C3B3318F45E6C002BC638 /* PNInformationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 799C3B3218F45E6C002BC638 /* PNInformationView.m */; };
 		799F096618ED6CE900919C3B /* PNConsoleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 799F096518ED6CE900919C3B /* PNConsoleView.m */; };
@@ -115,6 +113,8 @@
 		79DF895218F2F11B00314CB6 /* PNChannelAccessRightsView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79DF895118F2F11B00314CB6 /* PNChannelAccessRightsView~ipad.xib */; };
 		79DF895618F32B1B00314CB6 /* PNClientIdentifierAddView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79DF895518F32B1B00314CB6 /* PNClientIdentifierAddView~ipad.xib */; };
 		79DF895918F32C2500314CB6 /* PNClientIdentifierAddView.m in Sources */ = {isa = PBXBuildFile; fileRef = 79DF895818F32C2500314CB6 /* PNClientIdentifierAddView.m */; };
+		79EB4A2F1A6D30CF00E5F757 /* PubNub.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 79EB4A2C1A6D308A00E5F757 /* PubNub.bundle */; };
+		79EB4A301A6D317A00E5F757 /* libPubNub.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 79EB4A2A1A6D308A00E5F757 /* libPubNub.a */; };
 		79EBCA2816AC578900E616E8 /* PNMainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79EBCA2716AC578900E616E8 /* PNMainViewController.xib */; };
 		79ECCF361675DFB5005E83B3 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79ECCF351675DFB5005E83B3 /* SystemConfiguration.framework */; };
 		9669B8931996C452001C01B7 /* PNAutoMessager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9669B8921996C452001C01B7 /* PNAutoMessager.m */; };
@@ -133,23 +133,23 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		797B867A1A2F5C0E00BC7D47 /* PBXContainerItemProxy */ = {
+		79EB4A291A6D308A00E5F757 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 797B86731A2F5C0E00BC7D47 /* PubNub.xcodeproj */;
+			containerPortal = 79EB4A231A6D308A00E5F757 /* PubNub.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 798EFB6F1A00F14A00E8AFB7;
 			remoteInfo = PubNub;
 		};
-		797B867C1A2F5C0E00BC7D47 /* PBXContainerItemProxy */ = {
+		79EB4A2B1A6D308A00E5F757 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 797B86731A2F5C0E00BC7D47 /* PubNub.xcodeproj */;
+			containerPortal = 79EB4A231A6D308A00E5F757 /* PubNub.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 798E023D1A0105A300E8AFB7;
-			remoteInfo = PubNubResources;
+			remoteInfo = PubNub.bundle;
 		};
-		799778791A30B6BB0097A61C /* PBXContainerItemProxy */ = {
+		79EB4A2D1A6D309000E5F757 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 797B86731A2F5C0E00BC7D47 /* PubNub.xcodeproj */;
+			containerPortal = 79EB4A231A6D308A00E5F757 /* PubNub.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 798EFB6E1A00F14A00E8AFB7;
 			remoteInfo = PubNub;
@@ -204,8 +204,8 @@
 		79765F3318E590540058CE47 /* PNClientStateGetView~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "PNClientStateGetView~ipad.xib"; sourceTree = "<group>"; };
 		79765F3518E6DCB10058CE47 /* PNClientStateHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNClientStateHelper.h; sourceTree = "<group>"; };
 		79765F3618E6DCB10058CE47 /* PNClientStateHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNClientStateHelper.m; sourceTree = "<group>"; };
-		79765F3A18E6EE060058CE47 /* NSObject+PNAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+PNAddition.h"; sourceTree = "<group>"; };
-		79765F3B18E6EE060058CE47 /* NSObject+PNAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+PNAddition.m"; sourceTree = "<group>"; };
+		79765F3A18E6EE060058CE47 /* NSObject+PNDemoAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+PNDemoAddition.h"; sourceTree = "<group>"; };
+		79765F3B18E6EE060058CE47 /* NSObject+PNDemoAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+PNDemoAddition.m"; sourceTree = "<group>"; };
 		79765F4118E84BBC0058CE47 /* PNClientStateSetView~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "PNClientStateSetView~ipad.xib"; sourceTree = "<group>"; };
 		79765F4418E85ACF0058CE47 /* NSString+PNLocalization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+PNLocalization.h"; sourceTree = "<group>"; };
 		79765F4518E85ACF0058CE47 /* NSString+PNLocalization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+PNLocalization.m"; sourceTree = "<group>"; };
@@ -252,7 +252,6 @@
 		797B6FF218E4616700D88AAF /* PNUnsubscribeHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNUnsubscribeHelper.m; sourceTree = "<group>"; };
 		797B864F1A2F48BD00BC7D47 /* NSDictionary+PNDemoAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+PNDemoAddition.h"; sourceTree = "<group>"; };
 		797B86501A2F48BD00BC7D47 /* NSDictionary+PNDemoAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+PNDemoAddition.m"; sourceTree = "<group>"; };
-		797B86731A2F5C0E00BC7D47 /* PubNub.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PubNub.xcodeproj; path = ../../PubNub/PubNub.xcodeproj; sourceTree = "<group>"; };
 		799C3B2F18F45B2E002BC638 /* PNInformationView~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "PNInformationView~ipad.xib"; sourceTree = "<group>"; };
 		799C3B3118F45E6C002BC638 /* PNInformationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNInformationView.h; sourceTree = "<group>"; };
 		799C3B3218F45E6C002BC638 /* PNInformationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNInformationView.m; sourceTree = "<group>"; };
@@ -333,6 +332,7 @@
 		79DF895818F32C2500314CB6 /* PNClientIdentifierAddView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNClientIdentifierAddView.m; sourceTree = "<group>"; };
 		79DF895D18F32D7A00314CB6 /* PNClientIdentifierAddDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PNClientIdentifierAddDelegate.h; sourceTree = "<group>"; };
 		79E4E0C018B945C000978FB5 /* PNConfigurationDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PNConfigurationDelegate.h; sourceTree = "<group>"; };
+		79EB4A231A6D308A00E5F757 /* PubNub.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PubNub.xcodeproj; path = ../../PubNub/PubNub.xcodeproj; sourceTree = "<group>"; };
 		79EBCA2716AC578900E616E8 /* PNMainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PNMainViewController.xib; sourceTree = "<group>"; };
 		79ECCF351675DFB5005E83B3 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		9669B8911996C452001C01B7 /* PNAutoMessager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNAutoMessager.h; sourceTree = "<group>"; };
@@ -360,7 +360,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7997787B1A30B6C00097A61C /* libPubNub.a in Frameworks */,
 				79ECCF361675DFB5005E83B3 /* SystemConfiguration.framework in Frameworks */,
 				79C32231166DF847006DB535 /* CoreGraphics.framework in Frameworks */,
 				79C3222F166DF847006DB535 /* Foundation.framework in Frameworks */,
@@ -368,6 +367,7 @@
 				79C3222D166DF847006DB535 /* UIKit.framework in Frameworks */,
 				DD71B861D60C2DB2E44D1B6C /* QuartzCore.framework in Frameworks */,
 				DD71B50871A8083F6E609816 /* libz.1.2.5.dylib in Frameworks */,
+				79EB4A301A6D317A00E5F757 /* libPubNub.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -521,15 +521,6 @@
 			path = "Push Notifications";
 			sourceTree = "<group>";
 		};
-		797B86741A2F5C0E00BC7D47 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				797B867B1A2F5C0E00BC7D47 /* libPubNub.a */,
-				797B867D1A2F5C0E00BC7D47 /* PubNub.bundle */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		79BCB29619EAE00C00817A27 /* Channel Registry */ = {
 			isa = PBXGroup;
 			children = (
@@ -559,7 +550,7 @@
 		79C3222B166DF847006DB535 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				797B86731A2F5C0E00BC7D47 /* PubNub.xcodeproj */,
+				79EB4A231A6D308A00E5F757 /* PubNub.xcodeproj */,
 				79ECCF351675DFB5005E83B3 /* SystemConfiguration.framework */,
 				79C32250166DF848006DB535 /* SenTestingKit.framework */,
 				79C32230166DF847006DB535 /* CoreGraphics.framework */,
@@ -767,6 +758,15 @@
 			path = XIB;
 			sourceTree = "<group>";
 		};
+		79EB4A241A6D308A00E5F757 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				79EB4A2A1A6D308A00E5F757 /* libPubNub.a */,
+				79EB4A2C1A6D308A00E5F757 /* PubNub.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		DD71B229C9F2B05485DD70FB /* Categories */ = {
 			isa = PBXGroup;
 			children = (
@@ -776,8 +776,8 @@
 				793E41FB18B13AB60028413E /* UIScreen+PNAddition.m */,
 				793E41F718B136C80028413E /* UIView+PNAddition.h */,
 				793E41F818B136C80028413E /* UIView+PNAddition.m */,
-				79765F3A18E6EE060058CE47 /* NSObject+PNAddition.h */,
-				79765F3B18E6EE060058CE47 /* NSObject+PNAddition.m */,
+				79765F3A18E6EE060058CE47 /* NSObject+PNDemoAddition.h */,
+				79765F3B18E6EE060058CE47 /* NSObject+PNDemoAddition.m */,
 				79765F4418E85ACF0058CE47 /* NSString+PNLocalization.h */,
 				79765F4518E85ACF0058CE47 /* NSString+PNLocalization.m */,
 				797B864F1A2F48BD00BC7D47 /* NSDictionary+PNDemoAddition.h */,
@@ -847,7 +847,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				7997787A1A30B6BB0097A61C /* PBXTargetDependency */,
+				79EB4A2E1A6D309000E5F757 /* PBXTargetDependency */,
 			);
 			name = pubnub;
 			productName = pubnub;
@@ -876,8 +876,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 797B86741A2F5C0E00BC7D47 /* Products */;
-					ProjectRef = 797B86731A2F5C0E00BC7D47 /* PubNub.xcodeproj */;
+					ProductGroup = 79EB4A241A6D308A00E5F757 /* Products */;
+					ProjectRef = 79EB4A231A6D308A00E5F757 /* PubNub.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -888,18 +888,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		797B867B1A2F5C0E00BC7D47 /* libPubNub.a */ = {
+		79EB4A2A1A6D308A00E5F757 /* libPubNub.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libPubNub.a;
-			remoteRef = 797B867A1A2F5C0E00BC7D47 /* PBXContainerItemProxy */;
+			remoteRef = 79EB4A291A6D308A00E5F757 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		797B867D1A2F5C0E00BC7D47 /* PubNub.bundle */ = {
+		79EB4A2C1A6D308A00E5F757 /* PubNub.bundle */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = PubNub.bundle;
-			remoteRef = 797B867C1A2F5C0E00BC7D47 /* PBXContainerItemProxy */;
+			remoteRef = 79EB4A2B1A6D308A00E5F757 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -966,7 +966,7 @@
 				79D4EA3618C01B7800373A38 /* PNSubscribeView~ipad.xib in Resources */,
 				794DA19F1845800300C89A6C /* red-small-left-segmented-button.png in Resources */,
 				793E41ED18B0FBED0028413E /* cloud-pubnub-logo.png in Resources */,
-				7997787C1A30B6D80097A61C /* PubNub.bundle in Resources */,
+				79EB4A2F1A6D30CF00E5F757 /* PubNub.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1022,7 +1022,7 @@
 				799C3B3318F45E6C002BC638 /* PNInformationView.m in Sources */,
 				797B6FD218E2F0E100D88AAF /* PNButton.m in Sources */,
 				797B6FD318E2F0E100D88AAF /* PNAccessRightsInformationCell.m in Sources */,
-				79765F3C18E6EE060058CE47 /* NSObject+PNAddition.m in Sources */,
+				79765F3C18E6EE060058CE47 /* NSObject+PNDemoAddition.m in Sources */,
 				79765F4618E85ACF0058CE47 /* NSString+PNLocalization.m in Sources */,
 				79BCB29919EAE04400817A27 /* PNChannelRegistryView.m in Sources */,
 				79D8A49B18EC0BD3004A4A4F /* PNTableView.m in Sources */,
@@ -1040,10 +1040,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		7997787A1A30B6BB0097A61C /* PBXTargetDependency */ = {
+		79EB4A2E1A6D309000E5F757 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = PubNub;
-			targetProxy = 799778791A30B6BB0097A61C /* PBXContainerItemProxy */;
+			targetProxy = 79EB4A2D1A6D309000E5F757 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

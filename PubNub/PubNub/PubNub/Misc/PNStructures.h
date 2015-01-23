@@ -11,7 +11,8 @@
 
 #pragma mark Class forward
 
-@class PNAccessRightsCollection, PNPresenceEvent, PNChannelGroup, PNHereNow, PNMessage, PNChannel, PNClient, PNError, PNDate;
+@class PNAccessRightsCollection, PNObjectInformation, PNPresenceEvent, PNChannelGroup, PNHereNow;
+@class PNMessage, PNChannel, PNClient, PNObject, PNError, PNDate;
 
 
 #ifndef PNStructures_h
@@ -116,6 +117,11 @@ typedef NS_OPTIONS(NSInteger , PNAccessRightsLevel) {
     PNChannelGroupAccessRightsLevel,
     
     /**
+     Access rights granted for remote daya object
+     */
+    PNRemoteDataObjectAccessRightsLevel,
+    
+    /**
      Access rights granted for particular channel.
      */
     PNChannelAccessRightsLevel,
@@ -132,6 +138,114 @@ typedef void (^PNClientConnectionFailureBlock)(PNError *error);
 typedef void (^PNClientConnectionStateChangeBlock)(NSString *origin, BOOL isConnected, PNError *error);
 typedef void (^PNClientStateRetrieveHandlingBlock)(PNClient *client, PNError *error);
 typedef void (^PNClientStateUpdateHandlingBlock)(PNClient *client, PNError *error);
+
+/**
+ @brief Callback block called by \b PubNub client at the end of object synchronization process.
+ 
+ @param object    Reference on local copy of object which is stored in \b PubNub cloud. If there
+                  was no particular data path specified during synchronization launch, this
+                  object will represent complete object stored in cloud. If syncronization has
+                  been launced with path to piece of data, this object will store and handle
+                  updates of data at specified paths.
+ @param locations Can be \c nil or exist in case if specific data locations has been specified
+                  during synchronization start.
+ @param error     In case of synchronization launch error will contain reference on \b PNError
+                  instance which contains information about what exactly went wrong.
+ 
+ @since <#version number#>
+ */
+typedef void (^PNRemoteObjectSynchronizationStartHandlerBlock)(PNObject *object, NSArray *locations,
+                                                               PNError *error);
+
+/**
+ @brief Callback block called by \b PubNub client at the end of object synchronization 
+        termination process.
+ 
+ @param objectInformation Reference on information about object for which client tried to stop
+                          synchronization with local copy and list of location key-paths if only
+                          pieces of remote data object has been syncrhonized.
+ @param error             In case of synchronization termination error will contain reference on
+                          \b PNError instance which contains information about what exactly went 
+                          wrong.
+ 
+ @since <#version number#>
+ */
+typedef void (^PNRemoteObjectSynchronizationStopHandlerBlock)(PNObjectInformation *objectInformation,
+                                                              PNError *error);
+
+/**
+ @brief Callback block called by \b PubNub client at the end of object synchronization
+        termination process.
+
+ @param object    Reference local copy of remote object on which data modification event has been
+                  triggered.
+ @param locations Reference on list of locations at which modification event occurred.
+
+ @since <#version number#>
+ */
+typedef void (^PNRemoteObjectModificationEventHandlerBlock)(PNObject *object, NSArray *locations);
+
+/**
+ @brief Callback block called by \b PubNub client at the end of object's data fetch process.
+ 
+ @param objectInformation Reference on information about object for which client tried to request
+                          data from \b PubNub cloud. This object also contains data location
+                          key-path (if specified) in case if piece of data has been requested.
+ @param error             In case of fetch error will contain reference on \b PNError instance 
+                          which contains information about what exactly went wrong.
+ 
+ @since <#version number#>
+ */
+typedef void (^PNRemoteObjectDataFetchHandlerBlock)(PNObjectInformation *objectInformation,
+                                                    PNError *error);
+
+/**
+ @brief Callback block called by \b PubNub client when data has been pushed to remote object.
+ 
+ @param objectInformation Reference on information about object into which client tried to push
+                          provided data in \b PubNub cloud. This object also contains data 
+                          location key-path (if specified) in case if only piece of data should 
+                          be updated with pushed data. Object also contains actual data which 
+                          has been used during update process.
+ @param error             In case of fetch error will contain reference on \b PNError instance 
+                          which contains information about what exactly went wrong.
+ 
+ @since <#version number#>
+ */
+typedef void (^PNRemoteObjectDataPushHandlerBlock)(PNObjectInformation *objectInformation,
+                                                   PNError *error);
+
+/**
+ @brief Callback block called by \b PubNub client when data has been replaced in remote object.
+ 
+ @param objectInformation Reference on information about object in which client tried to replace
+                          piece of data in \b PubNub cloud. This object also contains data
+                          location key-path (if specified) in case if only piece of data should 
+                          be replaced with pushed data. Object also contains actual data which
+                          has been used during update process.
+ @param error             In case of fetch error will contain reference on \b PNError instance 
+                          which contains information about what exactly went wrong.
+ 
+ @since <#version number#>
+ */
+typedef void (^PNRemoteObjectDataReplaceHandlerBlock)(PNObjectInformation *objectInformation,
+                                                      PNError *error);
+
+/**
+ @brief Callback block called by \b PubNub client when data has been removed from remote object.
+ 
+ @param objectInformation Reference on information about object in which client tried to remove
+                          piece of data in \b PubNub cloud. This object also contains data
+                          location key-path (if specified) in case if only piece of data should 
+                          be removed.
+ @param error             In case of fetch error will contain reference on \b PNError instance 
+                          which contains information about what exactly went wrong.
+ 
+ @since <#version number#>
+ */
+typedef void (^PNRemoteObjectDataRemoveHandlerBlock)(PNObjectInformation *objectInformation,
+                                                     PNError *error);
+
 typedef void (^PNClientChannelGroupsRequestHandlingBlock)(NSString *namespaceName, NSArray *channelGroups, PNError *error);
 typedef void (^PNClientChannelGroupNamespacesRequestHandlingBlock)(NSArray *namespaces, PNError *error);
 typedef void (^PNClientChannelGroupNamespaceRemoveHandlingBlock)(NSString *namespaceName, PNError *error);

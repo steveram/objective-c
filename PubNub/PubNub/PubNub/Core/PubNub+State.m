@@ -8,7 +8,7 @@
 
 #import "PubNub+State.h"
 #import "PNClientStateUpdateRequest.h"
-#import "NSObject+PNAdditions.h"
+#import "NSObject+PNPrivateAdditions.h"
 #import "PNClientStateRequest.h"
 #import "PNChannel+Protected.h"
 #import "PubNub+Subscription.h"

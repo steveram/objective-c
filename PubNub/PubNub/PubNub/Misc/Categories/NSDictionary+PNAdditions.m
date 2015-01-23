@@ -37,6 +37,46 @@
 @implementation NSDictionary (PNAdditions)
 
 
+#pragma mark - Class methods
+
++ (NSArray *)pn_topLevelKeysFromList:(NSArray *)keyPaths {
+    
+    NSMutableArray *paths = nil;
+    if ([keyPaths count] > 1) {
+        
+        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"length" ascending:YES];
+        paths = [[keyPaths sortedArrayUsingDescriptors:@[sortDescriptor]] mutableCopy];
+        [[paths copy] enumerateObjectsUsingBlock:^(NSString *keyPath, NSUInteger keyPathIdx,
+                                                   BOOL *keyPathEnumeratorStop) {
+            
+            NSUInteger keyPathIndex = [paths indexOfObject:keyPath];
+            if (keyPathIndex != NSNotFound) {
+                
+                NSRange subArrayRange;
+                subArrayRange.location = (keyPathIndex + 1);
+                if (subArrayRange.location < [paths count]) {
+                    
+                    subArrayRange.length = ([paths count] - subArrayRange.location);
+                    NSArray *subArray = [paths subarrayWithRange:subArrayRange];
+                    [subArray enumerateObjectsUsingBlock:^(NSString *longerKeyPath,
+                                                           NSUInteger longerKeyPathIdx,
+                                                           BOOL *longerKeyPathEnumeratorStop) {
+                        
+                        if ([keyPath isEqualToString:@"*"] || [longerKeyPath hasPrefix:keyPath]) {
+                            
+                            [paths removeObject:longerKeyPath];
+                        }
+                    }];
+                }
+            }
+        }];
+    }
+    
+    
+    return ([keyPaths count] > 1 ? [paths copy] : keyPaths);
+}
+
+
 #pragma mark - Instance methods
 
 - (BOOL)pn_isValidState {

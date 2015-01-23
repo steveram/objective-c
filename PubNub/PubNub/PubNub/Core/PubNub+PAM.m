@@ -8,7 +8,7 @@
 
 #import "PubNub+PAM.h"
 #import "PNAccessRightOptions+Protected.h"
-#import "NSObject+PNAdditions.h"
+#import "NSObject+PNPrivateAdditions.h"
 #import "PNServiceChannel.h"
 #import "PubNub+Protected.h"
 #import "PNNotifications.h"
@@ -913,7 +913,7 @@
                 
                 PNAccessRightOptions *options = [PNAccessRightOptions accessRightOptionsForApplication:self.configuration.subscriptionKey
                                                                                             withRights:accessRights
-                                                                                              channels:objects
+                                                                                               objects:objects
                                                                                                clients:authorizationKeys
                                                                                           accessPeriod:accessPeriodDuration];
                 if (![self.configuration.secretKey length]) {
@@ -1090,7 +1090,7 @@
                 
                 PNAccessRightOptions *options = [PNAccessRightOptions accessRightOptionsForApplication:self.configuration.subscriptionKey
                                                                                             withRights:PNUnknownAccessRights
-                                                                                              channels:objects
+                                                                                               objects:objects
                                                                                                clients:authorizationKeys
                                                                                           accessPeriod:0];
                 if (![self.configuration.secretKey length]) {

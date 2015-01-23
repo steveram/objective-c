@@ -40,10 +40,24 @@
  */
 @property (nonatomic, assign, getter = isChannelGroup) BOOL channelGroup;
 
+/**
+ @brief Stores whether receiver is capable to be used as remote object synchronization feed or not.
+ 
+ @since <#version number#>
+ */
+@property (nonatomic, assign, getter = isForDataSynchronization) BOOL forDataSynchronization;
+
 // Stores number of participants for particular channel (this number fetched from presence API if it is used and
 // updated when requested list of participants)
 // INFO: it may differ in count from participants name because of nature of this value update logic
 @property (nonatomic, assign) NSUInteger participantsCount;
+
+/**
+ @brief Stores reference on original channel name.
+ 
+ @since <#version number#>
+ */
+@property (nonatomic, copy) NSString *channelName;
 
 // Last presence update date
 @property (nonatomic, strong) PNDate *presenceUpdateDate;
@@ -89,11 +103,6 @@ shouldUpdatePresenceObservingFlag:(BOOL)shouldUpdatePresenceObservingFlag;
  * channel
  */
 - (PNChannelPresence *)presenceObserver;
-
-/**
- * Update channel name
- */
-- (void)setName:(NSString *)name;
 
 /**
  * Returns reference on channel name which cane be sent in GET HTTP request to the PubNub service
