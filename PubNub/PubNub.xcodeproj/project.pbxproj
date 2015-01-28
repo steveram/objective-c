@@ -175,7 +175,7 @@
 		7997764D1A2FEFFD0097A61C /* PNWhereNow+Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 7997753C1A2FEFF90097A61C /* PNWhereNow+Protected.h */; };
 		7997764E1A2FEFFD0097A61C /* PNWhereNow.h in Headers */ = {isa = PBXBuildFile; fileRef = 7997753D1A2FEFF90097A61C /* PNWhereNow.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7997764F1A2FEFFD0097A61C /* PNWhereNow.m in Sources */ = {isa = PBXBuildFile; fileRef = 7997753E1A2FEFF90097A61C /* PNWhereNow.m */; };
-		799776501A2FEFFD0097A61C /* NSArray+PNAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 799775411A2FEFF90097A61C /* NSArray+PNAdditions.h */; };
+		799776501A2FEFFD0097A61C /* NSArray+PNAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 799775411A2FEFF90097A61C /* NSArray+PNAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		799776511A2FEFFD0097A61C /* NSArray+PNAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 799775421A2FEFF90097A61C /* NSArray+PNAdditions.m */; };
 		799776521A2FEFFD0097A61C /* NSData+PNAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 799775431A2FEFF90097A61C /* NSData+PNAdditions.h */; };
 		799776531A2FEFFD0097A61C /* NSData+PNAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 799775441A2FEFF90097A61C /* NSData+PNAdditions.m */; };
@@ -294,6 +294,8 @@
 		799776C41A2FF0060097A61C /* PNConnectionChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = 799775B91A2FEFFA0097A61C /* PNConnectionChannel.h */; };
 		799776C51A2FF0060097A61C /* PNConnectionChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 799775BA1A2FEFFA0097A61C /* PNConnectionChannel.m */; };
 		799776C61A2FF2230097A61C /* PNLoggerSymbols.plist in Resources */ = {isa = PBXBuildFile; fileRef = 799775BC1A2FEFFA0097A61C /* PNLoggerSymbols.plist */; };
+		79B45E4D1A780C0800C45DAC /* NSArray+PNPrivateAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 79B45E4B1A780C0800C45DAC /* NSArray+PNPrivateAdditions.h */; };
+		79B45E4E1A780C0800C45DAC /* NSArray+PNPrivateAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 79B45E4C1A780C0800C45DAC /* NSArray+PNPrivateAdditions.m */; };
 		79D95BB61A614F28007BA1CB /* PNDataSynchronizationEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 79D95BB41A614F28007BA1CB /* PNDataSynchronizationEvent.h */; };
 		79D95BB71A614F28007BA1CB /* PNDataSynchronizationEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 79D95BB51A614F28007BA1CB /* PNDataSynchronizationEvent.m */; };
 		79DDD1631A44561800CCB713 /* PubNub+DataSynchronization.h in Headers */ = {isa = PBXBuildFile; fileRef = 79DDD1611A44561800CCB713 /* PubNub+DataSynchronization.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -634,6 +636,8 @@
 		799775B91A2FEFFA0097A61C /* PNConnectionChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNConnectionChannel.h; sourceTree = "<group>"; };
 		799775BA1A2FEFFA0097A61C /* PNConnectionChannel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNConnectionChannel.m; sourceTree = "<group>"; };
 		799775BC1A2FEFFA0097A61C /* PNLoggerSymbols.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PNLoggerSymbols.plist; sourceTree = "<group>"; };
+		79B45E4B1A780C0800C45DAC /* NSArray+PNPrivateAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+PNPrivateAdditions.h"; sourceTree = "<group>"; };
+		79B45E4C1A780C0800C45DAC /* NSArray+PNPrivateAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+PNPrivateAdditions.m"; sourceTree = "<group>"; };
 		79D95BB41A614F28007BA1CB /* PNDataSynchronizationEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNDataSynchronizationEvent.h; sourceTree = "<group>"; };
 		79D95BB51A614F28007BA1CB /* PNDataSynchronizationEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNDataSynchronizationEvent.m; sourceTree = "<group>"; };
 		79DDD1611A44561800CCB713 /* PubNub+DataSynchronization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PubNub+DataSynchronization.h"; sourceTree = "<group>"; };
@@ -983,6 +987,8 @@
 				799775521A2FEFF90097A61C /* NSObject+PNPrivateAdditions.m */,
 				7997754D1A2FEFF90097A61C /* NSMutableArray+PNAdditions.h */,
 				7997754E1A2FEFF90097A61C /* NSMutableArray+PNAdditions.m */,
+				79B45E4B1A780C0800C45DAC /* NSArray+PNPrivateAdditions.h */,
+				79B45E4C1A780C0800C45DAC /* NSArray+PNPrivateAdditions.m */,
 				7997754F1A2FEFF90097A61C /* NSMutableSet+PNAdditions.h */,
 				799775501A2FEFF90097A61C /* NSMutableSet+PNAdditions.m */,
 				7997754B1A2FEFF90097A61C /* NSInvocation+PNAdditions.h */,
@@ -1281,6 +1287,7 @@
 				7997761A1A2FEFFB0097A61C /* PNAccessRightOptions.h in Headers */,
 				799776BE1A2FF0050097A61C /* PNServiceChannel.h in Headers */,
 				7997768E1A2FF0010097A61C /* PNChannelGroupsRequest.h in Headers */,
+				79B45E4D1A780C0800C45DAC /* NSArray+PNPrivateAdditions.h in Headers */,
 				799775F11A2FEFFA0097A61C /* PNChannelGroupNamespacesResponseParser+Protected.h in Headers */,
 				7997760C1A2FEFFB0097A61C /* PNOperationStatusResponseParser.h in Headers */,
 				799776641A2FEFFE0097A61C /* NSString+PNAddition.h in Headers */,
@@ -1535,6 +1542,7 @@
 				799776031A2FEFFA0097A61C /* PNClientStateUpdateResponseParser.m in Sources */,
 				799776971A2FF0020097A61C /* PNClientStateRequest.m in Sources */,
 				799776231A2FEFFB0097A61C /* PNCache.m in Sources */,
+				79B45E4E1A780C0800C45DAC /* NSArray+PNPrivateAdditions.m in Sources */,
 				799775FB1A2FEFFA0097A61C /* PNChannelHistoryParser.m in Sources */,
 				79EEEB011A45E14F0063FB84 /* PNObjectInformation.m in Sources */,
 				79D95BB71A614F28007BA1CB /* PNDataSynchronizationEvent.m in Sources */,

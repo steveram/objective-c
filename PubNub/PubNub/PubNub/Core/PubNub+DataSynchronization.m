@@ -7,6 +7,7 @@
 #import "PNSynchronizationChannel+Protected.h"
 #import "PNObjectInformation+Protected.h"
 #import "NSObject+PNPrivateAdditions.h"
+#import "NSArray+PNPrivateAdditions.h"
 #import "PNDataSynchronizationEvent.h"
 #import "PNDataSynchronizationTask.h"
 #import "PubNub+Subscription.h"

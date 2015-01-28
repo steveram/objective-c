@@ -4,17 +4,18 @@
  @copyright © 2009-2014 PubNub, Inc.
  */
 #import "PNDataSynchronization.h"
+#import "PNDataSynchronizationEvent+Protected.h"
 #import "PNSynchronizationChannel+Protected.h"
 #import "PNObjectInformation+Protected.h"
 #import "NSObject+PNPrivateAdditions.h"
 #import "PNDataSynchronizationEvent.h"
+#import "NSArray+PNPrivateAdditions.h"
 #import "PNDataSynchronizationTask.h"
 #import "NSDictionary+PNAdditions.h"
+#import "NSArray+PNAdditions.h"
 #import "PNObject+Protected.h"
 #import "PNErrorCodes.h"
 #import "PNError.h"
-#import "PNDataSynchronizationEvent+Protected.h"
-#import "NSArray+PNAdditions.h"
 
 
 #pragma mark Structures
@@ -797,7 +798,7 @@ struct PNObjectDataStructure PNObjectData = {
                                 else if (storedEvent.type == PNDataReplaceEvent) {
 
                                     [objectCache pn_removeRemoteObjectDataAtPath:storedEvent.modificationLocation];
-                                    [objectCache pn_mergeData:storedEvent.data at:storedEvent.modificationLocation];
+                                    [objectCache pn_mergeData:storedEvent.data at:storedEvent.relativeLocation];
                                 }
                                 else if (storedEvent.type == PNDataDeleteEvent) {
 

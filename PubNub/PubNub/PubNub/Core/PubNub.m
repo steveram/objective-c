@@ -1436,8 +1436,8 @@ shouldObserveProcessing:(BOOL)shouldObserveProcessing;
 
                         // Disconnecting communication channels and preserve all issued requests which wasn't sent till
                         // this moment (they will be send as soon as connection will be restored)
-                        [_sharedInstance.messagingChannel disconnectWithEvent:NO];
-                        [_sharedInstance.serviceChannel disconnectWithEvent:NO];
+                        [self.messagingChannel disconnectWithEvent:NO];
+                        [self.serviceChannel disconnectWithEvent:NO];
                     }
 
                     // Check whether user identifier was provided by user or not
@@ -1762,16 +1762,16 @@ shouldObserveProcessing:(BOOL)shouldObserveProcessing;
 
                 if (allowGenerateEvents) {
 
-                    [_sharedInstance.messagingChannel terminate];
-                    [_sharedInstance.serviceChannel terminate];
+                    [self.messagingChannel terminate];
+                    [self.serviceChannel terminate];
                 }
                 else {
 
-                    [_sharedInstance.messagingChannel disconnectWithEvent:NO];
-                    [_sharedInstance.serviceChannel disconnectWithEvent:NO];
+                    [self.messagingChannel disconnectWithEvent:NO];
+                    [self.serviceChannel disconnectWithEvent:NO];
                 }
-                _sharedInstance.messagingChannel = nil;
-                _sharedInstance.serviceChannel = nil;
+                self.messagingChannel = nil;
+                self.serviceChannel = nil;
             };
 
             if (isDisconnectedByUser) {

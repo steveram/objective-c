@@ -22,80 +22,27 @@
 @implementation NSArray (PNAdditions)
 
 
-#pragma mark - Class methods
-
-+ (NSArray *)pn_arrayWithVarietyList:(va_list)list {
-
-    NSMutableArray *array = [NSMutableArray array];
-    id argument;
-    while ((argument = va_arg(list, id))) {
-        if (argument == nil)
-            break;
-        [array addObject:argument];
-    }
-
-
-    return array;
-}
-
-+ (BOOL)pn_isEntryIndexString:(NSString *)string {
-    
-    // Lighweight check to ensure that string at least start with char specific only to time
-    // tokens.
-    BOOL isEntryIndexString = [string hasPrefix:@"-"];
-    if (isEntryIndexString) {
-        
-        
-        isEntryIndexString = ([string rangeOfString:@"^-([A-Za-z]*)?!([0-9]{17})"
-                                            options:NSRegularExpressionSearch].location != NSNotFound);
-    }
-    
-    
-    return isEntryIndexString;
-}
-
-
 #pragma mark - Instance methods
 
 - (id)pn_objectAtIndex:(NSString *)pnIndex {
     
     __block id storedObject = nil;
     if (pnIndex) {
-
+        
         [[self copy] enumerateObjectsUsingBlock:^(id object, NSUInteger objectIdx,
-                BOOL *objectEnumeratorStop) {
-
+                                                  BOOL *objectEnumeratorStop) {
+            
             if ([[object pn_index] isEqualToString:pnIndex]) {
-
+                
                 storedObject = object;
             }
-
+            
             *objectEnumeratorStop = (storedObject != nil);
         }];
     }
     
     
     return storedObject;
-}
-
-- (NSString *)logDescription {
-    
-    NSMutableString *logDescription = [NSMutableString stringWithString:@"<["];
-    
-    [self enumerateObjectsUsingBlock:^(id entry, NSUInteger entryIdx, BOOL *entryEnumeratorStop) {
-        
-        // Check whether parameter can be transformed for log or not
-        if ([entry respondsToSelector:@selector(logDescription)]) {
-            
-            entry = [entry performSelector:@selector(logDescription)];
-            entry = (entry ? entry : @"");
-        }
-        [logDescription appendFormat:@"%@%@", entry, (entryIdx + 1 != [self count] ? @"|" : @"")];
-    }];
-    [logDescription appendString:@"]>"];
-    
-    
-    return logDescription;
 }
 
 #pragma mark -

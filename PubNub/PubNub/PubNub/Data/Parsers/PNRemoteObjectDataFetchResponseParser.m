@@ -6,6 +6,7 @@
 #import "PNRemoteObjectDataFetchResponseParser+Protected.h"
 #import "PNObjectInformation+Protected.h"
 #import "NSObject+PNPrivateAdditions.h"
+#import "NSArray+PNPrivateAdditions.h"
 #import "PNResponse+Protected.h"
 #import "NSArray+PNAdditions.h"
 

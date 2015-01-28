@@ -7,6 +7,7 @@
 //
 
 #import "NSObject+PNPrivateAdditions.h"
+#import "NSArray+PNPrivateAdditions.h"
 #import "NSObject+PNAdditions.h"
 #import "NSArray+PNAdditions.h"
 #import <objc/runtime.h>

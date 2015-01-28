@@ -28,6 +28,7 @@
 #import "PNNetworkHelper.h"
 
 #import "NSObject+PNAdditions.h"
+#import "NSArray+PNAdditions.h"
 #import "NSString+PNAddition.h"
 
 #import "PNCryptoHelper.h"

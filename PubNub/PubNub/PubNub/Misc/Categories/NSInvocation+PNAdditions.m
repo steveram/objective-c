@@ -7,6 +7,7 @@
 //
 
 #import "NSInvocation+PNAdditions.h"
+#import "NSArray+PNPrivateAdditions.h"
 #import "NSArray+PNAdditions.h"
 
 

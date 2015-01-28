@@ -9,6 +9,7 @@
 #import "PNDataSynchronizationEvent+Protected.h"
 #import "PNSynchronizationChannel+Protected.h"
 #import "NSObject+PNPrivateAdditions.h"
+#import "NSArray+PNPrivateAdditions.h"
 #import "NSArray+PNAdditions.h"
 #import "PNMacro.h"
 #import "PNDate.h"
