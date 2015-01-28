@@ -4,7 +4,7 @@
 
 **This demo app and document are a work in progress. Please contact us at support@pubnub.com with any questions not answered in this document or demo app.**
 
-The following application is a demo implementation of Data Sync on iOS.
+The following application is a demo implementation of Data Sync on iOS. To follow along with the JavaScript Data Sync browser, connect with the same settings to: http://pubnub.github.io/pubnub-datasync-browser/
 
 All method descriptions are available within [PubNub+DataSynchronization.h](https://github.com/pubnub/objective-c/blob/ds-beta/PubNub/PubNub/PubNub/Core/PubNub%2BDataSynchronization.h)
 
