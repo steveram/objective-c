@@ -76,7 +76,18 @@ struct PNListEntryDataStructure PNListEntryData = {
 
 - (void)updateWithData:(NSDictionary *)entryData {
     
-    self.titleLabel.text = entryData[PNListEntryData.title];
+    if ([entryData[PNListEntryData.title] isKindOfClass:[NSNumber class]]) {
+        
+        self.titleLabel.text = [entryData[PNListEntryData.title] stringValue];
+    }
+    else if ([entryData[PNListEntryData.title] isKindOfClass:[NSNull class]]) {
+        
+        self.titleLabel.text = @"<null>";
+    }
+    else {
+        
+        self.titleLabel.text = entryData[PNListEntryData.title];
+    }
     self.sortingIndexLabel.text = entryData[PNListEntryData.additionalInformation];
 }
 

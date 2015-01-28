@@ -99,6 +99,10 @@ struct PNDictionaryEntryDataStructure PNDictionaryEntryData = {
         
         self.valueLabel.text = [entryData[PNDictionaryEntryData.title] stringValue];
     }
+    else if ([entryData[PNDictionaryEntryData.title] isKindOfClass:[NSNull class]]) {
+        
+        self.valueLabel.text = @"<null>";
+    }
     else {
         
         self.valueLabel.text = entryData[PNDictionaryEntryData.title];
