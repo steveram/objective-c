@@ -36,8 +36,8 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    self.channel = @"ping_3";
-    self.channel2 = @"ping_10";
+    self.channel = @"bad";
+    self.channel2 = @"good";
 
     [self tireKicker];
     return YES;
@@ -45,8 +45,6 @@
 
 - (void)tireKicker {
     [self pubNubInit];
-    [self pubNubTime];
-    //[self pubNubHistory];
     [self pubNubSubscribe];
 }
 
@@ -64,17 +62,6 @@
     [self printClientConfiguration];
 }
 
-- (void)delayedSub {
-    NSLog(@"Timer Called");
-    [self.client subscribeToChannels:@[_channel2] withPresence:YES andCompletion:^(PNStatus *status) {
-        if (!status.isError) {
-            NSLog(@"^^^^Second Subscribe request succeeded at timetoken %@.", status.currentTimetoken);
-        } else {
-            NSLog(@"^^^^Second Subscribe request did not succeed. All subscribe operations will autoretry when possible.");
-            [self handleStatus:status];
-        }
-    }];
-}
 
 - (void)pubNubSubscribe {
     // Subscribe
@@ -98,56 +85,6 @@
             [self handleStatus:status];
         }
     }];
-}
-
-- (void)pubNubHistory {
-    // History
-
-    [self.client historyForChannel:_channel withCompletion:^(PNResult *result, PNStatus *status) {
-
-        // For completion blocks that provide both result and status parameters, you will only ever
-        // have a non-nil status or result.
-
-        // If you have a result, the data you specifically requested (in this case, history response) is available in result.data
-        // If you have a status, error or non-error status information is available regarding the call.
-
-        if (status) {
-            // As a status, this contains error or non-error information about the history request, but not the actual history data I requested.
-            // Timeout Error, PAM Error, etc.
-
-            [self handleStatus:status];
-        }
-        else if (result) {
-            // As a result, this contains the messages, start, and end timetoken in the data attribute
-
-            NSLog(@"Loaded history data: %@", result.data);  // TODO: Call out data attributes here
-        }
-    }];
-}
-
-
-- (void)pubNubTime {
-    // Time (Ping) to PubNub Servers
-
-    [self.client timeWithCompletion:^(PNResult *result, PNStatus *status) {
-        if (result.data) {
-            NSLog(@"Result from Time: %@", result.data);
-        }
-        else if (status) {
-            [self handleStatus:status];
-        }
-    }];
-}
-
-- (void)publishHelloWorld {
-    [self.client publish:@"I'm here!" toChannel:_channel
-          withCompletion:^(PNStatus *status) {
-              if (!status.isError) {
-                  NSLog(@"Message sent at TT: %@", status.data[@"tt"]);
-              } else {
-                  [self handleStatus:status];
-              }
-          }];
 }
 
 #pragma mark - Streaming Data didReceiveMessage Listener
@@ -217,6 +154,22 @@
 
         if (status.data[@"channels"]) {
             NSLog(@"PAM error on channel %@", status.data[@"channels"][0]);
+
+
+            [self.client unsubscribeFromChannels:@[_channel] withPresence:YES andCompletion:^(PNStatus *status) {
+
+                [self.client subscribeToChannels:@[_channel2] withPresence:YES andCompletion:^(PNStatus *status) {
+                    if (!status.isError) {
+                        NSLog(@"^^^^Subscribe request succeeded at timetoken %@.", status.currentTimetoken);
+                    } else {
+                        NSLog(@"^^^^Second Subscribe request did not succeed. All subscribe operations will autoretry when possible.");
+                        [self handleStatus:status];
+                    }
+                }];
+            }];
+
+
+
         } else if (status.data[@"channel-groups"]) {
             NSLog(@"PAM error on channel %@", status.data[@"channel-groups"][0]);
         }
@@ -293,7 +246,7 @@
 
             // NSLog(@"Subscribe Connected to %@", status.data[@"channels"]);
             NSLog(@"^^^^ Non-error status: Connected, Channel Info: %@", status.channels);
-            [self publishHelloWorld];
+
 
         }
         else if (status.category == PNReconnectedCategory) {
