@@ -66,7 +66,7 @@
 - (void)pubNubSubscribe {
     // Subscribe
 
-    [self.client subscribeToChannels:@[_channel] withPresence:YES andCompletion:^(PNStatus *status) {
+    [self.client subscribeToChannels:@[_channel] withPresence:NO andCompletion:^(PNStatus *status) {
 
         // There are two places to monitor for the outcomes of a subscribe.
 
@@ -81,7 +81,8 @@
             NSLog(@"^^^^Subscribe request succeeded at timetoken %@.", status.currentTimetoken);
             self.timer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(delayedSub) userInfo:nil repeats:NO];
         } else {
-            NSLog(@"^^^^Second Subscribe request did not succeed. All subscribe operations will autoretry when possible.");
+            NSLog(@"^^^^Second Subscribe request did not succeed. All subscribe operations will autoretry when possible. %@", status.debugDescription);
+
             [self handleStatus:status];
         }
     }];
@@ -156,9 +157,9 @@
             NSLog(@"PAM error on channel %@", status.data[@"channels"][0]);
 
 
-            [self.client unsubscribeFromChannels:@[_channel] withPresence:YES andCompletion:^(PNStatus *status) {
+            [self.client unsubscribeFromChannels:@[_channel] withPresence:NO andCompletion:^(PNStatus *status) {
 
-                [self.client subscribeToChannels:@[_channel2] withPresence:YES andCompletion:^(PNStatus *status) {
+                [self.client subscribeToChannels:@[_channel2] withPresence:NO andCompletion:^(PNStatus *status) {
                     if (!status.isError) {
                         NSLog(@"^^^^Subscribe request succeeded at timetoken %@.", status.currentTimetoken);
                     } else {
