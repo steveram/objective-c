@@ -19,7 +19,7 @@
 @implementation PNPublishTests
 
 - (BOOL)recording {
-    return NO;
+    return YES;
 }
 
 - (void)setUp {
@@ -37,6 +37,18 @@
 
 - (void)testSimplePublish {
     [self performVerifiedPublish:@"test"];
+}
+
+- (void)testPublishNil {
+    [self performVerifiedPublish:nil];
+}
+
+- (void)testPublishDictionary {
+    [self performVerifiedPublish:@{@"test" : @"test"}];
+}
+
+- (void)testPublishArray {
+    [self performVerifiedPublish:@[@"test", @"test1"]];
 }
 
 - (void)performVerifiedPublish:(id)message {
