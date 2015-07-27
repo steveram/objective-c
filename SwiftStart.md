@@ -36,7 +36,23 @@ To add the PubNub iOS SDK to your project with CocoaPods, there are three basic 
 		
 		touch Podfile
 3.	Your Podfile should be in the root of the directory and look something like this:
-<script src="https://gist.github.com/jzucker2/e4b7b9687e6b2b504518.js"></script>
+
+			# It's good practice to include the Pod source in your Podfile
+			source 'https://github.com/CocoaPods/Specs.git'
+			
+			# specify platform and target OS version
+			platform :ios, '7.0'
+			
+			# this would be the relative path of your app, whatever that may be
+			xcodeproj 'SimplePubSub/SimplePubSub.xcodeproj'
+			
+			# this is the relative location of your workspace, I prefer to explicity 
+			# indicate this, though it is not always required. Feel free to use whatever
+			# name for your workspace that you would like.
+			workspace 'Examples.xcworkspace'
+			
+			# here we include the wonderful new PubNub pod
+			pod 'PubNub', '~> 4.0'
 
 If you have any other pods you’d like to include, they should be added to this Podfile. If you have other targets you’d like to add, like a test target, then you can add them to this Podfile. Cocoapods has great documentation for this on their site.
 
