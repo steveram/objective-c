@@ -14,7 +14,7 @@ If you've already installed you can upgrade to the latest cocoapods gem using:
 	
 PubNub SDK itself has dependencies on AFNetworking and CocoaLumberjack. These libraries will be added to your project as well.
 
-##How to Get It: Git
+##How to Get It: Gits
 Add the PubNub iOS SDK folder to your project.
 
 ##How to Get It: Source
@@ -139,9 +139,7 @@ Add the PNObjectEventListener protocol to AppDelegate
       
 ##Copy and paste examples:
 ###INIT
-Instantiate a new PubNub instance. Only the subscribeKey is mandatory. Also include publishKey if you intend to publish from this instance, and the secretKey if you wish to perform PAM administrative operations from this instance.
-
-***It is not a best practice to include the secret key in client-side code for security reasons.***
+Instantiate a new PubNub instance. Only the subscribeKey is mandatory. Also include publishKey if you intend to publish from this instance.
 
 	let client : PubNub
 	let config : PNConfiguration
