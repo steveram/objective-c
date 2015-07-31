@@ -41,6 +41,7 @@ Pod::Spec.new do |s|
   ]
 
   s.library   = "z"
+  s.dependency "Fabric"
   s.dependency "CocoaLumberjack", "2.0.0"
   s.dependency "Crashlytics", '~> 3.1'
 

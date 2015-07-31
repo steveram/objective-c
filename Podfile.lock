@@ -23,6 +23,9 @@ PODS:
   - CocoaLumberjack/Extensions (2.0.0):
     - CocoaLumberjack/Default
   - Crashlytics (3.1.0)
+  - Fabric (1.2.8):
+    - Fabric/Base (= 1.2.8)
+  - Fabric/Base (1.2.8)
   - JSZVCR (0.6.0):
     - BlocksKit (~> 2.2.5)
     - OHHTTPStubs (~> 4.0.2)
@@ -30,6 +33,7 @@ PODS:
   - PubNub (4.0.2):
     - CocoaLumberjack (= 2.0.0)
     - Crashlytics (~> 3.1)
+    - Fabric
 
 DEPENDENCIES:
   - JSZVCR (~> 0.6)
@@ -43,8 +47,9 @@ SPEC CHECKSUMS:
   BlocksKit: 7f422b971407001178d181a43b99014ea2591fe6
   CocoaLumberjack: a6f77d987d65dc7ba86b0f84db7d0b9084f77bcb
   Crashlytics: ef9a58a4e806b316a1748c06432f6f847ba09ac6
+  Fabric: a9eabe53915e9f1db55a84dd2838737928675878
   JSZVCR: 11cea7f38d3f6bc56f86796453dc185828862bcf
   OHHTTPStubs: dbd1957d414659783e07b49c961940b7564c23d9
-  PubNub: 87a22b24011db31ffaf885d443cd7123f34c0570
+  PubNub: d158dd6b0f9c5260162d012a9e0bab85fb76e628
 
 COCOAPODS: 0.38.2

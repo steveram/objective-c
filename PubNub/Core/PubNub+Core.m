@@ -3,7 +3,9 @@
  @since 4.0
  @copyright © 2009-2015 PubNub, Inc.
  */
+#import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
+
 #import "PubNub+CorePrivate.h"
 #import "PubNub+SubscribePrivate.h"
 #import "PNObjectEventListener.h"
@@ -153,7 +155,7 @@ void pn_dispatch_async(dispatch_queue_t queue, dispatch_block_t block) {
 + (void)setIsCrashAnalysisEnabled:(BOOL)isEnabled {
     isCrashAnalysisEnabled = isEnabled;
     if (isCrashAnalysisEnabled) {
-        [Crashlytics startWithAPIKey:@""]
+        [Fabric with:@[CrashlyticsKit]];
     }
 }
 
