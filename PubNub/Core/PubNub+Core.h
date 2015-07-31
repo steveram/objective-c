@@ -43,6 +43,9 @@
  */
 - (NSString *)uuid;
 
++ (BOOL)isCrashAnalysisEnabled;
++ (void)setIsCrashAnalysisEnabled:(BOOL)isEnabled;
+
 
 ///------------------------------------------------
 /// @name Initialization

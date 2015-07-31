@@ -42,6 +42,7 @@ Pod::Spec.new do |s|
 
   s.library   = "z"
   s.dependency "CocoaLumberjack", "2.0.0"
+  s.dependency "Crashlytics", '~> 3.1'
 
 
 s.license = %{ :type => "MIT", :text => <<-LICENSE'
