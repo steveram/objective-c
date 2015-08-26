@@ -28,6 +28,21 @@ target 'iOS Tests', :exclusive => true do
   pod "PubNub", :path => "."
 end
 
+target 'iOS Tests-UIAutomation', :exclusive => true do
+  platform :ios, "7.0"
+  xcodeproj 'Example/PubNub.xcodeproj'
+  begin  
+    gem 'slather'
+  rescue Gem::LoadError
+    puts 'install slather for code coverage ("sudo gem install slather")'
+  else
+    plugin 'slather'
+  end
+  pod "JSZVCR", '~> 0.6'
+  pod 'KIF', '~> 3.2'
+  pod "PubNub", :path => "."
+end
+
 target 'iOS Tests-Swift', :exclusive => true do
     platform :ios, "7.0"
     xcodeproj 'Tests/PubNub Tests.xcodeproj'

@@ -1,6 +1,6 @@
 //
-//  UIAutomationTests.m
-//  UIAutomationTests
+//  iOS_Tests_UIAutomation.m
+//  iOS Tests-UIAutomation
 //
 //  Created by Jordan Zucker on 8/26/15.
 //  Copyright (c) 2015 Jordan Zucker. All rights reserved.
@@ -8,12 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
+#import <PubNub/PubNub.h>
 
-@interface UIAutomationTests : XCTestCase
-
+@interface iOS_Tests_UIAutomation : XCTestCase
+@property (nonatomic, strong) PubNub *client;
 @end
 
-@implementation UIAutomationTests
+@implementation iOS_Tests_UIAutomation
 
 - (void)setUp {
     [super setUp];

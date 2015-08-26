@@ -25,12 +25,16 @@ PODS:
   - JSZVCR (0.6.1):
     - BlocksKit (~> 2.2.5)
     - OHHTTPStubs (~> 4.0.2)
+  - KIF (3.2.3):
+    - KIF/XCTest (= 3.2.3)
+  - KIF/XCTest (3.2.3)
   - OHHTTPStubs (4.0.2)
   - PubNub (4.0.2):
     - CocoaLumberjack (= 2.0.0)
 
 DEPENDENCIES:
   - JSZVCR (~> 0.6)
+  - KIF (~> 3.2)
   - PubNub (from `.`)
 
 EXTERNAL SOURCES:
@@ -41,6 +45,7 @@ SPEC CHECKSUMS:
   BlocksKit: 7f422b971407001178d181a43b99014ea2591fe6
   CocoaLumberjack: a6f77d987d65dc7ba86b0f84db7d0b9084f77bcb
   JSZVCR: e687dbc45cc68df2f5a55203356acfdd3e50d504
+  KIF: a94bffe9c97e449e44f8fa481c53243d21309e1e
   OHHTTPStubs: dbd1957d414659783e07b49c961940b7564c23d9
   PubNub: ebf9d7329cb19d40a0a08b2ce24de569afebde1b
 

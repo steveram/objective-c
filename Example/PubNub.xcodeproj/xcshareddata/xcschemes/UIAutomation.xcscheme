@@ -34,6 +34,20 @@
                ReferencedContainer = "container:PubNub.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "51307A431B8E3FC1003C1C34"
+               BuildableName = "iOS Tests-UIAutomation.xctest"
+               BlueprintName = "iOS Tests-UIAutomation"
+               ReferencedContainer = "container:PubNub.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -46,9 +60,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "51307A311B8E3DFD003C1C34"
-               BuildableName = "UIAutomationTests.xctest"
-               BlueprintName = "UIAutomationTests"
+               BlueprintIdentifier = "51307A431B8E3FC1003C1C34"
+               BuildableName = "iOS Tests-UIAutomation.xctest"
+               BlueprintName = "iOS Tests-UIAutomation"
                ReferencedContainer = "container:PubNub.xcodeproj">
             </BuildableReference>
          </TestableReference>
