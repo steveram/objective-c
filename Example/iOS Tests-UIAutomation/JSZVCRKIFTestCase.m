@@ -33,6 +33,12 @@
 - (instancetype)initWithInvocation:(NSInvocation *)invocation {
     self = [super initWithInvocation:invocation];
     if (self) {
+        if (
+            [NSStringFromSelector(invocation.selector) isEqualToString:@"beforeAll"] ||
+            [NSStringFromSelector(invocation.selector) isEqualToString:@"afterAll"]
+            ) {
+            return self;
+        }
         _vcr = [JSZVCR vcrWithMatcherClass:self.matcherClass];
         _vcr.playerDelegate = self;
         _vcr.currentTestCase = self;
@@ -42,19 +48,19 @@
     return self;
 }
 
-- (void)setUp {
-    [super setUp];
+- (void)beforeEach {
+    [super beforeEach];
     [self.vcr removeAllUnsavedRecordings];
     self.vcr.recording = [self isRecording];
 }
 
-- (void)tearDown {
+- (void)afterEach {
     [self.vcr tearDown];
     [self.vcr removeAllNetworkResponses];
     if (self.vcr.isRecording) {
         [self.vcr saveTestRecordings];
     }
-    [super tearDown];
+    [super afterEach];
 }
 
 - (NSArray *)recordings {
