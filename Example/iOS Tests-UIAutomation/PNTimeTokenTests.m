@@ -1,21 +1,21 @@
 //
-//  PNTimeTokenTestCase.m
+//  PNTimeTokenTests.m
 //  PubNub
 //
-//  Created by Jordan Zucker on 8/26/15.
+//  Created by Jordan Zucker on 8/27/15.
 //  Copyright (c) 2015 Jordan Zucker. All rights reserved.
 //
 
 #import "PNUIBasicClientTestCase.h"
 
-@interface PNTimeTokenTestCase : PNUIBasicClientTestCase 
+@interface PNTimeTokenTests : PNUIBasicClientTestCase
 
 @end
 
-@implementation PNTimeTokenTestCase
+@implementation PNTimeTokenTests
 
 - (BOOL)isRecording{
-    return YES;
+    return NO;
 }
 
 - (void)testTimeToken {

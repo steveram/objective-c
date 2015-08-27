@@ -69,6 +69,9 @@
                <Test
                   Identifier = "JSZVCRKIFTestCase">
                </Test>
+               <Test
+                  Identifier = "PNUIBasicClientTestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>
