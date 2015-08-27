@@ -6,39 +6,30 @@
 //  Copyright (c) 2015 Jordan Zucker. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import <XCTest/XCTest.h>
-#import <KIF/KIF.h>
+#import "PNUIBasicClientTestCase.h"
 
-@interface PNTimeTokenTestCase : KIFTestCase
+@interface PNTimeTokenTestCase : PNUIBasicClientTestCase 
 
 @end
 
 @implementation PNTimeTokenTestCase
 
-- (void)beforeEach {
-    [super beforeEach];
+- (BOOL)isRecording{
+    return YES;
 }
 
-- (void)setUp {
-    [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
-}
-
-- (void)tearDown {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
-}
-
-- (void)testExample {
-    // This is an example of a functional test case.
-    XCTAssert(YES, @"Pass");
-}
-
-- (void)testPerformanceExample {
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
+- (void)testTimeToken {
+    XCTestExpectation *timeTokenExpectation = [self expectationWithDescription:@"timeToken"];
+    [self.client timeWithCompletion:^(PNTimeResult *result, PNErrorStatus *status) {
+        XCTAssertNil(status.errorData.information);
+        XCTAssertNotNil(result);
+        XCTAssertEqual(result.operation, PNTimeOperation);
+        XCTAssertEqual(result.statusCode, 200);
+        XCTAssertEqualObjects(result.data.timetoken, @14355553745683928);
+        [timeTokenExpectation fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:5 handler:^(NSError *error) {
+        XCTAssertNil(error);
     }];
 }
 

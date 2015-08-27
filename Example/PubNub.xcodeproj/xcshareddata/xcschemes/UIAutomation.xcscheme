@@ -65,6 +65,11 @@
                BlueprintName = "iOS Tests-UIAutomation"
                ReferencedContainer = "container:PubNub.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "JSZVCRKIFTestCase">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>

@@ -14,7 +14,6 @@
 		51307A281B8E3DFD003C1C34 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 51307A261B8E3DFD003C1C34 /* Main.storyboard */; };
 		51307A2A1B8E3DFD003C1C34 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 51307A291B8E3DFD003C1C34 /* Images.xcassets */; };
 		51307A2D1B8E3DFD003C1C34 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 51307A2B1B8E3DFD003C1C34 /* LaunchScreen.xib */; };
-		51307A491B8E3FC1003C1C34 /* iOS_Tests_UIAutomation.m in Sources */ = {isa = PBXBuildFile; fileRef = 51307A481B8E3FC1003C1C34 /* iOS_Tests_UIAutomation.m */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -26,6 +25,8 @@
 		793D26AD1B44048900509447 /* CHANGELOG in Resources */ = {isa = PBXBuildFile; fileRef = 793D26AC1B44048900509447 /* CHANGELOG */; };
 		793D26AF1B44049400509447 /* VERSION in Resources */ = {isa = PBXBuildFile; fileRef = 793D26AE1B44049400509447 /* VERSION */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
+		9776D95F1B8EF18F0027F572 /* PNUIBasicClientTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 9776D95E1B8EF18F0027F572 /* PNUIBasicClientTestCase.m */; };
+		9776D9621B8EF5480027F572 /* JSZVCRKIFTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 9776D9611B8EF5480027F572 /* JSZVCRKIFTestCase.m */; };
 		97FB4DB91B36266800CA7C91 /* Rakefile in Resources */ = {isa = PBXBuildFile; fileRef = 97FB4DB81B36266800CA7C91 /* Rakefile */; };
 		A31955A64FD7AE963B2A0239 /* libPods-iOS Tests-UIAutomation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BD82D61F2AA7E43433342F41 /* libPods-iOS Tests-UIAutomation.a */; };
 		D14C620EAE6ED7F793175040 /* libPods-PubNub_Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 976A1943FCC7DA8BF70AEA62 /* libPods-PubNub_Example.a */; };
@@ -59,7 +60,6 @@
 		51307A2C1B8E3DFD003C1C34 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		51307A441B8E3FC1003C1C34 /* iOS Tests-UIAutomation.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "iOS Tests-UIAutomation.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		51307A471B8E3FC1003C1C34 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		51307A481B8E3FC1003C1C34 /* iOS_Tests_UIAutomation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iOS_Tests_UIAutomation.m; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* PubNub_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PubNub_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -80,6 +80,10 @@
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		8E34698A4B4E8DFF42E63481 /* libPods-UIAutomation.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-UIAutomation.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		976A1943FCC7DA8BF70AEA62 /* libPods-PubNub_Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PubNub_Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9776D95D1B8EF18F0027F572 /* PNUIBasicClientTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNUIBasicClientTestCase.h; sourceTree = "<group>"; };
+		9776D95E1B8EF18F0027F572 /* PNUIBasicClientTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNUIBasicClientTestCase.m; sourceTree = "<group>"; };
+		9776D9601B8EF5480027F572 /* JSZVCRKIFTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSZVCRKIFTestCase.h; sourceTree = "<group>"; };
+		9776D9611B8EF5480027F572 /* JSZVCRKIFTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSZVCRKIFTestCase.m; sourceTree = "<group>"; };
 		97FB4DB81B36266800CA7C91 /* Rakefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Rakefile; path = ../Rakefile; sourceTree = "<group>"; };
 		A53D41A9582BD11CC2DE4DFF /* Pods-UIAutomation.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIAutomation.release.xcconfig"; path = "../Pods/Target Support Files/Pods-UIAutomation/Pods-UIAutomation.release.xcconfig"; sourceTree = "<group>"; };
 		BD82D61F2AA7E43433342F41 /* libPods-iOS Tests-UIAutomation.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iOS Tests-UIAutomation.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -159,7 +163,7 @@
 		51307A451B8E3FC1003C1C34 /* iOS Tests-UIAutomation */ = {
 			isa = PBXGroup;
 			children = (
-				51307A481B8E3FC1003C1C34 /* iOS_Tests_UIAutomation.m */,
+				9776D95C1B8EEEEE0027F572 /* Helpers */,
 				51109CD91B8E5AA400E6B078 /* PNTimeTokenTestCase.m */,
 				51307A461B8E3FC1003C1C34 /* Supporting Files */,
 			);
@@ -247,6 +251,17 @@
 				97FB4DB81B36266800CA7C91 /* Rakefile */,
 			);
 			name = "Podspec Metadata";
+			sourceTree = "<group>";
+		};
+		9776D95C1B8EEEEE0027F572 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				9776D95D1B8EF18F0027F572 /* PNUIBasicClientTestCase.h */,
+				9776D95E1B8EF18F0027F572 /* PNUIBasicClientTestCase.m */,
+				9776D9601B8EF5480027F572 /* JSZVCRKIFTestCase.h */,
+				9776D9611B8EF5480027F572 /* JSZVCRKIFTestCase.m */,
+			);
+			name = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -490,8 +505,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9776D9621B8EF5480027F572 /* JSZVCRKIFTestCase.m in Sources */,
+				9776D95F1B8EF18F0027F572 /* PNUIBasicClientTestCase.m in Sources */,
 				51109CDA1B8E5AA400E6B078 /* PNTimeTokenTestCase.m in Sources */,
-				51307A491B8E3FC1003C1C34 /* iOS_Tests_UIAutomation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
