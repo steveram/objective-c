@@ -68,6 +68,23 @@ task :coverage do
   end
 end
 
+desc 'Print test coverage of the last test run'
+task :device_tests do
+  final_exit_status = 0
+  device_uuid = 'a7b1bdf91bd399aa2cde5071109b70408b916937'
+  destination = "-destination id=#{device_uuid}"
+  puts '**********************************'
+  puts destination
+  puts '**********************************'
+  sleep(5)
+  sh("xcodebuild -workspace PubNub.xcworkspace -scheme UIAutomation #{destination} test | xcpretty -c" + "; exit ${PIPESTATUS[0]}") rescue nil
+  current_exit_status = $?.exitstatus
+  if current_exit_status != 0
+    final_exit_status = current_exit_status
+  end
+  exit final_exit_status
+end
+
 desc "Run the PubNub Integration Tests for iOS"
 task :test do
   Rake::Task['test:ios'].invoke
