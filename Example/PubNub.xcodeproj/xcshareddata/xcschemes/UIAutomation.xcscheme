@@ -72,6 +72,9 @@
                <Test
                   Identifier = "PNUIBasicClientTestCase">
                </Test>
+               <Test
+                  Identifier = "PNUIBasicSubscribeTestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>
