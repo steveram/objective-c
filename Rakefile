@@ -71,7 +71,7 @@ end
 desc 'Print test coverage of the last test run'
 task :device_tests do
   final_exit_status = 0
-  device_uuid = 'a7b1bdf91bd399aa2cde5071109b70408b916937'
+  device_uuid = 'e2e95980442bf6bc62285ad3545553ee3daabdeb'
   destination = "-destination id=#{device_uuid}"
   puts '**********************************'
   puts destination
