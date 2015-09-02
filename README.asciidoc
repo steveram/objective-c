@@ -2,86 +2,91 @@
 :sectanchors:
 
 == Description
-This document covers usage of PubNub SDK as Framework within your project.
+This document covers the usage of the PubNub SDK as a Framework within your project.
 
-To build dynamic framework separate project will be used and can be downloaded from link:https://github.com/pubnub/objective-c/archive/framework.zip[here]. Project doesn't use dependency manager and updated each time when new version of PubNub SDK will be released.
+To build this dynamic framework, a separate project will be used and can be downloaded from link:https://github.com/pubnub/objective-c/archive/framework.zip[here]. This project doesn't use any sort of dependency manager, and is updated each time a new version of PubNub SDK is released.
 
 == How to use
-Framework can be added to your project in two different ways: as dependency project or as compiled binary.
+The framework can be added to your project in two different ways: 1) as dependency project or 2) as a compiled binary.
 
 === Project dependency
-With this approach you will have to place link:https://github.com/pubnub/objective-c/archive/framework.zip[downloaded] not war away from your project so it won't be deleted accidentally. +
-This approach allow to build frameworks only for active platform (device or simulator) and for releases will allow to preserve some application binary space (because framework binaries won't store additional symbols for another platform).
+With this approach you will have to keep  link:https://github.com/pubnub/objective-c/archive/framework.zip[framework.zip] close to your project (you don't want to delete it accidentally.) +
 
-To add dependency against PubNub framework project do next steps:
+The project dependency approach allows you to build frameworks only for the active platform (device or simulator) and for releases will allow you to preserve application binary space (since framework binaries won't store additional symbols for another platform).
 
-. Find PubNub framework project folder in downloaded archive:
+To add a dependency against the PubNub framework project perform the following:
+
+. Find the PubNub framework project folder in the downloaded archive:
 +
 image::resources/image00.png[align="center"]
-. Copy selected _PubNub_ folder somewhere to known and reliable location, because our project will need it every time when Xcode will build your application (in our case it will be our project's subfolder)
+. Copy the selected _PubNub_ folder to a location where it will be available each time you build (in our case it will be our project's subfolder.)
 +
 image::resources/image01.png[align="center"]
-. Open your project in Xcode and expand sources tree
+. Open your project in Xcode and expand the sources tree.
 +
 image::resources/image02.png[align="center"]
-. Select _PubNub_ framework project file and drag&drop it to your project sources tree
+. Select the _PubNub_ framework project file and drag an drop it into your project sources tree.
 +
 image::resources/image03.png[align="center"]
-. Open your project's _General_ tab and scroll to _Embedded Binaries_:
+. Open your project's _General_ tab and scroll to _Embedded Binaries_.
 +
 image::resources/image04.png[align="center"]
-. Clieck on *"+"* and select both _PubNub.framework_ and _CocoaLumberjack.framework_ files from _PubNub_ project as shown
+. Click on *"+"* and select both _PubNub.framework_ and _CocoaLumberjack.framework_ files from the _PubNub_ project as shown.
 +
 image::resources/image05.png[align="center"]
 
-Next follow documentation about xref:framework-use[how to use framework in your code].
+Next follow the documentation about xref:framework-use[how to use framework the in your code].
 
 
 == Standalone bundle
-_PubNub_ framework project also allow to build standalone framework bundles which can be copied right to your application. Even with _dependency_ approach project build those and copy products to root of _PubNub_ project folder under *Products* folder. +
-To build standalone bundle you need to link:https://github.com/pubnub/objective-c/archive/framework.zip[download] _PubNub_ framework project:
+_PubNub_ framework project also allows you to build standalone framework bundles which can be copied right into your application. Even with the _dependency_ approach, the project will still build and copy the products to the root of the _PubNub_ project folder (under the *Products* folder.) +
+To build the standalone bundle you need to  link:https://github.com/pubnub/objective-c/archive/framework.zip[download] the _PubNub_ framework project.
 
-. Open downloaded project in Xcode
-. Select _PubNub_ or _PubNub-Universal_ target and hit `Cmd+B` to build selected type of framework
+To implement the framework as a standalone bundle, perform the following:
+
+. Open the downloaded project in Xcode.
+
+. Select the _PubNub_ or _PubNub-Universal_ target and hit `Cmd+B` to build the selected type of framework.
 +
 image::resources/image06.png[align="center"]
-. Navigate to _PubNub_ project directory (the one from which it has been opened in Xcode) to find *Products* folder
+. Navigate to the _PubNub_ project directory (the directory from which the project has been opened in Xcode) and find the *Products* folder.
 +
 image::resources/image07.png[align="center"]
-. Copy _.framework_ bundles from *Products* folder to your application manually or allow to do it Xcode during files drag&drop to project tree
+. Copy the _.framework_ bundles from the *Products* folder to your application manually, or allow Xcode to do it for you by dragging and dropping the files into the project tree.
 +
 image::resources/image08.png[align="center"]
-+ And select _Copy items if needed_ checkbox and click _Finish_
++ Select the _Copy items if needed_ checkbox and click _Finish_.
 +
 image::resources/image09.png[align="center"]
-. Open your project's _General_ tab and scroll to _Embedded Binaries_:
+. Open your project's _General_ tab and scroll to _Embedded Binaries_.
 +
 image::resources/image04.png[align="center"]
-. Clieck on *"+"* and select both _PubNub.framework_ and _CocoaLumberjack.framework_ files as shown
+. Click on *"+"* and select both the _PubNub.framework_ and _CocoaLumberjack.framework_ files.
 +
 image::resources/image10.png[align="center"]
 
-NOTE: If _PubNub_ target has been used, then framework will be generated only for selected platform (device or simulator) and if you will try to use framework to compile for another platform it will crash on run-time.
+*NOTE*: If the _PubNub_ target has been used, then the framework will be generated only for the selected platform (device or simulator.) If you try to use the framework to compile for another platform, *it will crash during run-time!* Using the _PubNub-Universal_ build target (which can be used on both device and simulator) will help mitigate any sort of crash scenarios during development.
 
-NOTE: If you don't want to experience any run-time crash during development process, then it better to use _PubNub-Universal_ build target which will build universal binaries which can be used on both device and simulator.
-
-Next follow documentation about xref:framework-use[how to use framework in your code].
+Now that these steps are complete, let's learn more about xref:framework-use[how to use the framework in your app].
 
 [[framework-use]]
-== Use framework in code
+== Using the framework with your app
 
-That's all, we added frameworks tou our application and now depending on project's language (Objective-C or Swift) we need to make code aware what we have PubNub framework available:
+At this point, you should have the framework added to your application project, and depending on your project's language (Objective-C or Swift), we need to make your project aware of the PubNub framework.
 
-* For Objective-C project you need to import _PubNub_ headers in classes where it will be used
+* For an Objective-C project, you need to import the _PubNub_ headers in classes where it will be used.
 +
 [source,objc]
 ----
 #import <PubNub/PubNub.h>
 ----
 
-* For Swift project you need to import _PubNub_ module to files where it will be used
+* For a Swift project, you will need to import the _PubNub_ module in files where it will be used.
 +
 [source,swift]
 ----
 import PubNub
 ----
+
+== Additional Support
+At this point, you should have a compiling project.  If not, contact us at support@pubnub.com and we'll help get you unstuck.
