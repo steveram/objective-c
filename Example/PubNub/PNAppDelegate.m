@@ -95,69 +95,92 @@
     [self pubNubSetState];
 }
 
+
+
+
+- (void)unsub {
+
+    [self.client unsubscribeFromChannels:@[_channel1] withPresence:YES];
+
+    [self.client subscribeToChannels:@[_channel1] withPresence:YES clientState:@{_channel1:@{@"foo":@"bar"}}];
+
+}
+
 - (void)tireKicker {
     [self pubNubInit];
 
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:15.0
+                                                  target:self
+                                                selector:@selector(unsub)
+                                                userInfo:nil
+                                                 repeats:YES];
+
+
 #pragma mark - Time
+//
+//    [self pubNubTime];
+//
+//#pragma mark - Publish
+//    [self pubNubPublish];
+//
+//#pragma mark - History
+//
+//    [self pubNubHistory];
+//
+//#pragma mark - Channel Groups Subscribe / Unsubscribe
+//
+//    [self pubNubSubscribeToChannelGroup];
+//    [self pubNubUnsubFromChannelGroups];
+//
+//#pragma mark - Channel Subscribe / Unsubscribe
 
-    [self pubNubTime];
 
-#pragma mark - Publish
-    [self pubNubPublish];
+//
+//    [self pubNubSubscribeToChannels];
+//    [self pubNubUnsubscribeFromChannels];
 
-#pragma mark - History
 
-    [self pubNubHistory];
 
-#pragma mark - Channel Groups Subscribe / Unsubscribe
-
-    [self pubNubSubscribeToChannelGroup];
-    [self pubNubUnsubFromChannelGroups];
-
-#pragma mark - Channel Subscribe / Unsubscribe
-
-    [self pubNubSubscribeToChannels];
-    [self pubNubUnsubscribeFromChannels];
 
 #pragma mark - Presence Subscribe / Unsubscribe
+//
+//    [self pubNubSubscribeToPresence];
+//    [self pubNubUnsubFromPresence];
+//
+//#pragma mark - Here Nows
+//
+//    [self pubNubHereNowForChannel];
+//    [self pubNubGlobalHereNow];
+//    [self pubNubHereNowForChannelGroups];
+//    [self pubNubWhereNow];
+//
+//#pragma mark - CG Admin
+//
+//    [self pubNubCGAdd];
+//    [self pubNubChannelsForGroup];
+//    [self pubNubCGRemoveAllChannels];
+//    [self pubNubCGRemoveSomeChannels];
+//
+//#pragma mark - State Admin
+//    [self pubNubSetState];
+//    [self pubNubGetState];
 
-    [self pubNubSubscribeToPresence];
-    [self pubNubUnsubFromPresence];
 
-#pragma mark - Here Nows
-
-    [self pubNubHereNowForChannel];
-    [self pubNubGlobalHereNow];
-    [self pubNubHereNowForChannelGroups];
-    [self pubNubWhereNow];
-
-#pragma mark - CG Admin
-
-    [self pubNubCGAdd];
-    [self pubNubChannelsForGroup];
-    [self pubNubCGRemoveAllChannels];
-    [self pubNubCGRemoveSomeChannels];
-
-#pragma mark - State Admin
-    [self pubNubSetState];
-    [self pubNubGetState];
-
-
-#pragma mark - 3rd Party Push Notifications Admin
-
-    [self pubNubAddPushNotifications];
-    [self pubNubRemovePushNotification];
-    [self pubNubRemoveAllPushNotifications];
-    [self pubNubGetAllPushNotifications];
-
-#pragma mark - Public Encryption/Decryption Methods
-
-    [self pubNubAESDecrypt];
-    [self pubNubAESEncrypt];
-
-#pragma mark - Message Size Check Methods
-
-    [self pubNubSizeOfMessage];
+//#pragma mark - 3rd Party Push Notifications Admin
+//
+//    [self pubNubAddPushNotifications];
+//    [self pubNubRemovePushNotification];
+//    [self pubNubRemoveAllPushNotifications];
+//    [self pubNubGetAllPushNotifications];
+//
+//#pragma mark - Public Encryption/Decryption Methods
+//
+//    [self pubNubAESDecrypt];
+//    [self pubNubAESEncrypt];
+//
+//#pragma mark - Message Size Check Methods
+//
+//    [self pubNubSizeOfMessage];
 
 }
 
@@ -714,9 +737,9 @@
 - (void)updateClientConfiguration {
 
     // Set PubNub Configuration
-    self.myConfig.TLSEnabled = NO;
+    self.myConfig.TLSEnabled = YES;
     self.myConfig.uuid = [self randomString];
-    self.myConfig.origin = @"pubsub.pubnub.com";
+    self.myConfig.origin = @"pgt.pubnub.com";
     self.myConfig.authKey = _authKey;
 
     // Presence Settings
