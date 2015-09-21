@@ -1,6 +1,0 @@
-framework module PubNub {
-  umbrella header "PubNub.h"
-
-  export *
-  module * { export * }
-}

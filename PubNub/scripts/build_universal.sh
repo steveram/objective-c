@@ -12,14 +12,20 @@ if [[ -d "${PRODUCTS_PATH}" ]]; then
     rm -R "${PRODUCTS_PATH}"
 fi
 
+echo "ROOT: ${SDKROOT}"
+echo "Base: ${SDK_NAME}"
+echo "Base#2: ${IPHONEOS_DEPLOYMENT_TARGET}"
+echo "Base#3: ${TARGET_PLATFORM}${IPHONEOS_DEPLOYMENT_TARGET}"
+
+
 # Build library with dependencies for iPhoneOS (ARM binary slice)
 echo "Building ${PROJECT_NAME} for iPhoneOS..."
-xcrun --no-cache xcodebuild -project "${PROJECT_FILE_PATH}" -target "${PROJECT_NAME}" -configuration "${CONFIGURATION}" -sdk "iphoneos${IPHONEOS_DEPLOYMENT_TARGET}" BUILD_DIR="${BUILD_DIR}" OBJROOT="${OBJROOT}" BUILD_ROOT="${BUILD_ROOT}" SYMROOT="${SYMROOT}" ONLY_ACTIVE_ARCH=NO $ACTION > /dev/null
+xcrun --no-cache xcodebuild -project "${PROJECT_FILE_PATH}" -target "${PROJECT_NAME}" -configuration "${CONFIGURATION}" -sdk iphoneos BUILD_DIR="${BUILD_DIR}" OBJROOT="${OBJROOT}" BUILD_ROOT="${BUILD_ROOT}" SYMROOT="${SYMROOT}" ONLY_ACTIVE_ARCH=NO $ACTION > /dev/null
 echo "Built ${PROJECT_NAME} for iPhoneOS"
 
 # Build library with dependencies for Simulator (x86 binary slice)
 echo "Building ${PROJECT_NAME} for Simulator..."
-xcrun --no-cache xcodebuild -project "${PROJECT_FILE_PATH}" -target "${PROJECT_NAME}" -configuration "${CONFIGURATION}" -sdk "iphonesimulator${IPHONEOS_DEPLOYMENT_TARGET}" BUILD_DIR="${BUILD_DIR}" OBJROOT="${OBJROOT}" BUILD_ROOT="${BUILD_ROOT}" SYMROOT="${SYMROOT}" ONLY_ACTIVE_ARCH=NO $ACTION > /dev/null
+xcrun --no-cache xcodebuild -project "${PROJECT_FILE_PATH}" -target "${PROJECT_NAME}" -configuration "${CONFIGURATION}" -sdk iphonesimulator BUILD_DIR="${BUILD_DIR}" OBJROOT="${OBJROOT}" BUILD_ROOT="${BUILD_ROOT}" SYMROOT="${SYMROOT}" ONLY_ACTIVE_ARCH=NO $ACTION > /dev/null
 echo "Built ${PROJECT_NAME} for Simulator..."
 
 # Building universal binary
