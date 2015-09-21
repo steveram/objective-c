@@ -26,7 +26,7 @@ PODS:
     - BlocksKit (~> 2.2.5)
     - OHHTTPStubs (~> 4.0.2)
   - OHHTTPStubs (4.0.2)
-  - PubNub (4.0.4):
+  - PubNub (4.0.5):
     - CocoaLumberjack (= 2.0.0)
 
 DEPENDENCIES:
@@ -42,6 +42,6 @@ SPEC CHECKSUMS:
   CocoaLumberjack: a6f77d987d65dc7ba86b0f84db7d0b9084f77bcb
   JSZVCR: e687dbc45cc68df2f5a55203356acfdd3e50d504
   OHHTTPStubs: dbd1957d414659783e07b49c961940b7564c23d9
-  PubNub: 6dd5638449d6c2eb237f0dc2f350da4f668f2a6c
+  PubNub: 5c2aa3eb582606f97975a757bd1c33a827f07fad
 
 COCOAPODS: 0.38.2

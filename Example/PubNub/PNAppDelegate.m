@@ -716,7 +716,7 @@
 - (void)updateClientConfiguration {
 
     // Set PubNub Configuration
-    self.myConfig.TLSEnabled = NO;
+//    self.myConfig.TLSEnabled = NO;
     self.myConfig.uuid = [self randomString];
     self.myConfig.origin = @"pubsub.pubnub.com";
     self.myConfig.authKey = _authKey;
