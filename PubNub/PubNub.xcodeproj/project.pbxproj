@@ -51,6 +51,7 @@
 		79B1ECB01B8DDD0900FB120A /* DDMultiFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 79B1EC981B8DDD0900FB120A /* DDMultiFormatter.m */; };
 		79B1ECB11B8DDD6600FB120A /* CocoaLumberjack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79B1EC5E1B8DDB2B00FB120A /* CocoaLumberjack.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		79B1ECB31B8DDE8A00FB120A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79B1ECB21B8DDE8A00FB120A /* UIKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		79D798ED1BBF3740001EF2AD /* PNLogMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 79D798EC1BBF3740001EF2AD /* PNLogMacro.h */; settings = {ASSET_TAGS = (); }; };
 		79ED24981B8CF9E3003B951D /* PubNub+APNS.h in Headers */ = {isa = PBXBuildFile; fileRef = 79ED23FA1B8CF9E3003B951D /* PubNub+APNS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		79ED24991B8CF9E3003B951D /* PubNub+APNS.m in Sources */ = {isa = PBXBuildFile; fileRef = 79ED23FB1B8CF9E3003B951D /* PubNub+APNS.m */; };
 		79ED249A1B8CF9E3003B951D /* PubNub+ChannelGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = 79ED23FC1B8CF9E3003B951D /* PubNub+ChannelGroup.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -249,6 +250,7 @@
 		79B1EC981B8DDD0900FB120A /* DDMultiFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDMultiFormatter.m; sourceTree = "<group>"; };
 		79B1ECB21B8DDE8A00FB120A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		79B1ECB91B8F68F900FB120A /* build_universal.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = build_universal.sh; sourceTree = "<group>"; };
+		79D798EC1BBF3740001EF2AD /* PNLogMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNLogMacro.h; sourceTree = "<group>"; };
 		79ED23FA1B8CF9E3003B951D /* PubNub+APNS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PubNub+APNS.h"; sourceTree = "<group>"; };
 		79ED23FB1B8CF9E3003B951D /* PubNub+APNS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PubNub+APNS.m"; sourceTree = "<group>"; };
 		79ED23FC1B8CF9E3003B951D /* PubNub+ChannelGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PubNub+ChannelGroup.h"; sourceTree = "<group>"; };
@@ -714,6 +716,7 @@
 				79ED24641B8CF9E3003B951D /* PNLogFileManager.m */,
 				79ED24651B8CF9E3003B951D /* PNLogger.h */,
 				79ED24661B8CF9E3003B951D /* PNLogger.m */,
+				79D798EC1BBF3740001EF2AD /* PNLogMacro.h */,
 			);
 			path = Logger;
 			sourceTree = "<group>";
@@ -807,6 +810,7 @@
 				79ED24AD1B8CF9E3003B951D /* PNClientState.h in Headers */,
 				79ED24B81B8CF9E3003B951D /* PNConfiguration.h in Headers */,
 				79ED24C81B8CF9E3003B951D /* PNErrorStatus+Private.h in Headers */,
+				79D798ED1BBF3740001EF2AD /* PNLogMacro.h in Headers */,
 				79ED25011B8CF9E3003B951D /* PNPrivateStructures.h in Headers */,
 				79ED25271B8CF9E3003B951D /* PNReachability.h in Headers */,
 				79ED24F21B8CF9E3003B951D /* PNHelpers.h in Headers */,
