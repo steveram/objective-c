@@ -21,7 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		7901B2621BAFE351009004BB /* PNClientInformation.h in Headers */ = {isa = PBXBuildFile; fileRef = 7901B2601BAFE351009004BB /* PNClientInformation.h */; settings = {ASSET_TAGS = (); }; };
+		7901B2621BAFE351009004BB /* PNClientInformation.h in Headers */ = {isa = PBXBuildFile; fileRef = 7901B2601BAFE351009004BB /* PNClientInformation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7901B2631BAFE351009004BB /* PNClientInformation.m in Sources */ = {isa = PBXBuildFile; fileRef = 7901B2611BAFE351009004BB /* PNClientInformation.m */; settings = {ASSET_TAGS = (); }; };
 		798A6CA01B8C901D00008E71 /* PubNub.h in Headers */ = {isa = PBXBuildFile; fileRef = 798A6C9F1B8C901D00008E71 /* PubNub.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		79B1EC631B8DDB2C00FB120A /* CocoaLumberjack.h in Headers */ = {isa = PBXBuildFile; fileRef = 79B1EC621B8DDB2C00FB120A /* CocoaLumberjack.h */; settings = {ATTRIBUTES = (Public, ); }; };

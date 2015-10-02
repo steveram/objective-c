@@ -30,6 +30,7 @@ FOUNDATION_EXPORT const unsigned char PubNubVersionString[];
 #import "PNAcknowledgmentStatus.h"
 #import "PNChannelGroupsResult.h"
 #import "PNSubscriberResults.h"
+#import "PNClientInformation.h"
 #import "PNSubscribeStatus.h"
 #import "PNPublishStatus.h"
 #import "PNHistoryResult.h"
