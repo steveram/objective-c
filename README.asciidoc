@@ -1,47 +1,50 @@
 = PubNub Framework
 :sectanchors:
 
-== Description
-This document covers the usage of the PubNub SDK as a Framework within your project.
-
-== How to use
-
-_PubNub_ framework project allows you to build standalone framework bundles which can be copied right into your application. +
+The _PubNub_ framework project allows you to build standalone framework bundles which can be copied right into your application. +
 
 To build the framework as a standalone bundle, perform the following:
 
-. Clone PubNub master repository
+1. Clone the PubNub master repository
 +
 [source,bash]
 ----
 git clone git@github.com:pubnub/objective-c.git
 ----
 
-. Navigate to the place where cloned repository is stored
-. Run CocoaPods command to pull out all required dependencies
+1. Navigate to root of the cloned repository
+
+1. Run the CocoaPods ```pod install``` command to pull out all required dependencies
+
 +
 [source,bash]
 ----
 pod install
 ----
 
-. Open the _PubNub.xcworkspace_ from local clone of PubNub master repository in Xcode.
-. Select the _Framework_ or _Universal Framework_ target and hit `Cmd+B` to build the selected type of framework.
+1. Open the _PubNub.xcworkspace_ from the PubNub repository in Xcode.
+
+1. Select the _Framework_ or _Universal Framework_ target and hit `Cmd+B` to build the selected type of framework.
 +
 image::resources/image06.png[align="center"]
-. Navigate to the _Framework_  directory and find the *Products* directory.
+
+1. Navigate to the _Framework_  directory and find the *Products* directory.
 +
 image::resources/image07.png[align="center"]
-. Copy the _.framework_ bundles from the *Products* folder to your application manually, or allow Xcode to do it for you by dragging and dropping the files into the project tree.
+
+1. Copy the _.framework_ bundles from the *Products* folder to your application manually, or allow Xcode to do it for you by dragging and dropping the files into the project tree.
 +
 image::resources/image08.png[align="center"]
-+ Select the _Copy items if needed_ checkbox and click _Finish_.
+
+1. Select the _Copy items if needed_ checkbox and click _Finish_.
 +
 image::resources/image09.png[align="center"]
-. Open your project's _General_ tab and scroll to _Embedded Binaries_.
+
+1. Open your project's _General_ tab and scroll to _Embedded Binaries_.
 +
 image::resources/image04.png[align="center"]
-. Click on *"+"* and select both the _PubNub.framework_ and _CocoaLumberjack.framework_ files.
+
+1. Click on *"+"* and select both the _PubNub.framework_ and _CocoaLumberjack.framework_ files.
 +
 image::resources/image10.png[align="center"]
 
@@ -52,7 +55,7 @@ Now that these steps are complete, let's learn more about xref:framework-use[how
 [[framework-use]]
 == Using the framework with your app
 
-At this point, you should have the framework added to your application project, and depending on your project's language (Objective-C or Swift), we need to make your project aware of the PubNub framework.
+At this point, you should have the framework added to your application project, and depending on your project's language (Objective-C or Swift), we'll need to make your project aware of the PubNub framework.
 
 * For an Objective-C project, you need to import the _PubNub_ headers in classes where it will be used.
 +
