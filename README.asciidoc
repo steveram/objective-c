@@ -4,52 +4,32 @@
 == Description
 This document covers the usage of the PubNub SDK as a Framework within your project.
 
-To build this dynamic framework, a separate project will be used and can be downloaded from link:https://github.com/pubnub/objective-c/archive/framework.zip[here]. This project doesn't use any sort of dependency manager, and is updated each time a new version of PubNub SDK is released.
-
 == How to use
-The framework can be added to your project in two different ways: 1) as dependency project or 2) as a compiled binary.
 
-=== Project dependency
-With this approach you will have to keep  link:https://github.com/pubnub/objective-c/archive/framework.zip[framework.zip] close to your project (you don't want to delete it accidentally.) +
+_PubNub_ framework project allows you to build standalone framework bundles which can be copied right into your application. +
 
-The project dependency approach allows you to build frameworks only for the active platform (device or simulator) and for releases will allow you to preserve application binary space (since framework binaries won't store additional symbols for another platform).
+To build the framework as a standalone bundle, perform the following:
 
-To add a dependency against the PubNub framework project perform the following:
-
-. Find the PubNub framework project folder in the downloaded archive:
+. Clone PubNub master repository
 +
-image::resources/image00.png[align="center"]
-. Copy the selected _PubNub_ folder to a location where it will be available each time you build (in our case it will be our project's subfolder.)
+[source,bash]
+----
+git clone git@github.com:pubnub/objective-c.git
+----
+
+. Navigate to the place where cloned repository is stored
+. Run CocoaPods command to pull out all required dependencies
 +
-image::resources/image01.png[align="center"]
-. Open your project in Xcode and expand the sources tree.
-+
-image::resources/image02.png[align="center"]
-. Select the _PubNub_ framework project file and drag an drop it into your project sources tree.
-+
-image::resources/image03.png[align="center"]
-. Open your project's _General_ tab and scroll to _Embedded Binaries_.
-+
-image::resources/image04.png[align="center"]
-. Click on *"+"* and select both _PubNub.framework_ and _CocoaLumberjack.framework_ files from the _PubNub_ project as shown.
-+
-image::resources/image05.png[align="center"]
+[source,bash]
+----
+pod install
+----
 
-Next follow the documentation about xref:framework-use[how to use framework the in your code].
-
-
-== Standalone bundle
-_PubNub_ framework project also allows you to build standalone framework bundles which can be copied right into your application. Even with the _dependency_ approach, the project will still build and copy the products to the root of the _PubNub_ project folder (under the *Products* folder.) +
-To build the standalone bundle you need to  link:https://github.com/pubnub/objective-c/archive/framework.zip[download] the _PubNub_ framework project.
-
-To implement the framework as a standalone bundle, perform the following:
-
-. Open the downloaded project in Xcode.
-
-. Select the _PubNub_ or _PubNub-Universal_ target and hit `Cmd+B` to build the selected type of framework.
+. Open the _PubNub.xcworkspace_ from local clone of PubNub master repository in Xcode.
+. Select the _Framework_ or _Universal Framework_ target and hit `Cmd+B` to build the selected type of framework.
 +
 image::resources/image06.png[align="center"]
-. Navigate to the _PubNub_ project directory (the directory from which the project has been opened in Xcode) and find the *Products* folder.
+. Navigate to the _Framework_  directory and find the *Products* directory.
 +
 image::resources/image07.png[align="center"]
 . Copy the _.framework_ bundles from the *Products* folder to your application manually, or allow Xcode to do it for you by dragging and dropping the files into the project tree.
