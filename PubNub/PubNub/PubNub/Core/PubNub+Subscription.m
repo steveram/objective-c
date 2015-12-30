@@ -248,6 +248,11 @@ withCompletionHandlingBlock:(PNClientChannelUnsubscriptionHandlerBlock)handlerBl
 
 #pragma mark - Instance methods
 
+- (void)setFilterExpression:(NSString *)filterExpression {
+    
+    [self.messagingChannel setFilterExpression:filterExpression];
+}
+
 - (NSArray *)subscribedChannels {
     
     return [self subscribedObjectsList];

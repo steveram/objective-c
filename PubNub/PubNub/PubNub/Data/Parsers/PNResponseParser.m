@@ -139,14 +139,15 @@
 
             parserClass = [PNChannelHistoryParser class];
         }
-        // Check whether result is result for "Subscribe" request or not.
-        else if ([response.callbackMethod isEqualToString:PNServiceResponseCallbacks.subscriptionCallback]) {
-
-            parserClass = [PNChannelEventsResponseParser class];
-        }
+    }
+    
+    // Check whether result is result for "Subscribe" request or not.
+    if ([response.callbackMethod isEqualToString:PNServiceResponseCallbacks.subscriptionCallback]) {
+        
+        parserClass = [PNChannelEventsResponseParser class];
     }
     // Check whether response arrived as result of specific action execution.
-    if ([response.callbackMethod isEqualToString:PNServiceResponseCallbacks.leaveChannelCallback]) {
+    else if ([response.callbackMethod isEqualToString:PNServiceResponseCallbacks.leaveChannelCallback]) {
 
         parserClass = [PNActionResponseParser class];
     }

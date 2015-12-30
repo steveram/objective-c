@@ -88,6 +88,12 @@
 
 #pragma mark - Misc functions
 
+static NSString* PNKeyPathFromArray(NSArray *elements);
+NSString* PNKeyPathFromArray(NSArray *elements) {
+    
+    return [elements componentsJoinedByString:@"."];
+}
+
 static NSNumber* PNTimeTokenFromDate(NSDate *date);
 NSNumber* PNTimeTokenFromDate(NSDate *date) {
 

@@ -291,11 +291,17 @@
 		799776C61A2FF2230097A61C /* PNLoggerSymbols.plist in Resources */ = {isa = PBXBuildFile; fileRef = 799775BC1A2FEFFA0097A61C /* PNLoggerSymbols.plist */; };
 		79D424971AA6686000A3A80B /* PNContextInformation.h in Headers */ = {isa = PBXBuildFile; fileRef = 79D424951AA6686000A3A80B /* PNContextInformation.h */; };
 		79D424981AA6686000A3A80B /* PNContextInformation.m in Sources */ = {isa = PBXBuildFile; fileRef = 79D424961AA6686000A3A80B /* PNContextInformation.m */; };
+		79D4BB951C25C21900E88F48 /* PNTimeToken.h in Headers */ = {isa = PBXBuildFile; fileRef = 79D4BB931C25C21900E88F48 /* PNTimeToken.h */; };
+		79D4BB961C25C21900E88F48 /* PNTimeToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 79D4BB941C25C21900E88F48 /* PNTimeToken.m */; };
 		79E7E3F51AB3C45A00F6E175 /* PNPrivateMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 79E7E3F41AB3C45A00F6E175 /* PNPrivateMacro.h */; };
+		DD71B49DE786CDEAD217F9ED /* PNSubscribeEventInformation.m in Sources */ = {isa = PBXBuildFile; fileRef = DD71B5DC589AB62CA54E1E58 /* PNSubscribeEventInformation.m */; };
 		DD71B59CFF1405E2BE04BE53 /* PNTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = DD71B89F702C79C6C155EE8E /* PNTimer.h */; };
 		DD71B9ABB4A4632AC22B705A /* NSNotification+PNPrivateAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = DD71B922E31622996F01F2F8 /* NSNotification+PNPrivateAdditions.h */; };
 		DD71BA56BAB8F846C94129D3 /* PNTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = DD71B7DDE5B3A1F8E1F2DD3B /* PNTimer.m */; };
+		DD71BB221756ED2942CF0670 /* PNSubscribeEventInformation.h in Headers */ = {isa = PBXBuildFile; fileRef = DD71B06A1DBD2D68F4FFA7E9 /* PNSubscribeEventInformation.h */; };
+		DD71BCB5AA2160A330D9E281 /* PNSubscribeEventInformation+Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = DD71BE304B278644C606E054 /* PNSubscribeEventInformation+Protected.h */; };
 		DD71BE1739EDB0904AC6506A /* NSNotification+PNPrivateAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = DD71B837F703421434E56C66 /* NSNotification+PNPrivateAdditions.m */; };
+		DD71BF2ECBD72FF9D6952C45 /* PNChannelEventsResponseParser+Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = DD71B4F9C70DDD6CDDF44DF8 /* PNChannelEventsResponseParser+Protected.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -606,11 +612,17 @@
 		799775BC1A2FEFFA0097A61C /* PNLoggerSymbols.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PNLoggerSymbols.plist; sourceTree = "<group>"; };
 		79D424951AA6686000A3A80B /* PNContextInformation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = PNContextInformation.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		79D424961AA6686000A3A80B /* PNContextInformation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = PNContextInformation.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		79D4BB931C25C21900E88F48 /* PNTimeToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNTimeToken.h; sourceTree = "<group>"; };
+		79D4BB941C25C21900E88F48 /* PNTimeToken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNTimeToken.m; sourceTree = "<group>"; };
 		79E7E3F41AB3C45A00F6E175 /* PNPrivateMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNPrivateMacro.h; sourceTree = "<group>"; };
+		DD71B06A1DBD2D68F4FFA7E9 /* PNSubscribeEventInformation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNSubscribeEventInformation.h; sourceTree = "<group>"; };
+		DD71B4F9C70DDD6CDDF44DF8 /* PNChannelEventsResponseParser+Protected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PNChannelEventsResponseParser+Protected.h"; sourceTree = "<group>"; };
+		DD71B5DC589AB62CA54E1E58 /* PNSubscribeEventInformation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNSubscribeEventInformation.m; sourceTree = "<group>"; };
 		DD71B7DDE5B3A1F8E1F2DD3B /* PNTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNTimer.m; sourceTree = "<group>"; };
 		DD71B837F703421434E56C66 /* NSNotification+PNPrivateAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNotification+PNPrivateAdditions.m"; sourceTree = "<group>"; };
 		DD71B89F702C79C6C155EE8E /* PNTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNTimer.h; sourceTree = "<group>"; };
 		DD71B922E31622996F01F2F8 /* NSNotification+PNPrivateAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNotification+PNPrivateAdditions.h"; sourceTree = "<group>"; };
+		DD71BE304B278644C606E054 /* PNSubscribeEventInformation+Protected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PNSubscribeEventInformation+Protected.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -759,6 +771,8 @@
 				7997753C1A2FEFF90097A61C /* PNWhereNow+Protected.h */,
 				7997753D1A2FEFF90097A61C /* PNWhereNow.h */,
 				7997753E1A2FEFF90097A61C /* PNWhereNow.m */,
+				79D4BB931C25C21900E88F48 /* PNTimeToken.h */,
+				79D4BB941C25C21900E88F48 /* PNTimeToken.m */,
 				799775391A2FEFF90097A61C /* PNResponse+Protected.h */,
 				7997753A1A2FEFF90097A61C /* PNResponse.h */,
 				7997753B1A2FEFF90097A61C /* PNResponse.m */,
@@ -780,6 +794,9 @@
 				799775251A2FEFF90097A61C /* PNDate.m */,
 				DD71B89F702C79C6C155EE8E /* PNTimer.h */,
 				DD71B7DDE5B3A1F8E1F2DD3B /* PNTimer.m */,
+				DD71B06A1DBD2D68F4FFA7E9 /* PNSubscribeEventInformation.h */,
+				DD71B5DC589AB62CA54E1E58 /* PNSubscribeEventInformation.m */,
+				DD71BE304B278644C606E054 /* PNSubscribeEventInformation+Protected.h */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -879,6 +896,7 @@
 				799775001A2FEFF90097A61C /* PNResponseDeserialize.m */,
 				799775011A2FEFF90097A61C /* PNResponseParser.h */,
 				799775021A2FEFF90097A61C /* PNResponseParser.m */,
+				DD71B4F9C70DDD6CDDF44DF8 /* PNChannelEventsResponseParser+Protected.h */,
 			);
 			path = Parsers;
 			sourceTree = "<group>";
@@ -1084,6 +1102,7 @@
 				799776381A2FEFFC0097A61C /* PNError.h in Headers */,
 				799776621A2FEFFE0097A61C /* NSSet+PNAdditions.h in Headers */,
 				799776701A2FEFFF0097A61C /* PNMacro.h in Headers */,
+				79D4BB951C25C21900E88F48 /* PNTimeToken.h in Headers */,
 				799776161A2FEFFB0097A61C /* PNWhereNowResponseParser+Protected.h in Headers */,
 				799776501A2FEFFD0097A61C /* NSArray+PNAdditions.h in Headers */,
 				799776431A2FEFFD0097A61C /* PNMessagesHistory.h in Headers */,
@@ -1234,6 +1253,9 @@
 				799776AB1A2FF0040097A61C /* PNPushNotificationsEnabledChannelsRequest.h in Headers */,
 				DD71B59CFF1405E2BE04BE53 /* PNTimer.h in Headers */,
 				DD71B9ABB4A4632AC22B705A /* NSNotification+PNPrivateAdditions.h in Headers */,
+				DD71BB221756ED2942CF0670 /* PNSubscribeEventInformation.h in Headers */,
+				DD71BCB5AA2160A330D9E281 /* PNSubscribeEventInformation+Protected.h in Headers */,
+				DD71BF2ECBD72FF9D6952C45 /* PNChannelEventsResponseParser+Protected.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1283,7 +1305,7 @@
 		798EFB671A00F14A00E8AFB7 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0610;
+				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = "PubNub, Inc.";
 				TargetAttributes = {
 					798E02321A0103B200E8AFB7 = {
@@ -1463,6 +1485,7 @@
 				799776821A2FF0000097A61C /* PNBaseRequest.m in Sources */,
 				799776BD1A2FF0050097A61C /* PNReachability.m in Sources */,
 				799776A71A2FF0030097A61C /* PNMessageHistoryRequest.m in Sources */,
+				79D4BB961C25C21900E88F48 /* PNTimeToken.m in Sources */,
 				799776921A2FF0020097A61C /* PNChannelsForGroupRequest.m in Sources */,
 				799776B01A2FF0040097A61C /* PNPushNotificationsStateChangeRequest.m in Sources */,
 				7997768C1A2FF0010097A61C /* PNChannelGroupRemoveRequest.m in Sources */,
@@ -1472,6 +1495,7 @@
 				799776C51A2FF0060097A61C /* PNConnectionChannel.m in Sources */,
 				DD71BA56BAB8F846C94129D3 /* PNTimer.m in Sources */,
 				DD71BE1739EDB0904AC6506A /* NSNotification+PNPrivateAdditions.m in Sources */,
+				DD71B49DE786CDEAD217F9ED /* PNSubscribeEventInformation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1521,6 +1545,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pubnub.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = PubNub;
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = bundle;
@@ -1536,6 +1561,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pubnub.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = PubNub;
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = bundle;
@@ -1562,6 +1588,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;

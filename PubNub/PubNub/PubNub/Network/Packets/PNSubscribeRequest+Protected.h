@@ -14,22 +14,31 @@
 #import "PNSubscribeRequest.h"
 
 
-#pragma mark Protected interface methods
+#pragma mark Class forward
 
-@interface PNSubscribeRequest (Protected)
+@class PNTimeToken;
+
+
+#pragma mark - Private interface declaration
+
+@interface PNSubscribeRequest ()
 
 
 #pragma mark - Properties
-
-// Stores whether leave request was sent to subscribe on new channels or as result of user request
-@property (nonatomic, assign, getter = isSendingByUserRequest) BOOL sendingByUserRequest;
 
 // Stores reference on list of channels for which presence should be enabled/disabled
 @property (nonatomic, strong) NSArray *channelsForPresenceEnabling;
 @property (nonatomic, strong) NSArray *channelsForPresenceDisabling;
 
 // Stores recent channels/presence state update time (token)
-@property (nonatomic, copy) NSString *updateTimeToken;
+@property (nonatomic, strong) PNTimeToken *updateTimeToken;
+
+/**
+ @brief  Stores reference on user-provided message filtering expression.
+ 
+ @since 3.8.0
+ */
+@property (nonatomic, copy) NSString *filteringExpression;
 
 /**
  Stores user-provided state which should be appended to the client subscription.
@@ -41,6 +50,9 @@
  */
 @property (nonatomic, assign) NSInteger presenceHeartbeatTimeout;
 @property (nonatomic, copy) NSString *subscriptionKey;
+
+@property (nonatomic, strong) NSArray *channels;
+@property (nonatomic, assign, getter = isPerformingMultipleActions) BOOL performingMultipleActions;
 
 
 #pragma mark - Instance methods
@@ -58,7 +70,7 @@
  * Allow to reset time token on each of channel which should be used for subscription
  */
 - (void)resetTimeToken;
-- (void)resetTimeTokenTo:(NSString *)timeToken;
+- (void)resetTimeTokenTo:(PNTimeToken *)timeToken;
 
 #pragma mark -
 

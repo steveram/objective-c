@@ -11,7 +11,6 @@
 //  Created by Sergey Mamontov.
 //
 //
-
 #import "PNPresenceEvent.h"
 
 
@@ -58,20 +57,36 @@ struct PNPresenceEventDataKeysStruct {
 extern struct PNPresenceEventDataKeysStruct PNPresenceEventDataKeys;
 
 
-#pragma mark - Protected interface methods
+#pragma mark - Class forward
 
-@interface PNPresenceEvent (Protected)
+@class PNSubscribeEventInformation;
+
+
+#pragma mark - Private interface methods
+
+@interface PNPresenceEvent ()
 
 
 #pragma mark - Properties
 
-// Stores reference on channel on which this event
-// is fired
+// Stores reference on channel on which this event is fired
 @property (nonatomic, strong) PNChannel *channel;
 
-// Stores reference on presence occurrence
-// date
+// Stores reference on presence occurrence date
 @property (nonatomic, strong) PNDate *date;
+
+@property (nonatomic, assign) PNPresenceEventType type;
+@property (nonatomic, strong) PNClient *client;
+@property (nonatomic, copy) NSString *uuid;
+@property (nonatomic, assign) NSUInteger occupancy;
+@property (nonatomic, strong) PNChannelGroup *channelGroup;
+
+/**
+ @brief  Stores reference on instance which contain debug information from event envelope.
+
+ @since 3.8.0
+ */
+@property (nonatomic, strong) PNSubscribeEventInformation *debugInformation;
 
 #pragma mark -
 

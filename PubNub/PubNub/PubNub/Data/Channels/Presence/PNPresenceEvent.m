@@ -10,14 +10,13 @@
 //  Created by Sergey Mamontov.
 //
 //
-
-
 #import "PNPresenceEvent+Protected.h"
+#import "PNSubscribeEventInformation.h"
 #import "PNChannel+Protected.h"
 #import "PNClient+Protected.h"
+#import "PNChannelGroup.h"
 #import "PNClient.h"
 #import "PNDate.h"
-#import "PNChannelGroup.h"
 
 
 // ARC check
@@ -25,11 +24,6 @@
 #error PubNub presence event must be built with ARC.
 // You can turn on ARC for only PubNub files by adding '-fobjc-arc' to the build phase for each of its files.
 #endif
-
-
-#pragma mark Class forward
-
-@class PNClient;
 
 
 #pragma mark Structures
@@ -42,25 +36,6 @@ struct PNPresenceEventDataKeysStruct PNPresenceEventDataKeys = {
     .channel = @"channel",
     .occupancy = @"occupancy"
 };
-
-
-#pragma mark - Private interface methods
-
-@interface PNPresenceEvent ()
-
-
-#pragma mark Properties
-
-@property (nonatomic, assign) PNPresenceEventType type;
-@property (nonatomic, strong) PNClient *client;
-@property (nonatomic, strong) PNDate *date;
-@property (nonatomic, copy) NSString *uuid;
-@property (nonatomic, assign) NSUInteger occupancy;
-@property (nonatomic, strong) PNChannel *channel;
-@property (nonatomic, strong) PNChannelGroup *channelGroup;
-
-
-@end
 
 
 #pragma mark - Public interface methods
@@ -78,12 +53,12 @@ struct PNPresenceEventDataKeysStruct PNPresenceEventDataKeys = {
 
 + (BOOL)isPresenceEventObject:(NSDictionary *)event {
 
-    BOOL isPresenceEventObject = ([event objectForKey:PNPresenceEventDataKeys.timestamp] != nil &&
-                                  [event objectForKey:PNPresenceEventDataKeys.occupancy] != nil);
+    BOOL isPresenceEventObject = (event[PNPresenceEventDataKeys.timestamp] != nil &&
+                                  event[PNPresenceEventDataKeys.occupancy] != nil);
     if (!isPresenceEventObject) {
 
-        isPresenceEventObject = ([event objectForKey:PNPresenceEventDataKeys.action] != nil &&
-                                 [event objectForKey:PNPresenceEventDataKeys.uuid] != nil);
+        isPresenceEventObject = (event[PNPresenceEventDataKeys.action] != nil &&
+                                 event[PNPresenceEventDataKeys.uuid] != nil);
     }
 
     return isPresenceEventObject;
@@ -100,7 +75,7 @@ struct PNPresenceEventDataKeysStruct PNPresenceEventDataKeys = {
 
         // Extracting event type from response
         self.type = PNPresenceEventJoin;
-        NSString *type = [presenceResponse valueForKey:PNPresenceEventDataKeys.action];
+        NSString *type = (presenceResponse[PNPresenceEventDataKeys.action]?: @"interval");
         if ([type isEqualToString:@"leave"]) {
 
             self.type = PNPresenceEventLeave;
@@ -113,33 +88,26 @@ struct PNPresenceEventDataKeysStruct PNPresenceEventDataKeys = {
 
             self.type = PNPresenceEventStateChanged;
         }
-        else if (type == nil){
+        else if ([type isEqualToString:@"interval"]){
 
             self.type = PNPresenceEventChanged;
         }
 
         // Extracting event date from response
-        NSNumber *timestamp = [presenceResponse valueForKey:PNPresenceEventDataKeys.timestamp];
+        NSNumber *timestamp = presenceResponse[PNPresenceEventDataKeys.timestamp];
         self.date = [PNDate dateWithToken:timestamp];
 
         // Extracting channel occupancy from response
-        self.occupancy = [[presenceResponse valueForKey:PNPresenceEventDataKeys.occupancy] unsignedIntegerValue];
+        self.occupancy = [presenceResponse[PNPresenceEventDataKeys.occupancy] unsignedIntegerValue];
         
         // Extracting client specific state
-        self.client = [PNClient clientForIdentifier:[presenceResponse valueForKey:PNPresenceEventDataKeys.uuid]
+        self.client = [PNClient clientForIdentifier:presenceResponse[PNPresenceEventDataKeys.uuid]
                                             channel:nil
-                                            andData:[presenceResponse valueForKey:PNPresenceEventDataKeys.data]];
+                                            andData:presenceResponse[PNPresenceEventDataKeys.data]];
 
         self.channel = channel;
         self.channelGroup = channelGroup;
-        
-        /**
-         DEPRECATED. WILL BE COMPLETELY REMOVED IN PubNub 3.5.5
-         */
-        // Extracting user identifier from response
-        _uuid = [presenceResponse valueForKey:PNPresenceEventDataKeys.uuid];
     }
-    
     
     return self;
 }
@@ -179,10 +147,10 @@ struct PNPresenceEventDataKeysStruct PNPresenceEventDataKeys = {
         action = @"occupancy changed";
     }
 
-
-    return [[NSString alloc] initWithFormat:@"%@\nEVENT: %@%@\nDATE: %@\nOCCUPANCY: %ld\nCHANNEL: %@",
-                    NSStringFromClass([self class]), action, [[NSString alloc] initWithFormat:@"\nCLIENT: %@", self.client],
-                    self.date, (unsigned long)self.occupancy, self.channel];
+    return [[NSString alloc] initWithFormat:@"%@\nEVENT: %@\nCLIENT: %@\nDATE: %@\nOCCUPANCY: "
+            "%ld\nCHANNEL: %@\nDEBUG: %@",
+            NSStringFromClass([self class]), action, self.client, self.date,
+            (unsigned long)self.occupancy, self.channel, self.debugInformation];
 }
 
 - (NSString *)logDescription {
@@ -204,12 +172,15 @@ struct PNPresenceEventDataKeysStruct PNPresenceEventDataKeys = {
         
         action = @"occupancy changed";
     }
-    
+
     #pragma clang diagnostic push
     #pragma clang diagnostic ignored "-Wundeclared-selector"
-    return [[NSString alloc] initWithFormat:@"<%@|%@|%@|%ld|%@>", action, (self.date ? [self.date performSelector:@selector(logDescription)] : [NSNull null]),
-            (self.channel ? [self.channel performSelector:@selector(logDescription)] : [NSNull null]), (unsigned long)self.occupancy,
-            (self.client ? [self.client performSelector:@selector(logDescription)] : [NSNull null])];
+    return [[NSString alloc] initWithFormat:@"<%@|%@|%@|%ld|%@|%@>", action,
+            ([self.date performSelector:@selector(logDescription)]?: [NSNull null]),
+            ([self.channel performSelector:@selector(logDescription)]?: [NSNull null]),
+            (unsigned long)self.occupancy,
+            ([self.client performSelector:@selector(logDescription)]?: [NSNull null]),
+            ([self.debugInformation performSelector:@selector(logDescription)]?: [NSNull null])];
     #pragma clang diagnostic pop
 }
 

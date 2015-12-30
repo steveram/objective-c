@@ -33,6 +33,7 @@
 #import "PNConfiguration.h"
 #import "PNErrorCodes.h"
 #import "PNConnection.h"
+#import "PNTimeToken.h"
 #import "PNResponse.h"
 #import "PNHelper.h"
 #import "PNCache.h"
@@ -91,6 +92,16 @@ typedef NS_OPTIONS(NSUInteger, PNMessagingConnectionStateFlag)  {
 @property (nonatomic, strong) NSMutableSet *subscribedChannelsSet;
 @property (nonatomic, strong) NSMutableSet *oldSubscribedChannelsSet;
 
+// Stores reference on numeric region identificator.
+@property (nonatomic, strong) NSNumber *subscriptionRegion;
+
+/**
+ @brief  Stores reference on user-provided filtering expression.
+ 
+ @since 3.8.0
+ */
+@property (nonatomic, copy) NSString *messageFilteringExpression;
+
 // Stores whether on subscription request should be reset when rescheduling requests or not
 @property (nonatomic, assign, getter = isRestoringSubscriptionOnResume) BOOL restoringSubscriptionOnResume;
 
@@ -115,6 +126,13 @@ typedef NS_OPTIONS(NSUInteger, PNMessagingConnectionStateFlag)  {
  * on which it can resubscribe, NO in other case.
  */
 - (BOOL)canResubscribe;
+
+/**
+ @brief      Issue resubscription cycle.
+ @discussion Basically method use idle timer handling code to re-subscribe to existing
+             channels.
+ */
+- (void)resubscribe;
 
 /**
  * Will restore channels subscription if doesn't set that it should resubscribe
@@ -496,6 +514,7 @@ typedef NS_OPTIONS(NSUInteger, PNMessagingConnectionStateFlag)  {
                                                                                PNMessagingChannelSubscriptionTimeTokenRetrieve, BITS_LIST_TERMINATOR];
 
                             [(PNSubscribeRequest *) request resetSubscriptionTimeToken];
+                            ((PNSubscribeRequest *) request).filteringExpression = self.messageFilteringExpression;
 
                             NSArray *onlyChannels = [self channelsWithOutPresenceFromList:((PNSubscribeRequest *) request).channels];
                             if (shouldNotifyAboutSubscriptionRestore && [onlyChannels count]) {
@@ -746,6 +765,19 @@ typedef NS_OPTIONS(NSUInteger, PNMessagingConnectionStateFlag)  {
 }
 
 
+
+#pragma mark - Filtering
+
+- (void)setFilterExpression:(NSString *)filterExpression {
+    
+    [self pn_dispatchBlock:^{
+        
+        self.messageFilteringExpression = filterExpression;
+        [self resubscribe];
+    }];
+}
+
+
 #pragma mark - Channels management
 
 - (NSArray *)subscribedChannels {
@@ -786,6 +818,18 @@ typedef NS_OPTIONS(NSUInteger, PNMessagingConnectionStateFlag)  {
 - (BOOL)canResubscribe {
 
     return ([self.subscribedChannelsSet count] > 0);
+}
+
+- (void)resubscribe {
+    
+    // This method should be launched only from within it's private queue
+    [self pn_scheduleOnPrivateQueueAssert];
+    
+    if ([self canResubscribe]) {
+        
+        [self stopChannelIdleTimer];
+        [self handleIdleTimer];
+    }
 }
 
 - (void)restoreSubscription:(BOOL)shouldRestoreSubscriptionFromLastTimeToken {
@@ -835,6 +879,7 @@ typedef NS_OPTIONS(NSUInteger, PNMessagingConnectionStateFlag)  {
                     PNSubscribeRequest *resubscribeRequest = [PNSubscribeRequest subscribeRequestForChannels:[self.subscribedChannelsSet allObjects]
                                                                                                byUserRequest:YES
                                                                                              withClientState:clientStateInformation];
+                    resubscribeRequest.filteringExpression = self.messageFilteringExpression;
                     [resubscribeRequest resetSubscriptionTimeToken];
 
                     // Check whether connection channel is waiting for response via long-poll connection or not
@@ -957,6 +1002,7 @@ typedef NS_OPTIONS(NSUInteger, PNMessagingConnectionStateFlag)  {
                 PNSubscribeRequest *subscribeRequest = [PNSubscribeRequest subscribeRequestForChannels:[channelsForSubscription allObjects]
                                                                                          byUserRequest:YES
                                                                                        withClientState:request.state];
+                subscribeRequest.filteringExpression = self.messageFilteringExpression;
                 if (shouldModifyPresence) {
 
                     subscribeRequest.channelsForPresenceEnabling = request.channelsForPresenceEnabling;
@@ -1366,6 +1412,7 @@ typedef NS_OPTIONS(NSUInteger, PNMessagingConnectionStateFlag)  {
                         PNSubscribeRequest *subscribeRequest = [PNSubscribeRequest subscribeRequestForChannels:[subscriptionChannelsSet allObjects]
                                                                                                  byUserRequest:YES
                                                                                                withClientState:clientStateForRequest];
+                        subscribeRequest.filteringExpression = self.messageFilteringExpression;
                         [subscribeRequest resetSubscriptionTimeToken];
 
                         if ((!isPresenceModification || indirectionalPresenceModification) && [channelsSet count]) {
@@ -1507,6 +1554,7 @@ typedef NS_OPTIONS(NSUInteger, PNMessagingConnectionStateFlag)  {
                     PNSubscribeRequest *resubscribeRequest = [PNSubscribeRequest subscribeRequestForChannels:channelsList
                                                                                                byUserRequest:NO
                                                                                              withClientState:clientStateInformation];
+                    resubscribeRequest.filteringExpression = self.messageFilteringExpression;
                     resubscribeRequest.closeConnection = [PNBitwiseHelper is:self.messagingState containsBit:PNMessagingChannelSubscriptionWaitingForEvents];
                     if ([PNBitwiseHelper is:self.messagingState containsBit:PNMessagingChannelRestoringConnectionTerminatedByServer]) {
 
@@ -1592,6 +1640,7 @@ typedef NS_OPTIONS(NSUInteger, PNMessagingConnectionStateFlag)  {
                             PNSubscribeRequest *subscribeRequest = [PNSubscribeRequest subscribeRequestForChannels:[currentlySubscribedChannels allObjects]
                                                                                                      byUserRequest:isLeavingByUserRequest
                                                                                                    withClientState:clientStateInformation];
+                            subscribeRequest.filteringExpression = self.messageFilteringExpression;
                             [subscribeRequest resetSubscriptionTimeToken];
                             
                             subscribeRequest.closeConnection = [PNBitwiseHelper is:self.messagingState containsBit:PNMessagingChannelSubscriptionWaitingForEvents];
@@ -1800,18 +1849,18 @@ typedef NS_OPTIONS(NSUInteger, PNMessagingConnectionStateFlag)  {
         if (request) {
 
             // Retrieve event time token
-            NSString *timeToken = @"0";
+            PNTimeToken *timeToken = [PNTimeToken  new];
             if (events.timeToken) {
 
-                timeToken = PNStringFromUnsignedLongLongNumber(events.timeToken);
+                timeToken = [events.timeToken copy];
             }
 
             // Update channels state update time token
             [channelsForTokenUpdate addObjectsFromArray:request.channels];
 
-            NSString *largestTimeToken = [PNChannel largestTimetokenFromChannels:[channelsForTokenUpdate allObjects]];
+            PNTimeToken *largestTimeToken = [PNChannel largestTimetokenFromChannels:channelsForTokenUpdate.allObjects];
             if ([PNBitwiseHelper is:self.messagingState containsBit:PNMessagingChannelSubscriptionTimeTokenRetrieve] &&
-                ![largestTimeToken isEqualToString:@"0"]) {
+                [largestTimeToken.token compare:@0] != NSOrderedSame) {
 
                 timeToken = largestTimeToken;
             }
@@ -2773,14 +2822,16 @@ typedef NS_OPTIONS(NSUInteger, PNMessagingConnectionStateFlag)  {
                     if ([[requestsOfSameType lastObject] isKindOfClass:[PNSubscribeRequest class]]) {
                         
                         // Sort array of subscribe request to make sure that
-                        NSSortDescriptor *subscribeRequestSort = [[NSSortDescriptor alloc]initWithKey:@"updateTimeToken" ascending:YES];
+                        NSSortDescriptor *subscribeRequestSort = [[NSSortDescriptor alloc] initWithKey:@"updateTimeToken" ascending:YES];
                         requestsOfSameType = [requestsOfSameType sortedArrayUsingDescriptors:@[subscribeRequestSort]];
                         PNSubscribeRequest *targetRequest = [requestsOfSameType objectAtIndex:0];
                         PNSubscribeRequest *lastRequest = [requestsOfSameType lastObject];
+                        targetRequest.filteringExpression = self.messageFilteringExpression;
+                        lastRequest.filteringExpression = self.messageFilteringExpression;
                         
                         // Looks like there is no subsciption request for new channels and
                         // client should fix this state.
-                        if (![targetRequest.updateTimeToken isEqualToString:@"0"]) {
+                        if ([targetRequest.updateTimeToken.token compare:@0] != NSOrderedSame) {
                             
                             targetRequest = lastRequest;
                         }
@@ -2789,6 +2840,8 @@ typedef NS_OPTIONS(NSUInteger, PNMessagingConnectionStateFlag)  {
                                                                          __unused NSUInteger subscribeRequestIdx,
                                                                          __unused BOOL *subscribeRequestEnumeratorStop) {
                             
+                            subscribeRequest.filteringExpression = self.messageFilteringExpression;
+                            
                             // Don't touch request which should preserve in the list.
                             if (![subscribeRequest isEqual:targetRequest]) {
                                 
@@ -2796,7 +2849,7 @@ typedef NS_OPTIONS(NSUInteger, PNMessagingConnectionStateFlag)  {
                                     
                                     // Updating time token value to the last one from previous
                                     // request (it may be subscription update request).
-                                    NSString *timeToken = [PNChannel largestTimetokenFromChannels:[subscribeRequest channels]];
+                                    PNTimeToken *timeToken = [PNChannel largestTimetokenFromChannels:subscribeRequest.channels];
                                     [[targetRequest channels] makeObjectsPerformSelector:@selector(setUpdateTimeToken:)
                                                                               withObject:timeToken];
                                 }

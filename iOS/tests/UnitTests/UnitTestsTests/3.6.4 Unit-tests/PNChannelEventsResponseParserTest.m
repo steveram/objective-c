@@ -11,6 +11,7 @@
 #import "PNChannelEvents.h"
 #import "PNPresenceEvent+Protected.h"
 #import "PNPresenceEvent.h"
+#import "PNTimeToken.h"
 #import "PNResponse.h"
 #import "PNChannel.h"
 #import "PNClient.h"
@@ -61,7 +62,7 @@
 	response.response = @[ @[eventDic], @"123", @"ch1-pnpres,ch2" ];
 	PNChannelEventsResponseParser *parser = [[PNChannelEventsResponseParser alloc] initWithResponse: response];
 
-	XCTAssertTrue( [parser.events.timeToken intValue] == 123, @"");
+	XCTAssertTrue( [parser.events.timeToken.token intValue] == 123, @"");
 	XCTAssertTrue( parser.events.events.count == 1, @"");
 	PNPresenceEvent *event = parser.events.events[0];
 	XCTAssertTrue( event.type == PNPresenceEventLeave, @"");

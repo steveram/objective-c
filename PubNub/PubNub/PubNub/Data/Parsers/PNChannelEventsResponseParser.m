@@ -1,17 +1,17 @@
 /**
-
  @author Sergey Mamontov
  @version 3.4.0
  @copyright © 2009-13 PubNub Inc.
 
  */
-
-#import "PNPrivateImports.h"
-#import "PNChannelEventsResponseParser.h"
+#import "PNChannelEventsResponseParser+Protected.h"
+#import "PNSubscribeEventInformation.h"
 #import "PNChannelPresence+Protected.h"
 #import "PNPresenceEvent+Protected.h"
-#import "PNChannelEvents+Protected.h"
 #import "PNResponse+Protected.h"
+#import "PNPrivateImports.h"
+#import "PNChannelGroup.h"
+#import "PNTimeToken.h"
 #import "PNDate.h"
 
 
@@ -25,48 +25,43 @@
 #pragma mark Static
 
 /**
- Stores reference on index under which events list is stored.
+ @brief  Stores reference on key under which request status is stored.
  */
-static NSUInteger const kPNResponseEventsListElementIndex = 0;
+static NSString * const kPNResponseStatusKey = @"s";
 
 /**
- Stores reference on index under which channels list is stored.
+ @brief  Stores reference on key under which service advisory information stored.
  */
-static NSUInteger const kPNResponseChannelsListElementIndex = 2;
+static NSString * const kPNResponseAdvisoryKey = @"a";
 
 /**
- @brief Stores reference on index under which channels detalization is stored
- 
- @discussion In case if under \c kPNResponseChannelsListElementIndex stored list of channel groups, under this index
- will be stored list of actual channels from channel group at which event fired.
- 
- @since 3.7.0
+ @brief  Stores reference on key under which stored information about when event has been triggered
+         by server and from which region.
  */
-static NSUInteger const kPNResponseChannelsDetailsListElementIndex = 3;
+static NSString * const kPNResponseEventTimeKey = @"t";
 
 /**
- Stores reference on time token element index in response for events.
+ @brief  Stores reference on key under which list of events is stored.
  */
-static NSUInteger const kPNResponseTimeTokenElementIndexForEvent = 1;
+static NSString * const kPNResponseEvenetsListKey = @"m";
 
 
-#pragma mark - Private interface methods
+#pragma mark - Structures
 
-@interface PNChannelEventsResponseParser ()
+struct PNEventTimeTokenStructure PNEventTimeToken = {
+    .timeToken = @"t",
+    .region = @"r"
+};
 
-
-#pragma mark - Properties
-
-/**
- Stores reference on even data object which holds all information about events.
- */
-@property (nonatomic, strong) PNChannelEvents *events;
-
-
-#pragma mark -
-
-
-@end
+struct PNEventEnvelopeStructure PNEventEnvelope = {
+    .senderTimeToken = { .key = @"o" },
+    .publishTimeToken = { .key = @"p" },
+    .actualChannel = @"c",
+    .subscribedChannel = @"b",
+    .payload = @"d",
+    .presence = { .action = @"action", .data = @"data", .occupancy = @"occupancy",
+                  .timestamp = @"timestamp", .uuid = @"uuid" }
+};
 
 
 #pragma mark - Public interface methods
@@ -80,40 +75,28 @@ static NSUInteger const kPNResponseTimeTokenElementIndexForEvent = 1;
 
     NSAssert1(0, @"%s SHOULD BE CALLED ONLY FROM PARENT CLASS", __PRETTY_FUNCTION__);
 
-
     return nil;
 }
 
 + (BOOL)isResponseConformToRequiredStructure:(PNResponse *)response {
 
+    BOOL conforms = NO;
+
     // Checking base requirement about payload data type.
-    BOOL conforms = [response.response isKindOfClass:[NSArray class]];
+    if ([response.response isKindOfClass:NSDictionary.class]) {
 
-    // Checking base components
-    if (conforms) {
-
-        NSArray *responseData = response.response;
-        conforms = ([responseData count] > kPNResponseEventsListElementIndex);
+        NSDictionary *responseData = response.response;
+        conforms = (responseData[kPNResponseEventTimeKey] != nil &&
+                    responseData[kPNResponseEvenetsListKey] != nil);
+        conforms = (conforms && [responseData[kPNResponseEventTimeKey] isKindOfClass:NSDictionary.class]);
+        conforms = (conforms && [responseData[kPNResponseEvenetsListKey] isKindOfClass:NSArray.class]);
         if (conforms) {
 
-            if ([responseData count] > kPNResponseTimeTokenElementIndexForEvent) {
-
-                id timeToken = [responseData objectAtIndex:kPNResponseTimeTokenElementIndexForEvent];
-                conforms = (timeToken && ([timeToken isKindOfClass:[NSNumber class]] || [timeToken isKindOfClass:[NSString class]]));
-            }
-
-            id events = [responseData objectAtIndex:kPNResponseEventsListElementIndex];
-            conforms = ((conforms && events) ? [events isKindOfClass:[NSArray class]] : conforms);
-
-            if ([responseData count] > kPNResponseChannelsListElementIndex) {
-
-                id channelsList = [responseData objectAtIndex:kPNResponseChannelsListElementIndex];
-                conforms = ((conforms && channelsList) ? [channelsList isKindOfClass:[NSString class]] : conforms);
-
-            }
+            NSDictionary *timeToken = responseData[kPNResponseEventTimeKey];
+            conforms = (timeToken[PNEventTimeToken.timeToken] != nil &&
+                        timeToken[PNEventTimeToken.region] != nil);
         }
     }
-
 
     return conforms;
 }
@@ -126,95 +109,82 @@ static NSUInteger const kPNResponseTimeTokenElementIndexForEvent = 1;
     // Check whether initialization successful or not
     if ((self = [super init])) {
 
-        NSArray *responseData = response.response;
+        NSDictionary *responseData = response.response;
         self.events = [PNChannelEvents new];
-        PNDate *eventDate = nil;
 
-        // Check whether time token is available or not
-        if ([responseData count] > kPNResponseTimeTokenElementIndexForEvent) {
+        // Time token information extraction block.
+        PNTimeToken* (^timeTokenExtractBlock)(NSDictionary *) = ^(NSDictionary *information) {
 
-            id timeToken = [responseData objectAtIndex:kPNResponseTimeTokenElementIndexForEvent];
-            self.events.timeToken = PNNumberFromUnsignedLongLongString(timeToken);
-            eventDate = [PNDate dateWithToken:self.events.timeToken];
-        }
+            return [PNTimeToken timeTokenWithTime:information[PNEventTimeToken.timeToken]
+                                        andRegion:information[PNEventTimeToken.region]];
+        };
+        
+        // Retrieve event trigger time token
+        self.events.timeToken = timeTokenExtractBlock(responseData[kPNResponseEventTimeKey]);
 
         // Retrieving list of events
-        NSArray *events = [responseData objectAtIndex:kPNResponseEventsListElementIndex];
-
-        // Retrieving list of channels on which events fired
-        NSArray *channels = nil;
-        if ([responseData count] > kPNResponseChannelsListElementIndex) {
-
-            channels = [[responseData objectAtIndex:kPNResponseChannelsListElementIndex]
-                    componentsSeparatedByString:@","];
-        }
-        
-        // Retrieve list of channel details
-        NSArray *channelDetails = nil;
-        if ([responseData count] > kPNResponseChannelsDetailsListElementIndex) {
+        NSArray *events = responseData[kPNResponseEvenetsListKey];
+        NSMutableArray *eventObjects = [[NSMutableArray alloc] initWithCapacity:[events count]];
+        [events enumerateObjectsUsingBlock:^(NSDictionary *event, __unused NSUInteger eventIdx,
+                                             __unused BOOL *eventsEnumeratorStop) {
             
-            channelDetails = [[responseData objectAtIndex:kPNResponseChannelsDetailsListElementIndex]
-                              componentsSeparatedByString:@","];
-        }
-
-        if ([events count] > 0) {
-
-            NSMutableArray *eventObjects = [[NSMutableArray alloc] initWithCapacity:[events count]];
-            [events enumerateObjectsUsingBlock:^(id event, NSUInteger eventIdx,
-                                                 __unused BOOL *eventEnumeratorStop) {
-
-                __block BOOL isPresenceObservationChannel = NO;
-                PNChannel* (^channelExtractBlock)(NSString *) = ^(NSString *channelName) {
+            __block BOOL isPresenceObservationChannel = NO;
+            PNChannel* (^channelExtractBlock)(NSString *) = ^(NSString *channelName) {
+                
+                PNChannel *channel = nil;
+                if (channelName) {
                     
                     // Retrieve reference on channel on which event is occurred
-                    PNChannel *channel = [PNChannel channelWithName:channelName];
+                    channel = [PNChannel channelWithName:channelName];
                     
-                    // Checking whether event occurred on presence observing channel or no and retrieve reference on
-                    // original channel
+                    // Checking whether event occurred on presence observing channel or no and
+                    // retrieve reference on original channel
                     isPresenceObservationChannel = ([channel isPresenceObserver]);
                     if (isPresenceObservationChannel) {
                         
                         channel = [(PNChannelPresence *)channel observedChannel];
                     }
-                    
-                    return channel;
-                };
+                }
                 
-                PNChannel *channel = ([channels count] ? channelExtractBlock([channels objectAtIndex:eventIdx]): nil);
-                PNChannel *detailedChannel = ([channelDetails count] ? channelExtractBlock([channelDetails objectAtIndex:eventIdx]): nil);
+                return channel;
+            };
+            
+            // Extracting channel names information.
+            NSString *channelName = [event valueForKey:PNEventEnvelope.actualChannel];
+            NSString *subscriptionMatch = [event valueForKey:PNEventEnvelope.subscribedChannel];
+            if ([channelName isEqualToString:subscriptionMatch]) { subscriptionMatch = nil; }
+            
+            id eventObject = nil;
+            id payload = [event valueForKey:PNEventEnvelope.payload];
+            PNChannelGroup *group = nil;
+            PNChannel *channel = channelExtractBlock(channelName);
+            PNChannel *detailedChannel = channelExtractBlock(subscriptionMatch);
+            if (detailedChannel && detailedChannel.isChannelGroup) {
+                
+                group = (PNChannelGroup *)detailedChannel;
+            }
+            
+            // Checking whether event presence event or not
+            if (isPresenceObservationChannel) {
+                
+                eventObject = [PNPresenceEvent presenceEventForResponse:payload onChannel:channel
+                                                           channelGroup:group];
+            }
+            else {
 
-                id eventObject = nil;
-                PNChannelGroup *group = nil;
-                PNChannel *targetChannel = (detailedChannel ? detailedChannel : channel);
-                if (detailedChannel && channel) {
-                    
-                    if (channel.isChannelGroup) {
-                        
-                        group = (PNChannelGroup *)channel;
-                    }
-                }
+                PNTimeToken *eventTimeToken = timeTokenExtractBlock(event[PNEventEnvelope.senderTimeToken.key]?:
+                                                                    event[PNEventEnvelope.publishTimeToken.key]);
+                eventObject = [PNMessage messageFromServiceResponse:payload onChannel:channel
+                                                       channelGroup:group atDate:eventTimeToken];
+            }
 
-                // Checking whether event presence event or not
-                if (isPresenceObservationChannel && [event isKindOfClass:[NSDictionary class]] &&
-                    [PNPresenceEvent isPresenceEventObject:event]) {
-                    
-                    eventObject = [PNPresenceEvent presenceEventForResponse:event
-                                                                  onChannel:targetChannel
-                                                               channelGroup:group];
-                }
-                else {
-
-                    eventObject = [PNMessage messageFromServiceResponse:event onChannel:targetChannel
-                                                           channelGroup:group atDate:eventDate];
-                }
-
-                [eventObjects addObject:eventObject];
-            }];
-
-            self.events.events = eventObjects;
-        }
+            [eventObject performSelector:@selector(setDebugInformation:)
+              withObject:[PNSubscribeEventInformation subscribeEventInformationWithPayload:event]];
+            [eventObjects addObject:eventObject];
+        }];
+        
+        self.events.events = eventObjects;
     }
-
 
     return self;
 }
@@ -226,8 +196,16 @@ static NSUInteger const kPNResponseTimeTokenElementIndexForEvent = 1;
 
 - (NSString *)description {
 
-    return [[NSString alloc] initWithFormat:@"%@ (%p) <time token: %@, events: %@>",
-            NSStringFromClass([self class]), self, self.events.timeToken, self.events.events];
+    return [[NSString alloc] initWithFormat:@"%@ (%p) <time token: <%@>, events: %@>",
+            NSStringFromClass([self class]), (__bridge void *)self, self.events.timeToken,
+            self.events.events];
+}
+
+- (NSString *)logDescription {
+    
+    return [[NSString alloc] initWithFormat:@"<%@|%@>",
+            ([self.events.timeToken performSelector:@selector(logDescription)]?: [NSNull null]),
+            ([self.events.events performSelector:@selector(logDescription)]?: [NSNull null])];
 }
 
 #pragma mark -

@@ -63,6 +63,22 @@
 - (void)disconnectWithReset:(BOOL)shouldResetCommunicationChannel;
 
 
+
+#pragma mark - Filtering
+
+/**
+ @brief  Pass string with message filtering configuration to the client.
+ @discussion Only messages who's \c meta data conform to this filtering configuration will
+             reach client.
+ 
+ @param filterExpression Reference on expression which has been configured using 
+                         subscription API \c filtering documentation.
+ 
+ @since 3.8.0
+ */
+- (void)setFilterExpression:(NSString *)filterExpression;
+
+
 #pragma mark - Channels management
 
 - (NSArray *)subscribedChannels;

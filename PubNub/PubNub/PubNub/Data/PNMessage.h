@@ -44,7 +44,7 @@
 @property (nonatomic, readonly, copy) id<NSObject, NSCopying> message;
 
 // Stores reference on date when this message was received
-@property (nonatomic, readonly, strong) PNDate *receiveDate;
+@property (nonatomic, readonly) PNDate *receiveDate;
 
 // Stores reference on date when this message has been sent to the target channel.
 @property (nonatomic, readonly, strong) PNDate *date;
@@ -65,6 +65,13 @@
 #pragma mark - Instance methods
 
 /**
+ @brief  Access to meta information which has been passed by other client during message publish.
+ 
+ @return Dictionary with meta-data passed by other user.
+ */
+- (NSDictionary *)meta;
+
+/**
  Serialized \b PNMessage and save it into file at specified path.
 
  @param messageStoreFilePath
@@ -75,7 +82,6 @@
  @return Whether serialized instance written to the file at specified path or not.
  */
 - (BOOL)writeToFileAtPath:(NSString *)messageStoreFilePath;
-
 
 #pragma mark -
 

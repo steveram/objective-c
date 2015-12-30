@@ -9,7 +9,7 @@
 #import "PNChannelEvents.h"
 
 
-#pragma mark Protected interface methods
+#pragma mark - Protected interface methods
 
 @interface PNChannelEvents ()
 
@@ -18,7 +18,7 @@
 
 
 @property (nonatomic, strong) NSArray *events;
-@property (nonatomic, strong) NSNumber *timeToken;
+@property (nonatomic, strong) PNTimeToken *timeToken;
 
 #pragma mark -
 

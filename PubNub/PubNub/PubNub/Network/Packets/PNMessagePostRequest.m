@@ -18,6 +18,7 @@
 #import "NSString+PNAddition.h"
 #import "PNMessage+Protected.h"
 #import "PNChannel+Protected.h"
+#import "PNJSONSerialization.h"
 #import "PNLoggerSymbols.h"
 #import "PNConfiguration.h"
 #import "PNConstants.h"
@@ -166,6 +167,11 @@
     if (!self.message.shouldStoreInHistory) {
         
         [resourcePath appendString:@"&store=0"];
+    }
+    if (self.message.userMeta) {
+        
+        [resourcePath appendFormat:@"&meta=%@", 
+         [[PNJSONSerialization stringFromJSONObject:self.message.userMeta] pn_percentEscapedString]];
     }
     
 

@@ -21,6 +21,7 @@
 #import "PNJSONSerialization.h"
 #import "PNConfiguration.h"
 #import "PNConstants.h"
+#import "PNTimeToken.h"
 #import "PNCache.h"
 #import "PNMacro.h"
 
@@ -30,37 +31,6 @@
 #error PubNub subscribe request must be built with ARC.
 // You can turn on ARC for only PubNub files by adding '-fobjc-arc' to the build phase for each of its files.
 #endif
-
-
-#pragma mark Private interface methods
-
-@interface PNSubscribeRequest ()
-
-
-#pragma mark - Properties
-
-// Stores reference on list of channels on which client should subscribe
-@property (nonatomic, strong) NSArray *channels;
-
-// Stores reference on list of channels for which presence should be enabled/disabled
-@property (nonatomic, strong) NSArray *channelsForPresenceEnabling;
-@property (nonatomic, strong) NSArray *channelsForPresenceDisabling;
-
-// Stores recent channels/presence state update time (token)
-@property (nonatomic, copy) NSString *updateTimeToken;
-
-/**
- Stores user-provided state which should be appended to the client subscription.
- */
-@property (nonatomic, copy) NSDictionary *state;
-
-@property (nonatomic, assign, getter = isPerformingMultipleActions) BOOL performingMultipleActions;
-
-@property (nonatomic, assign) NSInteger presenceHeartbeatTimeout;
-@property (nonatomic, copy) NSString *subscriptionKey;
-
-
-@end
 
 
 #pragma mark Public interface methods
@@ -109,7 +79,6 @@
         self.channels = [[NSArray alloc] initWithArray:channels copyItems:NO];
         self.state = ([clientState count] ? clientState : nil);
         
-        
         // Retrieve largest update time token from set of channels (sorting to make larger token to be at
         // the end of the list
         self.updateTimeToken = [PNChannel largestTimetokenFromChannels:channels];
@@ -131,15 +100,15 @@
 
 - (void)resetSubscriptionTimeToken {
     
-    self.updateTimeToken = @"0";
+    self.updateTimeToken = [PNTimeToken new];
 }
 
 - (void)resetTimeToken {
     
-    [self resetTimeTokenTo:@"0"];
+    [self resetTimeTokenTo:[PNTimeToken new]];
 }
 
-- (void)resetTimeTokenTo:(NSString *)timeToken {
+- (void)resetTimeTokenTo:(PNTimeToken *)timeToken {
     
     [[self channels] makeObjectsPerformSelector:@selector(setUpdateTimeToken:) withObject:timeToken];
     self.updateTimeToken = timeToken;
@@ -198,7 +167,7 @@
 
 - (BOOL)isInitialSubscription {
     
-    return [self.updateTimeToken isEqualToString:@"0"];
+    return [self.updateTimeToken.token compare:@0] == NSOrderedSame;
 }
 
 - (void)prepareToSend {
@@ -301,9 +270,26 @@
         }
     }
     
-    return [[NSString alloc] initWithFormat:@"/subscribe/%@/%@/%@_%@/%@?uuid=%@%@%@%@%@&pnsdk=%@",
+    NSMutableString *filteringExpression = [NSMutableString stringWithString:@""];
+    if (self.filteringExpression.length) {
+        
+        [filteringExpression appendString:@"filter-expr="];
+        [filteringExpression appendString:[[NSString stringWithFormat:@"(%@)", 
+                                            self.filteringExpression] pn_percentEscapedString]];
+        [filteringExpression appendString:@"&"];
+    }
+    
+    // Compose timetoken object (if possible)
+    NSString *timeTokenValue = (self.updateTimeToken.token.stringValue?: @"0");
+    NSString *timeTokenRegion = @"";
+    if (self.updateTimeToken && [self.updateTimeToken.token compare:@0] != NSOrderedSame) {
+        
+        timeTokenRegion = [NSString stringWithFormat:@"tr=%@&", self.updateTimeToken.region];
+    }
+    
+    return [[NSString alloc] initWithFormat:@"/v2/subscribe/%@/%@/%@_%@?tt=%@&%@%@uuid=%@%@%@%@%@&pnsdk=%@",
             [self.subscriptionKey pn_percentEscapedString], (channelsListParameter ? channelsListParameter : @","),
-            [self callbackMethodName], self.shortIdentifier, self.updateTimeToken,
+            [self callbackMethodName], self.shortIdentifier, timeTokenValue, timeTokenRegion, filteringExpression,
             [self.clientIdentifier stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], heartbeatValue,
             state, (groupsListParameter ? [[NSString alloc] initWithFormat:@"&channel-group=%@", groupsListParameter] : @""),
             ([self authorizationField] ? [[NSString alloc] initWithFormat:@"&%@", [self authorizationField]] : @""),

@@ -167,7 +167,7 @@
  \c YES in case if message should be stored on \b PubNub service side and become available with History API.
  */
 + (PNMessage *)sendMessage:(id<NSObject, NSCopying>)message toChannel:(PNChannel *)channel
-            storeInHistory:(BOOL)shouldStoreInHistory
+            storeInHistory:(BOOL)shouldStoreInHistory 
        withCompletionBlock:(PNClientMessageProcessingBlock)success;
 
 /**
@@ -3080,6 +3080,20 @@ withCompletionBlock:(PNClientMessageProcessingBlock)success;
        withCompletionBlock:(PNClientMessageProcessingBlock)success;
 
 /**
+ @brief Same as -sendMessage:toChannel:withCompletionBlock: but allow to specify meta 
+        payload which will should be sent along with message.
+ 
+ @param meta \b NSDictionary with values which should be used by \b PubNub service to 
+             filter messages basing on provided filter predicate before / during 
+             subscription.
+ 
+ @since 3.8.0
+ */
+- (PNMessage *)sendMessage:(id<NSObject, NSCopying>)message toChannel:(PNChannel *)channel
+                  withMeta:(NSDictionary *)meta 
+           completionBlock:(PNClientMessageProcessingBlock)success;
+
+/**
  Send \c message to the \c channel. All messages placed into queue and will be sent in the same order as they were scheduled.
  
  @code
@@ -3161,6 +3175,21 @@ withCompletionBlock:(PNClientMessageProcessingBlock)success;
 - (PNMessage *)sendMessage:(id<NSObject, NSCopying>)message toChannel:(PNChannel *)channel
             storeInHistory:(BOOL)shouldStoreInHistory
        withCompletionBlock:(PNClientMessageProcessingBlock)success;
+
+/**
+ @brief Same as -sendMessage:toChannel:storeInHistory:withCompletionBlock: but allow to 
+        specify meta payload which will should be sent along with message.
+ 
+ @param shouldStoreInHistory \c YES in case if message should be stored on \b PubNub 
+                             service side and become available with History API.
+ @param meta                 \b NSDictionary with values which should be used by \b PubNub
+                             service to filter messages basing on provided filter
+                             predicate before / during subscription.
+ @since 3.8.0
+ */
+- (PNMessage *)sendMessage:(id<NSObject, NSCopying>)message toChannel:(PNChannel *)channel
+            storeInHistory:(BOOL)shouldStoreInHistory withMeta:(NSDictionary *)meta 
+           completionBlock:(PNClientMessageProcessingBlock)success;
 
 /**
  Send \c message to the \c channel. All messages placed into queue and will be sent in the same order as they were scheduled.
@@ -3332,6 +3361,20 @@ withCompletionBlock:(PNClientMessageProcessingBlock)success;
 - (PNMessage *)sendMessage:(id<NSObject, NSCopying>)message applePushNotification:(NSDictionary *)apnsPayload
                  toChannel:(PNChannel *)channel
        withCompletionBlock:(PNClientMessageProcessingBlock)success;
+
+/**
+ @brief Same as -sendMessage:applePushNotification:toChannel:withCompletionBlock: but 
+        allow to specify meta payload which will should be sent along with message.
+ 
+ @param meta \b NSDictionary with values which should be used by \b PubNub service to 
+             filter messages basing on provided filter predicate before / during 
+             subscription.
+ 
+ @since 3.8.0
+ */
+- (PNMessage *)sendMessage:(id<NSObject, NSCopying>)message applePushNotification:(NSDictionary *)apnsPayload
+                 toChannel:(PNChannel *)channel withMeta:(NSDictionary *)meta 
+           completionBlock:(PNClientMessageProcessingBlock)success;
 
 /**
  Send \c message to the \c channel. All messages placed into queue and will be sent in the same order as they were scheduled.
@@ -3511,6 +3554,20 @@ applePushNotification:@{@"aps":@{@"alert":@"Someone sent array of strings"}}
        withCompletionBlock:(PNClientMessageProcessingBlock)success;
 
 /**
+ @brief Same as -sendMessage:applePushNotification:toChannel:storeInHistory:withCompletionBlock:
+        but allow to specify meta payload which will should be sent along with message.
+ 
+ @param meta \b NSDictionary with values which should be used by \b PubNub service to 
+             filter messages basing on provided filter predicate before / during 
+             subscription.
+ 
+ @since 3.8.0
+ */
+- (PNMessage *)sendMessage:(id<NSObject, NSCopying>)message applePushNotification:(NSDictionary *)apnsPayload
+                 toChannel:(PNChannel *)channel storeInHistory:(BOOL)shouldStoreInHistory
+                  withMeta:(NSDictionary *)meta completionBlock:(PNClientMessageProcessingBlock)success;
+
+/**
  Send \c message to the \c channel. All messages placed into queue and will be sent in the same order as they were scheduled.
  
  @code
@@ -3680,6 +3737,20 @@ applePushNotification:@{@"aps":@{@"alert":@"Someone sent array of strings"}}
 - (PNMessage *)sendMessage:(id<NSObject, NSCopying>)message googleCloudNotification:(NSDictionary *)gcmPayload
                  toChannel:(PNChannel *)channel
        withCompletionBlock:(PNClientMessageProcessingBlock)success;
+
+/**
+ @brief Same as -sendMessage:googleCloudNotification:toChannel:withCompletionBlock:
+        but allow to specify meta payload which will should be sent along with message.
+ 
+ @param meta \b NSDictionary with values which should be used by \b PubNub service to 
+             filter messages basing on provided filter predicate before / during 
+             subscription.
+ 
+ @since 3.8.0
+ */
+- (PNMessage *)sendMessage:(id<NSObject, NSCopying>)message googleCloudNotification:(NSDictionary *)gcmPayload
+                 toChannel:(PNChannel *)channel withMeta:(NSDictionary *)meta 
+           completionBlock:(PNClientMessageProcessingBlock)success;
 
 /**
  Send \c message to the \c channel. All messages placed into queue and will be sent in the same order as they were scheduled.
@@ -3859,6 +3930,20 @@ googleCloudNotification:@{@"data":@{@"summary":@"Someone sent array of strings"}
        withCompletionBlock:(PNClientMessageProcessingBlock)success;
 
 /**
+ @brief Same as -sendMessage:googleCloudNotification:toChannel:storeInHistory:withCompletionBlock:
+        but allow to specify meta payload which will should be sent along with message.
+ 
+ @param meta \b NSDictionary with values which should be used by \b PubNub service to 
+             filter messages basing on provided filter predicate before / during 
+             subscription.
+ 
+ @since 3.8.0
+ */
+- (PNMessage *)sendMessage:(id<NSObject, NSCopying>)message googleCloudNotification:(NSDictionary *)gcmPayload
+                 toChannel:(PNChannel *)channel storeInHistory:(BOOL)shouldStoreInHistory
+                  withMeta:(NSDictionary *)meta completionBlock:(PNClientMessageProcessingBlock)success;
+
+/**
  Send \c message to the \c channel. All messages placed into queue and will be sent in the same order as they were scheduled.
  
  @code
@@ -4036,6 +4121,20 @@ googleCloudNotification:@{@"data":@{@"summary":@"Someone sent array of strings"}
 - (PNMessage *)sendMessage:(id<NSObject, NSCopying>)message applePushNotification:(NSDictionary *)apnsPayload
    googleCloudNotification:(NSDictionary *)gcmPayload toChannel:(PNChannel *)channel
        withCompletionBlock:(PNClientMessageProcessingBlock)success;
+
+/**
+ @brief Same as -sendMessage:applePushNotification:googleCloudNotification:toChannel:withCompletionBlock:
+        but allow to specify meta payload which will should be sent along with message.
+ 
+ @param meta \b NSDictionary with values which should be used by \b PubNub service to 
+             filter messages basing on provided filter predicate before / during 
+             subscription.
+ 
+ @since 3.8.0
+ */
+- (PNMessage *)sendMessage:(id<NSObject, NSCopying>)message applePushNotification:(NSDictionary *)apnsPayload
+   googleCloudNotification:(NSDictionary *)gcmPayload toChannel:(PNChannel *)channel 
+                  withMeta:(NSDictionary *)meta completionBlock:(PNClientMessageProcessingBlock)success;
 
 /**
  Send \c message to the \c channel. All messages placed into queue and will be sent in the same order as they were scheduled.
@@ -4225,6 +4324,21 @@ googleCloudNotification:@{@"data":@{@"summary":@"Someone sent array of strings"}
        withCompletionBlock:(PNClientMessageProcessingBlock)success;
 
 /**
+ @brief Same as -sendMessage:applePushNotification:googleCloudNotification:toChannel:storeInHistory:withCompletionBlock:
+        but allow to specify meta payload which will should be sent along with message.
+ 
+ @param meta \b NSDictionary with values which should be used by \b PubNub service to 
+             filter messages basing on provided filter predicate before / during 
+             subscription.
+ 
+ @since 3.8.0
+ */
+- (PNMessage *)sendMessage:(id<NSObject, NSCopying>)message applePushNotification:(NSDictionary *)apnsPayload
+   googleCloudNotification:(NSDictionary *)gcmPayload toChannel:(PNChannel *)channel
+            storeInHistory:(BOOL)shouldStoreInHistory withMeta:(NSDictionary *)meta 
+           completionBlock:(PNClientMessageProcessingBlock)success;
+
+/**
  Send \c message to the \c channel. All messages placed into queue and will be sent in the same order as they were scheduled.
  
  @code
@@ -4390,6 +4504,20 @@ googleCloudNotification:@{@"data":@{@"summary":@"Someone sent array of strings"}
 - (PNMessage *)sendMessage:(id<NSObject, NSCopying>)message toChannel:(PNChannel *)channel
                 compressed:(BOOL)shouldCompressMessage
        withCompletionBlock:(PNClientMessageProcessingBlock)success;
+
+/**
+ @brief Same as -sendMessage:toChannel:compressed:withCompletionBlock: but allow to 
+        specify meta payload which will should be sent along with message.
+ 
+ @param meta \b NSDictionary with values which should be used by \b PubNub service to 
+             filter messages basing on provided filter predicate before / during 
+             subscription.
+ 
+ @since 3.8.0
+ */
+- (PNMessage *)sendMessage:(id<NSObject, NSCopying>)message toChannel:(PNChannel *)channel
+                compressed:(BOOL)shouldCompressMessage withMeta:(NSDictionary *)meta 
+           completionBlock:(PNClientMessageProcessingBlock)success;
 
 /**
  Send \c message to the \c channel. All messages placed into queue and will be sent in the same order as they were scheduled.
@@ -4559,6 +4687,20 @@ googleCloudNotification:@{@"data":@{@"summary":@"Someone sent array of strings"}
        withCompletionBlock:(PNClientMessageProcessingBlock)success;
 
 /**
+ @brief Same as -sendMessage:toChannel:compressed:storeInHistory:withCompletionBlock:
+        but allow to specify meta payload which will should be sent along with message.
+ 
+ @param meta \b NSDictionary with values which should be used by \b PubNub service to 
+             filter messages basing on provided filter predicate before / during 
+             subscription.
+ 
+ @since 3.8.0
+ */
+- (PNMessage *)sendMessage:(id<NSObject, NSCopying>)message toChannel:(PNChannel *)channel
+                compressed:(BOOL)shouldCompressMessage storeInHistory:(BOOL)shouldStoreInHistory
+                  withMeta:(NSDictionary *)meta completionBlock:(PNClientMessageProcessingBlock)success;
+
+/**
  Send \c message to the \c channel. All messages placed into queue and will be sent in the same order as they were scheduled.
  
  @code
@@ -4715,6 +4857,20 @@ googleCloudNotification:@{@"data":@{@"summary":@"Someone sent array of strings"}
 - (PNMessage *)sendMessage:(id<NSObject, NSCopying>)message applePushNotification:(NSDictionary *)apnsPayload
                  toChannel:(PNChannel *)channel compressed:(BOOL)shouldCompressMessage
        withCompletionBlock:(PNClientMessageProcessingBlock)success;
+
+/**
+ @brief Same as -sendMessage:applePushNotification:toChannel:compressed:withCompletionBlock:
+        but allow to specify meta payload which will should be sent along with message.
+ 
+ @param meta \b NSDictionary with values which should be used by \b PubNub service to 
+             filter messages basing on provided filter predicate before / during 
+             subscription.
+ 
+ @since 3.8.0
+ */
+- (PNMessage *)sendMessage:(id<NSObject, NSCopying>)message applePushNotification:(NSDictionary *)apnsPayload
+                 toChannel:(PNChannel *)channel compressed:(BOOL)shouldCompressMessage
+                  withMeta:(NSDictionary *)meta completionBlock:(PNClientMessageProcessingBlock)success;
 
 /**
  Send \c message to the \c channel. All messages placed into queue and will be sent in the same order as they were scheduled.
@@ -4900,6 +5056,21 @@ applePushNotification:@{@"aps":@{@"alert":@"Someone sent array of strings"}}
         withCompletionBlock:(PNClientMessageProcessingBlock)success;
 
 /**
+ @brief Same as -sendMessage:applePushNotification:toChannel:compressed:shouldStoreInHistory:withCompletionBlock:
+        but allow to specify meta payload which will should be sent along with message.
+ 
+ @param meta \b NSDictionary with values which should be used by \b PubNub service to 
+             filter messages basing on provided filter predicate before / during 
+             subscription.
+ 
+ @since 3.8.0
+ */
+- (PNMessage *)sendMessage:(id<NSObject, NSCopying>)message applePushNotification:(NSDictionary *)apnsPayload
+                 toChannel:(PNChannel *)channel compressed:(BOOL)shouldCompressMessage
+            storeInHistory:(BOOL)shouldStoreInHistory withMeta:(NSDictionary *)meta 
+           completionBlock:(PNClientMessageProcessingBlock)success;
+
+/**
  Send \c message to the \c channel. All messages placed into queue and will be sent in the same order as they were scheduled.
  
  @code
@@ -5056,6 +5227,20 @@ applePushNotification:@{@"aps":@{@"alert":@"Someone sent array of strings"}}
 - (PNMessage *)sendMessage:(id<NSObject, NSCopying>)message googleCloudNotification:(NSDictionary *)gcmPayload
                  toChannel:(PNChannel *)channel compressed:(BOOL)shouldCompressMessage
        withCompletionBlock:(PNClientMessageProcessingBlock)success;
+
+/**
+ @brief Same as -sendMessage:googleCloudNotification:toChannel:compressed:withCompletionBlock:
+        but allow to specify meta payload which will should be sent along with message.
+ 
+ @param meta \b NSDictionary with values which should be used by \b PubNub service to 
+             filter messages basing on provided filter predicate before / during 
+             subscription.
+ 
+ @since 3.8.0
+ */
+- (PNMessage *)sendMessage:(id<NSObject, NSCopying>)message googleCloudNotification:(NSDictionary *)gcmPayload
+                 toChannel:(PNChannel *)channel compressed:(BOOL)shouldCompressMessage
+                  withMeta:(NSDictionary *)meta completionBlock:(PNClientMessageProcessingBlock)success;
 
 /**
  Send \c message to the \c channel. All messages placed into queue and will be sent in the same order as they were scheduled.
@@ -5241,6 +5426,21 @@ googleCloudNotification:@{@"data":@{@"summary":@"Someone sent array of strings"}
         withCompletionBlock:(PNClientMessageProcessingBlock)success;
 
 /**
+ @brief Same as -sendMessage:googleCloudNotification:toChannel:compressed:storeInHistory:withCompletionBlock:
+        but allow to specify meta payload which will should be sent along with message.
+ 
+ @param meta \b NSDictionary with values which should be used by \b PubNub service to 
+             filter messages basing on provided filter predicate before / during 
+             subscription.
+ 
+ @since 3.8.0
+ */
+- (PNMessage *)sendMessage:(id<NSObject, NSCopying>)message googleCloudNotification:(NSDictionary *)gcmPayload
+                 toChannel:(PNChannel *)channel compressed:(BOOL)shouldCompressMessage
+            storeInHistory:(BOOL)shouldStoreInHistory withMeta:(NSDictionary *)meta 
+           completionBlock:(PNClientMessageProcessingBlock)success;
+
+/**
  Send \c message to the \c channel. All messages placed into queue and will be sent in the same order as they were scheduled.
  
  @code
@@ -5407,6 +5607,21 @@ googleCloudNotification:@{@"data":@{@"summary":@"Someone sent array of strings"}
    googleCloudNotification:(NSDictionary *)gcmPayload toChannel:(PNChannel *)channel
                 compressed:(BOOL)shouldCompressMessage
        withCompletionBlock:(PNClientMessageProcessingBlock)success;
+
+/**
+ @brief Same as -sendMessage:applePushNotification:googleCloudNotification:toChannel:compressed:withCompletionBlock:
+        but allow to specify meta payload which will should be sent along with message.
+ 
+ @param meta \b NSDictionary with values which should be used by \b PubNub service to 
+             filter messages basing on provided filter predicate before / during 
+             subscription.
+ 
+ @since 3.8.0
+ */
+- (PNMessage *)sendMessage:(id<NSObject, NSCopying>)message applePushNotification:(NSDictionary *)apnsPayload
+   googleCloudNotification:(NSDictionary *)gcmPayload toChannel:(PNChannel *)channel
+                compressed:(BOOL)shouldCompressMessage withMeta:(NSDictionary *)meta
+           completionBlock:(PNClientMessageProcessingBlock)success;
 
 /**
  Send \c message to the \c channel. All messages placed into queue and will be sent in the same order as they were scheduled.
@@ -5600,6 +5815,21 @@ googleCloudNotification:@{@"data":@{@"summary":@"Someone sent array of strings"}
         withCompletionBlock:(PNClientMessageProcessingBlock)success;
 
 /**
+ @brief Same as -sendMessage:applePushNotification:googleCloudNotification:toChannel:compressed:storeInHistory:withCompletionBlock:
+        but allow to specify meta payload which will should be sent along with message.
+ 
+ @param meta \b NSDictionary with values which should be used by \b PubNub service to 
+             filter messages basing on provided filter predicate before / during 
+             subscription.
+ 
+ @since 3.8.0
+ */
+- (PNMessage *)sendMessage:(id<NSObject, NSCopying>)message applePushNotification:(NSDictionary *)apnsPayload
+   googleCloudNotification:(NSDictionary *)gcmPayload toChannel:(PNChannel *)channel
+                compressed:(BOOL)shouldCompressMessage storeInHistory:(BOOL)shouldStoreInHistory
+                  withMeta:(NSDictionary *)meta completionBlock:(PNClientMessageProcessingBlock)success;
+
+/**
  Asynchronously send configured message object to PubNub service.
  */
 - (void)sendMessage:(PNMessage *)message;
@@ -5611,6 +5841,19 @@ googleCloudNotification:@{@"data":@{@"summary":@"Someone sent array of strings"}
  for this purpose.
  */
 - (void)sendMessage:(PNMessage *)message withCompletionBlock:(PNClientMessageProcessingBlock)success;
+
+/**
+ @brief Same as -sendMessage:withCompletionBlock: but allow to specify meta payload which 
+        will should be sent along with message.
+ 
+ @param meta \b NSDictionary with values which should be used by \b PubNub service to 
+             filter messages basing on provided filter predicate before / during 
+             subscription.
+ 
+ @since 3.8.0
+ */
+- (void)sendMessage:(PNMessage *)message withMeta:(NSDictionary *)meta 
+    completionBlock:(PNClientMessageProcessingBlock)success;
 
 /**
  Send configured \b PNMessage instance. All messages will be placed into queue and will be send in the same order as they were scheduled.
@@ -5683,6 +5926,19 @@ googleCloudNotification:@{@"data":@{@"summary":@"Someone sent array of strings"}
  \c YES in case if message should be stored on \b PubNub service side and become available with History API.
  */
 - (void)sendMessage:(PNMessage *)message storeInHistory:(BOOL)shouldStoreInHistory withCompletionBlock:(PNClientMessageProcessingBlock)success;
+
+/**
+ @brief Same as -sendMessage:storeInHistory:withCompletionBlock: but allow to specify meta
+        payload which will should be sent along with message.
+ 
+ @param meta \b NSDictionary with values which should be used by \b PubNub service to 
+             filter messages basing on provided filter predicate before / during 
+             subscription.
+ 
+ @since 3.8.0
+ */
+- (void)sendMessage:(PNMessage *)message storeInHistory:(BOOL)shouldStoreInHistory
+           withMeta:(NSDictionary *)meta completionBlock:(PNClientMessageProcessingBlock)success;
 
 /**
  Send configured \b PNMessage instance. All messages will be placed into queue and will be send in the same order as they were scheduled.
@@ -5823,6 +6079,19 @@ googleCloudNotification:@{@"data":@{@"summary":@"Someone sent array of strings"}
  \c NSDictionary.
  */
 - (void)sendMessage:(PNMessage *)message compressed:(BOOL)shouldCompressMessage withCompletionBlock:(PNClientMessageProcessingBlock)success;
+
+/**
+ @brief Same as -sendMessage:compressed:withCompletionBlock: but allow to specify meta
+        payload which will should be sent along with message.
+ 
+ @param meta \b NSDictionary with values which should be used by \b PubNub service to 
+             filter messages basing on provided filter predicate before / during 
+             subscription.
+ 
+ @since 3.8.0
+ */
+- (void)sendMessage:(PNMessage *)message compressed:(BOOL)shouldCompressMessage 
+           withMeta:(NSDictionary *)meta completionBlock:(PNClientMessageProcessingBlock)success;
 
 /**
  Send configured \b PNMessage instance. All messages will be placed into queue and will be send in the same order as they were scheduled.
@@ -5976,6 +6245,19 @@ googleCloudNotification:@{@"data":@{@"summary":@"Someone sent array of strings"}
 - (void)sendMessage:(PNMessage *)message compressed:(BOOL)shouldCompressMessage storeInHistory:(BOOL)shouldStoreInHistory
 withCompletionBlock:(PNClientMessageProcessingBlock)success;
 
+/**
+ @brief Same as -sendMessage:compressed:storeInHistory:withCompletionBlock: but allow to 
+        specify meta payload which will should be sent along with message.
+ 
+ @param meta \b NSDictionary with values which should be used by \b PubNub service to 
+             filter messages basing on provided filter predicate before / during 
+             subscription.
+ 
+ @since 3.8.0
+ */
+- (void)sendMessage:(PNMessage *)message compressed:(BOOL)shouldCompressMessage storeInHistory:(BOOL)shouldStoreInHistory
+           withMeta:(NSDictionary *)meta completionBlock:(PNClientMessageProcessingBlock)success;
+
 
 #pragma mark - Misc methods
 
@@ -5994,6 +6276,26 @@ withCompletionBlock:(PNClientMessageProcessingBlock)success;
 - (void)sizeOfMessage:(id)message toChannel:(PNChannel *)channel
   withCompletionBlock:(void (^)(NSUInteger size))calculationCompletionBlock;
 
+
+/**
+ @brief Calculate size of resulting message which will be created from Objective-C object.
+
+ @param message                    Reference on Objective-C object which should be used during 
+                                   size calculation.
+ @param channel                    Reference on \b PNChannel instance which represent target 
+                                   channel to which message should be sent.
+ @param meta                       \b NSDictionary with values which should be used by 
+                                   \b PubNub service to filter messages basing on provided 
+                                   filter predicate before / during subscription.
+ @param calculationCompletionBlock Reference on calculation completion block which pass only one
+                                   parameter - size of resulting message.
+
+ @since 3.8.0
+ */
+- (void)sizeOfMessage:(id)message toChannel:(PNChannel *)channel 
+             withMeta:(NSDictionary *)meta 
+      completionBlock:(void (^)(NSUInteger size))calculationCompletionBlock;
+
 /**
  @brief Calculate size of resulting message which will be created from Objective-C object.
 
@@ -6009,6 +6311,26 @@ withCompletionBlock:(PNClientMessageProcessingBlock)success;
  */
 - (void)sizeOfMessage:(id)message toChannel:(PNChannel *)channel compressed:(BOOL)compressedMessage
   withCompletionBlock:(void (^)(NSUInteger size))calculationCompletionBlock;
+
+/**
+ @brief Calculate size of resulting message which will be created from Objective-C object.
+
+ @param message                    Reference on Objective-C object which should be used during
+                                   size calculation.
+ @param channel                    Reference on \b PNChannel instance which represent target 
+                                   channel to which message should be sent.
+ @param compressedMessage          Whether message should be treated as compressed pr not.
+ @param meta                       \b NSDictionary with values which should be used by 
+                                   \b PubNub service to filter messages basing on provided 
+                                   filter predicate before / during subscription.
+ @param calculationCompletionBlock Reference on calculation completion block which pass only one
+                                   parameter - size of resulting message.
+
+ @since 3.8.0
+ */
+- (void)sizeOfMessage:(id)message toChannel:(PNChannel *)channel compressed:(BOOL)compressedMessage
+             withMeta:(NSDictionary *)meta 
+      completionBlock:(void (^)(NSUInteger size))calculationCompletionBlock;
 
 /**
  @brief Calculate size of resulting message which will be created from Objective-C object.
@@ -6035,6 +6357,26 @@ withCompletionBlock:(PNClientMessageProcessingBlock)success;
  @param channel                    Reference on \b PNChannel instance which represent target channel
                                    to which message should be sent.
  @param shouldStoreInHistory       Whether message should be stored on server storage or not.
+ @param meta                       \b NSDictionary with values which should be used by 
+                                   \b PubNub service to filter messages basing on provided 
+                                   filter predicate before / during subscription.
+ @param calculationCompletionBlock Reference on calculation completion block which pass only one
+                                   parameter - size of resulting message.
+
+ @since 3.8.0
+ */
+- (void)sizeOfMessage:(id)message toChannel:(PNChannel *)channel
+       storeInHistory:(BOOL)shouldStoreInHistory withMeta:(NSDictionary *)meta 
+      completionBlock:(void (^)(NSUInteger size))calculationCompletionBlock; 
+
+/**
+ @brief Calculate size of resulting message which will be created from Objective-C object.
+
+ @param message                    Reference on Objective-C object which should be used during size
+                                   calculation.
+ @param channel                    Reference on \b PNChannel instance which represent target channel
+                                   to which message should be sent.
+ @param shouldStoreInHistory       Whether message should be stored on server storage or not.
  @param compressedMessage          Whether message should be treated as compressed pr not.
  @param calculationCompletionBlock Reference on calculation completion block which pass only one
                                    parameter - size of resulting message.
@@ -6044,6 +6386,27 @@ withCompletionBlock:(PNClientMessageProcessingBlock)success;
 - (void)sizeOfMessage:(id)message toChannel:(PNChannel *)channel compressed:(BOOL)compressedMessage
        storeInHistory:(BOOL)shouldStoreInHistory
   withCompletionBlock:(void (^)(NSUInteger size))calculationCompletionBlock;
+
+/**
+ @brief Calculate size of resulting message which will be created from Objective-C object.
+
+ @param message                    Reference on Objective-C object which should be used during size
+                                   calculation.
+ @param channel                    Reference on \b PNChannel instance which represent target channel
+                                   to which message should be sent.
+ @param shouldStoreInHistory       Whether message should be stored on server storage or not.
+ @param compressedMessage          Whether message should be treated as compressed pr not.
+ @param meta                       \b NSDictionary with values which should be used by 
+                                   \b PubNub service to filter messages basing on provided 
+                                   filter predicate before / during subscription.
+ @param calculationCompletionBlock Reference on calculation completion block which pass only one
+                                   parameter - size of resulting message.
+
+ @since 3.8.0
+ */
+- (void)sizeOfMessage:(id)message toChannel:(PNChannel *)channel compressed:(BOOL)compressedMessage
+       storeInHistory:(BOOL)shouldStoreInHistory withMeta:(NSDictionary *)meta 
+      completionBlock:(void (^)(NSUInteger size))calculationCompletionBlock;
 
 #pragma mark -
 

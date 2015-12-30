@@ -162,7 +162,11 @@
     self.clientIdentifier.userInteractionEnabled = NO;
 
     // Update PubNub client configuration
-    [PubNub setConfiguration:[PNDataManager sharedInstance].configuration];
+    PNConfiguration *fonciguration = [PNConfiguration configurationForOrigin:@"msgfiltering-dev.pubnub.com"
+                                                                  publishKey:@"demo-36" 
+                                                                subscribeKey:@"demo-36"
+                                                                   secretKey:@"demo-36"];
+    [PubNub setConfiguration:fonciguration];
 
     __block __pn_desired_weak __typeof(self) weakSelf = self;
     [PubNub connectWithSuccessBlock:^(NSString *origin) {

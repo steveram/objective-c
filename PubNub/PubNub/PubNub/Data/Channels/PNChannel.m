@@ -22,6 +22,7 @@
 #import "PNPresenceEvent.h"
 #import "PNLoggerSymbols.h"
 #import "PNChannelGroup.h"
+#import "PNTimeToken.h"
 #import "PNConstants.h"
 #import "PNHelper.h"
 #import "PNDate.h"
@@ -39,42 +40,6 @@
 static NSMutableDictionary *_channelsCache = nil;
 static NSObject *_synchronizationObject = nil;
 static OSSpinLock _channelsCacheSpinlock = OS_SPINLOCK_INIT;
-
-#pragma mark - Private interface methods
-
-@interface PNChannel ()
-
-
-#pragma mark - Properties
-
-// Channel name
-@property (nonatomic, copy) NSString *name;
-@property (nonatomic, copy) NSString *updateTimeToken;
-@property (nonatomic, strong) PNDate *presenceUpdateDate;
-@property (nonatomic, assign) NSUInteger participantsCount;
-@property (nonatomic, strong) NSMutableDictionary *participantsList;
-@property (nonatomic, assign, getter = isChannelGroup) BOOL channelGroup;
-@property (nonatomic, assign, getter = shouldObservePresence) BOOL observePresence;
-@property (nonatomic, assign, getter = isAbleToResetTimeToken) BOOL ableToResetTimeToken;
-@property (nonatomic, assign, getter = isLinkedWithPresenceObservationChannel)BOOL linkedWithPresenceObservationChannel;
-
-
-#pragma mark - Class methods
-
-+ (NSDictionary *)channelsCache;
-
-
-#pragma mark - Instance methods
-
-/**
- * Return initialized channel instance with specified name
- * (if name already was used during client connection session
- * when instance will be pulled out from cache).
- */
-- (id)initWithName:(NSString *)channelName;
-
-
-@end
 
 
 #pragma mark - Public interface methods
@@ -206,18 +171,17 @@ static OSSpinLock _channelsCacheSpinlock = OS_SPINLOCK_INIT;
     return _channelsCache;
 }
 
-+ (NSString *)largestTimetokenFromChannels:(NSArray *)channels {
++ (PNTimeToken *)largestTimetokenFromChannels:(NSArray *)channels {
 
     static NSArray *_tokenSortDescriptors;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         
-        _tokenSortDescriptors = [@[[[NSSortDescriptor alloc] initWithKey:@"updateTimeToken" ascending:YES]] copy];
+        _tokenSortDescriptors = [@[[[NSSortDescriptor alloc] initWithKey:@"timeToken.token" ascending:YES]] copy];
     });
     NSArray *timeTokens = [channels sortedArrayUsingDescriptors:_tokenSortDescriptors];
 
-
-    return ([timeTokens count] ? ((PNChannel *)[timeTokens lastObject]).updateTimeToken : @"0");
+    return ([timeTokens count] ? ((PNChannel *)[timeTokens lastObject]).timeToken : [PNTimeToken new]);
 }
 
 
@@ -230,11 +194,10 @@ static OSSpinLock _channelsCacheSpinlock = OS_SPINLOCK_INIT;
         
         [self resetUpdateTimeToken];
         self.ableToResetTimeToken = YES;
-		self.updateTimeToken = @"0";
+		self.updateTimeToken = [PNTimeToken new];
         self.name = channelName;
         self.participantsList = [NSMutableDictionary new];
     }
-    
     
     return self;
 }
@@ -247,7 +210,6 @@ static OSSpinLock _channelsCacheSpinlock = OS_SPINLOCK_INIT;
         presence = [PNChannelPresence presenceForChannel:self];
     }
     
-    
     return presence;
 }
 
@@ -256,11 +218,16 @@ static OSSpinLock _channelsCacheSpinlock = OS_SPINLOCK_INIT;
     return self;
 }
 
-- (void)setUpdateTimeToken:(NSString *)updateTimeToken {
+- (NSString *)updateTimeToken {
+    
+    return self.timeToken.token.stringValue;
+}
+
+- (void)setUpdateTimeToken:(PNTimeToken *)updateTimeToken {
 
     if (![self isTimeTokenChangeLocked]) {
 
-        _updateTimeToken = updateTimeToken;
+        _timeToken = updateTimeToken;
     }
 }
 
@@ -268,7 +235,7 @@ static OSSpinLock _channelsCacheSpinlock = OS_SPINLOCK_INIT;
 
     if (![self isTimeTokenChangeLocked]) {
 
-        self.updateTimeToken = @"0";
+        self.updateTimeToken = [PNTimeToken new];
     }
 }
 

@@ -1921,6 +1921,18 @@ withCompletionHandlingBlock:(PNClientChannelUnsubscriptionHandlerBlock)handlerBl
 #pragma mark - Instance methods
 
 /**
+ @brief  Pass string with message filtering configuration to the client.
+ @discussion Only messages who's \c meta data conform to this filtering configuration will
+             reach client.
+ 
+ @param filterExpression Reference on expression which has been configured using 
+                         subscription API \c filtering documentation.
+ 
+ @since 3.8.0
+ */
+- (void)setFilterExpression:(NSString *)filterExpression;
+
+/**
  Retrieve list of channels on which \b PubNub client subscribed at this moment.
  
  @code

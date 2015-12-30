@@ -26,7 +26,8 @@ static NSString * const kPNMessageBodyKey = @"message";
  */
 static NSString * const kPNMessageTimeTokenKey = @"timetoken";
 
-#pragma mark Struct
+
+#pragma mark - Structures
 
 struct PNMessageDataKeysStruct {
 
@@ -34,6 +35,11 @@ struct PNMessageDataKeysStruct {
      Stores key under which message will be encoded.
     */
     __unsafe_unretained NSString *message;
+
+    /**
+     Stores key under which meta data will be encoded.
+    */
+    __unsafe_unretained NSString *meta;
 
     /**
      Stores key under which encrypted message will be encoded.
@@ -71,18 +77,26 @@ extern struct PNMessageDataKeysStruct PNMessageDataKeys;
 
 #pragma mark - Class forward
 
-@class PNChannel, PNError, PNDate;
+@class PNSubscribeEventInformation, PNTimeToken, PNChannel, PNError;
 
 
-#pragma mark - Protected methods
+#pragma mark - Private interface methods
 
-@interface PNMessage (Protected)
+@interface PNMessage () <NSCoding>
 
 
 #pragma mark - Properties
 
 // Stores reference on message body
 @property (nonatomic, copy) id<NSObject, NSCopying> message;
+
+/**
+ @brief  Stores reference on meta data information which should be used by message filter
+         logic.
+ 
+ @since 3.8.0
+ */
+@property (nonatomic, copy) NSDictionary *userMeta;
 
 // Stores whether message should be compressed or not
 @property (nonatomic, assign, getter = shouldCompressMessage) BOOL compressMessage;
@@ -105,10 +119,18 @@ extern struct PNMessageDataKeysStruct PNMessageDataKeys;
 @property (nonatomic, strong) PNChannel *channel;
 
 // Stores reference on date when this message was received (doesn't work for history, only for presence events).
-@property (nonatomic, strong) PNDate *receiveDate;
+@property (nonatomic, readonly) PNDate *setReceiveDate;
 
 @property (nonatomic, strong) PNDate *date;
+@property (nonatomic, strong) PNChannelGroup *channelGroup;
+@property (nonatomic, strong) NSNumber *timeToken;
 
+/**
+ @brief  Stores reference on instance which contain debug information from event envelope.
+
+ @since 3.8.0
+ */
+@property (nonatomic, strong) PNSubscribeEventInformation *debugInformation;
 
 
 #pragma mark - Class methods
@@ -126,8 +148,8 @@ extern struct PNMessageDataKeysStruct PNMessageDataKeys;
  * Return reference on message data object which will represent
  * message received from PubNub service
  */
-+ (PNMessage *)messageFromServiceResponse:(id<NSObject, NSCopying>)messageBody onChannel:(PNChannel *)channel
-                                   atDate:(PNDate *)messagePostDate;
++ (PNMessage *)messageFromServiceResponse:(id<NSObject, NSCopying>)messageBody
+                                onChannel:(PNChannel *)channel atDate:(PNTimeToken *)messagePostDate;
 
 /**
  @brief Construct message instance from \b PubNub service response.
@@ -146,7 +168,7 @@ extern struct PNMessageDataKeysStruct PNMessageDataKeys;
  @since 3.7.0
  */
 + (PNMessage *)messageFromServiceResponse:(id<NSObject, NSCopying>)messageBody onChannel:(PNChannel *)channel
-                             channelGroup:(PNChannelGroup *)group atDate:(PNDate *)messagePostDate;
+                             channelGroup:(PNChannelGroup *)group atDate:(PNTimeToken *)messagePostDate;
 
 
 #pragma mark - Instance methods
@@ -156,7 +178,7 @@ extern struct PNMessageDataKeysStruct PNMessageDataKeys;
  */
 - (id)initWithObject:(id<NSObject, NSCopying>)object forChannel:(PNChannel *)channel
           compressed:(BOOL)shouldCompressMessage storeInHistory:(BOOL)shouldStoreInHistory;
-- (void)setReceiveDate:(PNDate *)receiveDate;
+- (void)updateReceiveDate:(PNTimeToken *)receiveDate;
 
 
 @end

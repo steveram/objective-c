@@ -14,6 +14,7 @@
 
 #import "PNChannel.h"
 
+
 #pragma mark Static
 
 /**
@@ -21,19 +22,23 @@
  */
 static NSString * const kPNResponseChannelsKey = @"channels";
 
-#pragma mark Class forward
 
-@class PNChannelPresence;
-@class PNPresenceEvent;
-@class PNHereNow;
+#pragma mark - Class forward
+
+@class PNChannelPresence, PNPresenceEvent, PNTimeToken, PNHereNow;
 
 
-#pragma mark Protected interface methods
+#pragma mark - Protected interface declaration
 
-@interface PNChannel (Protected)
+@interface PNChannel ()
 
 
 #pragma mark - Properties
+
+// Channel name
+@property (nonatomic, copy) NSString *name;
+@property (nonatomic, copy) PNTimeToken *timeToken;
+@property (nonatomic, strong) NSMutableDictionary *participantsList;
 
 // Stores whether channel presence observation is required
 @property (nonatomic, assign, getter = shouldObservePresence) BOOL observePresence;
@@ -53,9 +58,12 @@ static NSString * const kPNResponseChannelsKey = @"channels";
 
 // Last presence update date
 @property (nonatomic, strong) PNDate *presenceUpdateDate;
+@property (nonatomic, assign, getter = isAbleToResetTimeToken) BOOL ableToResetTimeToken;
 
 
 #pragma mark - Class methods
+
++ (NSDictionary *)channelsCache;
 
 /**
  * Clear all cached channel instances
@@ -81,9 +89,17 @@ shouldUpdatePresenceObservingFlag:(BOOL)shouldUpdatePresenceObservingFlag;
 /**
  * Allow to fetch largest time token inside channels group
  */
-+ (NSString *)largestTimetokenFromChannels:(NSArray *)channels;
++ (PNTimeToken *)largestTimetokenFromChannels:(NSArray *)channels;
+
 
 #pragma mark - Instance methods
+
+/**
+ * Return initialized channel instance with specified name
+ * (if name already was used during client connection session
+ * when instance will be pulled out from cache).
+ */
+- (id)initWithName:(NSString *)channelName;
 
 /**
  * Return whether channel is presence observer or not
@@ -125,7 +141,7 @@ shouldUpdatePresenceObservingFlag:(BOOL)shouldUpdatePresenceObservingFlag;
 /**
  * Update channel update time token
  */
-- (void)setUpdateTimeToken:(NSString *)updateTimeToken;
+- (void)setUpdateTimeToken:(PNTimeToken *)updateTimeToken;
 
 /**
  * Will reset channel last update time token to "0"

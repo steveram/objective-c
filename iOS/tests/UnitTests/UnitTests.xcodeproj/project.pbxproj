@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		79458ECE1C274E440042EE02 /* PNTimeToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 79458ECD1C274E440042EE02 /* PNTimeToken.m */; };
+		79458ECF1C274E440042EE02 /* PNTimeToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 79458ECD1C274E440042EE02 /* PNTimeToken.m */; };
+		79458ED31C274E5D0042EE02 /* PNSubscribeEventInformation.m in Sources */ = {isa = PBXBuildFile; fileRef = 79458ED11C274E5D0042EE02 /* PNSubscribeEventInformation.m */; };
+		79458ED41C274E5D0042EE02 /* PNSubscribeEventInformation.m in Sources */ = {isa = PBXBuildFile; fileRef = 79458ED11C274E5D0042EE02 /* PNSubscribeEventInformation.m */; };
 		960063291A027789002063CF /* PNCryptoHistoryTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 960063281A027789002063CF /* PNCryptoHistoryTest.m */; };
 		9606DE6E1A15EB6E00EF1934 /* PNConnectNegativeTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 9606DE6D1A15EB6E00EF1934 /* PNConnectNegativeTest.m */; };
 		961B70EC1A40B86C0036C02B /* MessageToUnsubChannelTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 961B70EB1A40B86C0036C02B /* MessageToUnsubChannelTest.m */; };
@@ -222,6 +226,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		79458ECC1C274E440042EE02 /* PNTimeToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNTimeToken.h; sourceTree = "<group>"; };
+		79458ECD1C274E440042EE02 /* PNTimeToken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNTimeToken.m; sourceTree = "<group>"; };
+		79458ED01C274E5D0042EE02 /* PNSubscribeEventInformation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNSubscribeEventInformation.h; sourceTree = "<group>"; };
+		79458ED11C274E5D0042EE02 /* PNSubscribeEventInformation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNSubscribeEventInformation.m; sourceTree = "<group>"; };
+		79458ED21C274E5D0042EE02 /* PNSubscribeEventInformation+Protected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PNSubscribeEventInformation+Protected.h"; sourceTree = "<group>"; };
 		960063281A027789002063CF /* PNCryptoHistoryTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNCryptoHistoryTest.m; sourceTree = "<group>"; };
 		9606DE6D1A15EB6E00EF1934 /* PNConnectNegativeTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNConnectNegativeTest.m; sourceTree = "<group>"; };
 		961B70EB1A40B86C0036C02B /* MessageToUnsubChannelTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageToUnsubChannelTest.m; sourceTree = "<group>"; };
@@ -802,8 +811,13 @@
 				968AFDF01AD9A0CC00F29724 /* PNResponse+Protected.h */,
 				968AFDF11AD9A0CC00F29724 /* PNResponse.h */,
 				968AFDF21AD9A0CC00F29724 /* PNResponse.m */,
+				79458ED01C274E5D0042EE02 /* PNSubscribeEventInformation.h */,
+				79458ED11C274E5D0042EE02 /* PNSubscribeEventInformation.m */,
+				79458ED21C274E5D0042EE02 /* PNSubscribeEventInformation+Protected.h */,
 				968AFDF31AD9A0CC00F29724 /* PNTimer.h */,
 				968AFDF41AD9A0CC00F29724 /* PNTimer.m */,
+				79458ECC1C274E440042EE02 /* PNTimeToken.h */,
+				79458ECD1C274E440042EE02 /* PNTimeToken.m */,
 				968AFDF51AD9A0CC00F29724 /* PNWhereNow+Protected.h */,
 				968AFDF61AD9A0CC00F29724 /* PNWhereNow.h */,
 				968AFDF71AD9A0CC00F29724 /* PNWhereNow.m */,
@@ -1499,6 +1513,7 @@
 				968AFEBF1AD9A0CC00F29724 /* NSSet+PNAdditions.m in Sources */,
 				968AFEBE1AD9A0CC00F29724 /* NSObject+PNAdditions.m in Sources */,
 				968AFEC81AD9A0CC00F29724 /* PNChannelGroupRemoveRequest.m in Sources */,
+				79458ECE1C274E440042EE02 /* PNTimeToken.m in Sources */,
 				968AFEBB1AD9A0CC00F29724 /* NSMutableArray+PNAdditions.m in Sources */,
 				968AFE881AD9A0CC00F29724 /* PNChannelPresence.m in Sources */,
 				968AFEDC1AD9A0CC00F29724 /* PNReachability.m in Sources */,
@@ -1584,6 +1599,7 @@
 				968AFE9E1AD9A0CC00F29724 /* PNWhereNowResponseParser.m in Sources */,
 				968AFEC71AD9A0CC00F29724 /* PNChannelGroupNamespacesRequest.m in Sources */,
 				968AFECC1AD9A0CC00F29724 /* PNClientStateRequest.m in Sources */,
+				79458ED31C274E5D0042EE02 /* PNSubscribeEventInformation.m in Sources */,
 				968AFE7F1AD9A0CC00F29724 /* PubNub+PAM.m in Sources */,
 				968AFEAF1AD9A0CC00F29724 /* PNMessagesHistory.m in Sources */,
 				968AFECA1AD9A0CC00F29724 /* PNChannelsForGroupRequest.m in Sources */,
@@ -1600,6 +1616,7 @@
 				96CB6A2719D071D40093D64E /* Swizzler.m in Sources */,
 				96CB6A8B19D19A6B0093D64E /* PNLatencyMeasureRequestTest.m in Sources */,
 				96517C1E1B1719980023E5BF /* TestConfigurator.m in Sources */,
+				79458ECF1C274E440042EE02 /* PNTimeToken.m in Sources */,
 				96CB6A8C19D19A6B0093D64E /* PNLeaveRequestTest.m in Sources */,
 				96CB6A7219D19A6B0093D64E /* Configuration.m in Sources */,
 				96CB6A7D19D19A6B0093D64E /* PNChannelConstructor.m in Sources */,
@@ -1644,6 +1661,7 @@
 				96E0446919EC3A1B00A4C18A /* ChannelGroupSubscriptionInstanceTest.m in Sources */,
 				96FA82951A15027B005D6A33 /* PNConnectSuccessBlockTest.m in Sources */,
 				96CB6A9819D19A6B0093D64E /* PNServiceChannelTest.m in Sources */,
+				79458ED41C274E5D0042EE02 /* PNSubscribeEventInformation.m in Sources */,
 				96CB6A9119D19A6B0093D64E /* PNMessagingChannelTest.m in Sources */,
 				96CB6A7419D19A6B0093D64E /* NSString+PNAdditionTest.m in Sources */,
 				96CB6A7F19D19A6B0093D64E /* PNChannelHistoryParserTest.m in Sources */,

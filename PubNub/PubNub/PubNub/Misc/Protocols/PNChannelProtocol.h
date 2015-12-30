@@ -37,7 +37,7 @@
  
  @since 3.7.0
  */
-@property (nonatomic, readonly, copy) NSString *updateTimeToken;
+@property (nonatomic, readonly) NSString *updateTimeToken;
 
 /**
  Stores whether channel represents group of channels or not.
