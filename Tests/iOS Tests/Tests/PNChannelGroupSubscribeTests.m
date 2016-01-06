@@ -41,8 +41,9 @@ static NSString * const kPNChannelGroupTestsName = @"PNChannelGroupSubscribeTest
 
 - (void)testSubscribeThenRemoveChannelFromSubscribedGroup {
     PNWeakify(self);
-    NSInteger timesMessageReceivedCalled = 0;
-    NSInteger timesStatusReceivedCalled = 0;
+    __block NSInteger timesMessageReceivedCalled = 0;
+    __block NSInteger timesStatusReceivedCalled = 0;
+    __block XCTestExpectation *channelGroupRemoveExpectation = [self expectationWithDescription:@"channelGroupRemove"];
     PNClientDidReceiveStatusAssertions firstStatusAssertion = ^void (PubNub *client, PNSubscribeStatus *status) {
         PNStrongify(self);
         XCTAssertEqualObjects(self.client, client);
@@ -59,6 +60,7 @@ static NSString * const kPNChannelGroupTestsName = @"PNChannelGroupSubscribeTest
         
         XCTAssertEqual(status.operation, PNSubscribeOperation);
         NSLog(@"timeToken: %@", status.currentTimetoken);
+        XCTAssertEqual(status.statusCode, 200);
         XCTAssertEqualObjects(status.currentTimetoken, @14508287398196981);
         XCTAssertEqualObjects(status.currentTimetoken, status.data.timetoken);
     };
@@ -85,6 +87,73 @@ static NSString * const kPNChannelGroupTestsName = @"PNChannelGroupSubscribeTest
         //        [self.channelGroupSubscribeExpectation fulfill];
 //        self.channelGroupSubscribeExpectation = nil;
     };
+    PNClientDidReceiveStatusAssertions secondStatusAssertion = ^void (PubNub *client, PNSubscribeStatus *status) {
+        PNStrongify(self);
+        NSLog(@"second status!!!!!");
+        XCTAssertEqualObjects(self.client, client);
+        XCTAssertNotNil(status);
+        XCTAssertFalse(status.isError);
+        XCTAssertEqual(status.category, PNConnectedCategory);
+        NSArray *expectedChannelGroups = @[
+                                           kPNChannelGroupTestsName,
+                                           [kPNChannelGroupTestsName stringByAppendingString:@"-pnpres"]
+                                           ];
+        XCTAssertEqual(status.subscribedChannels.count, 0);
+        XCTAssertEqualObjects([NSSet setWithArray:status.subscribedChannelGroups],
+                              [NSSet setWithArray:expectedChannelGroups]);
+        
+        XCTAssertEqual(status.operation, PNSubscribeOperation);
+        NSLog(@"timeToken: %@", status.currentTimetoken);
+        XCTAssertEqual(status.statusCode, 200);
+        XCTAssertEqualObjects(status.currentTimetoken, @14508287398196981);
+        XCTAssertEqualObjects(status.currentTimetoken, status.data.timetoken);
+    };
+    PNClientDidReceiveMessageAssertions secondMessageAssertion = ^void (PubNub *client, PNMessageResult *message) {
+        PNStrongify(self);
+        XCTAssertEqualObjects(self.client, client);
+        XCTAssertEqualObjects(client.uuid, message.uuid);
+        XCTAssertNotNil(message.uuid);
+        XCTAssertNil(message.authKey);
+        XCTAssertEqual(message.statusCode, 200);
+        XCTAssertTrue(message.TLSEnabled);
+        XCTAssertEqual(message.operation, PNSubscribeOperation);
+        NSLog(@"message:");
+        NSLog(@"%@", message.data.message);
+        XCTAssertNotNil(message.data);
+        XCTAssertEqualObjects(message.data.message, @"******......... 6158 - 2015-12-22 15:59:00");
+        XCTAssertEqualObjects(message.data.actualChannel, @"a");
+        XCTAssertEqualObjects(message.data.subscribedChannel, kPNChannelGroupTestsName);
+        XCTAssertEqualObjects(message.data.timetoken, @14508287407082352);
+//                [self.client removeChannels:@[@"a"] fromGroup:kPNChannelGroupTestsName withCompletion:^(PNAcknowledgmentStatus *status) {
+//                    PNStrongify(self);
+//                    XCTAssertNotNil(status);
+//                }];
+//                [self.channelGroupSubscribeExpectation fulfill];
+//                self.channelGroupSubscribeExpectation = nil;
+    };
+    PNClientDidReceiveMessageAssertions thirdMessageAssertion = ^void (PubNub *client, PNMessageResult *message) {
+        PNStrongify(self);
+        XCTAssertEqualObjects(self.client, client);
+        XCTAssertEqualObjects(client.uuid, message.uuid);
+        XCTAssertNotNil(message.uuid);
+        XCTAssertNil(message.authKey);
+        XCTAssertEqual(message.statusCode, 200);
+        XCTAssertTrue(message.TLSEnabled);
+        XCTAssertEqual(message.operation, PNSubscribeOperation);
+        NSLog(@"message:");
+        NSLog(@"%@", message.data.message);
+        XCTAssertNotNil(message.data);
+        XCTAssertEqualObjects(message.data.message, @"******......... 6158 - 2015-12-22 15:59:00");
+        XCTAssertEqualObjects(message.data.actualChannel, @"a");
+        XCTAssertEqualObjects(message.data.subscribedChannel, kPNChannelGroupTestsName);
+        XCTAssertEqualObjects(message.data.timetoken, @14508287407082352);
+        //        [self.client removeChannels:@[@"a"] fromGroup:kPNChannelGroupTestsName withCompletion:^(PNAcknowledgmentStatus *status) {
+        //            PNStrongify(self);
+        //            XCTAssertNotNil(status);
+        //        }];
+        //        [self.channelGroupSubscribeExpectation fulfill];
+        //        self.channelGroupSubscribeExpectation = nil;
+    };
     self.didReceiveStatusAssertions = ^void (PubNub *client, PNSubscribeStatus *status) {
         PNStrongify(self);
         switch (timesStatusReceivedCalled) {
@@ -93,13 +162,18 @@ static NSString * const kPNChannelGroupTestsName = @"PNChannelGroupSubscribeTest
                 firstStatusAssertion(client, status);
             }
                 break;
-                
+            case 1:
+            {
+                secondStatusAssertion(client, status);
+            }
+                break;
             default:
             {
-                XCTFail(@"shouldn't be here");
+                XCTFail(@"status: %@ shouldn't be here, time: %ld", status.debugDescription, (long)timesStatusReceivedCalled);
             }
                 break;
         }
+        timesStatusReceivedCalled++;
     };
     self.didReceiveMessageAssertions = ^void (PubNub *client, PNMessageResult *message) {
         PNStrongify(self);
@@ -110,16 +184,35 @@ static NSString * const kPNChannelGroupTestsName = @"PNChannelGroupSubscribeTest
                 [self.client removeChannels:@[@"b"] fromGroup:kPNChannelGroupTestsName withCompletion:^(PNAcknowledgmentStatus *status) {
                     PNStrongify(self);
                     XCTAssertNotNil(status);
+                    XCTAssertFalse(status.isError);
+                    XCTAssertEqualObjects(self.client, client);
+                    XCTAssertEqual(status.category, PNAcknowledgmentCategory);
+                    XCTAssertEqual(status.operation, PNRemoveChannelsFromGroupOperation);
+                    XCTAssertEqual(status.statusCode, 200);
+                    [channelGroupRemoveExpectation fulfill];
+                    channelGroupRemoveExpectation = nil;
                 }];
             }
                 break;
-                
+            case 1:
+            {
+                secondMessageAssertion(client, message);
+            }
+                break;
+            case 2:
+            {
+                thirdMessageAssertion(client, message);
+                [self.channelGroupSubscribeExpectation fulfill];
+                self.channelGroupSubscribeExpectation = nil;
+            }
+                break;
             default:
             {
-                XCTFail(@"shouldn't be here");
+                XCTFail(@"message: %@ shouldn't be here, time: %ld", message.debugDescription, (long)timesMessageReceivedCalled);
             }
                 break;
         }
+        timesMessageReceivedCalled++;
     };
     [self PNTest_subscribeToChannelGroups:[self channelGroups] withPresence:YES];
 }
