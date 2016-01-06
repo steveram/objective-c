@@ -107,6 +107,10 @@ static NSString * const kPNChannelGroupTestsName = @"PNChannelGroupSubscribeTest
             case 0:
             {
                 firstMessageAssertion(client, message);
+                [self.client removeChannels:@[@"b"] fromGroup:kPNChannelGroupTestsName withCompletion:^(PNAcknowledgmentStatus *status) {
+                    PNStrongify(self);
+                    XCTAssertNotNil(status);
+                }];
             }
                 break;
                 
