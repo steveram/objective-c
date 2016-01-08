@@ -37,7 +37,7 @@
 struct PNMessageDataKeysStruct PNMessageDataKeys = {
     
     .message = @"message",
-    .meta = @"meta",
+    .metadata = @"metadata",
     .encryptedMessage = @"emessage",
     .channel = @"channel",
     .compress = @"compressed",
@@ -158,9 +158,9 @@ struct PNMessageDataKeysStruct PNMessageDataKeys = {
 
                 self.encryptedMessage = [decoder decodeObjectForKey:PNMessageDataKeys.encryptedMessage];
             }
-            if ([decoder containsValueForKey:PNMessageDataKeys.meta]) {
+            if ([decoder containsValueForKey:PNMessageDataKeys.metadata]) {
                 
-                self.userMeta = [decoder decodeObjectForKey:PNMessageDataKeys.meta];
+                self.userMetadata = [decoder decodeObjectForKey:PNMessageDataKeys.metadata];
             }
             self.channel = [PNChannel channelWithName:[decoder decodeObjectForKey:PNMessageDataKeys.channel]];
 
@@ -207,9 +207,9 @@ struct PNMessageDataKeysStruct PNMessageDataKeys = {
     return _date;
 }
 
-- (NSDictionary *)meta {
+- (NSDictionary *)metadata {
     
-    return self.debugInformation.meta;
+    return self.debugInformation.metadata;
 }
 
 - (BOOL)writeToFileAtPath:(NSString *)messageStoreFilePath {
@@ -236,7 +236,7 @@ struct PNMessageDataKeysStruct PNMessageDataKeys = {
 - (void)encodeWithCoder:(NSCoder *)coder {
     
     [coder encodeObject:self.message forKey:PNMessageDataKeys.message];
-    if (self.userMeta) { [coder encodeObject:self.userMeta forKey:PNMessageDataKeys.meta]; }
+    if (self.userMetadata) { [coder encodeObject:self.userMetadata forKey:PNMessageDataKeys.metadata]; }
     [coder encodeObject:self.encryptedMessage forKey:PNMessageDataKeys.encryptedMessage];
     [coder encodeObject:self.channel.name forKey:PNMessageDataKeys.channel];
 

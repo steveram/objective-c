@@ -68,7 +68,7 @@
 
 /**
  @brief  Pass string with message filtering configuration to the client.
- @discussion Only messages who's \c meta data conform to this filtering configuration will
+ @discussion Only messages who's \c metadata conform to this filtering configuration will
              reach client.
  
  @param filterExpression Reference on expression which has been configured using 

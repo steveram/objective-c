@@ -11,6 +11,7 @@
 		79458ECF1C274E440042EE02 /* PNTimeToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 79458ECD1C274E440042EE02 /* PNTimeToken.m */; };
 		79458ED31C274E5D0042EE02 /* PNSubscribeEventInformation.m in Sources */ = {isa = PBXBuildFile; fileRef = 79458ED11C274E5D0042EE02 /* PNSubscribeEventInformation.m */; };
 		79458ED41C274E5D0042EE02 /* PNSubscribeEventInformation.m in Sources */ = {isa = PBXBuildFile; fileRef = 79458ED11C274E5D0042EE02 /* PNSubscribeEventInformation.m */; };
+		79C62C041C3D230000C3C8A1 /* PNMessageFilteringTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 79C62C031C3D230000C3C8A1 /* PNMessageFilteringTest.m */; };
 		960063291A027789002063CF /* PNCryptoHistoryTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 960063281A027789002063CF /* PNCryptoHistoryTest.m */; };
 		9606DE6E1A15EB6E00EF1934 /* PNConnectNegativeTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 9606DE6D1A15EB6E00EF1934 /* PNConnectNegativeTest.m */; };
 		961B70EC1A40B86C0036C02B /* MessageToUnsubChannelTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 961B70EB1A40B86C0036C02B /* MessageToUnsubChannelTest.m */; };
@@ -231,6 +232,7 @@
 		79458ED01C274E5D0042EE02 /* PNSubscribeEventInformation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNSubscribeEventInformation.h; sourceTree = "<group>"; };
 		79458ED11C274E5D0042EE02 /* PNSubscribeEventInformation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNSubscribeEventInformation.m; sourceTree = "<group>"; };
 		79458ED21C274E5D0042EE02 /* PNSubscribeEventInformation+Protected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PNSubscribeEventInformation+Protected.h"; sourceTree = "<group>"; };
+		79C62C031C3D230000C3C8A1 /* PNMessageFilteringTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNMessageFilteringTest.m; sourceTree = "<group>"; };
 		960063281A027789002063CF /* PNCryptoHistoryTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNCryptoHistoryTest.m; sourceTree = "<group>"; };
 		9606DE6D1A15EB6E00EF1934 /* PNConnectNegativeTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNConnectNegativeTest.m; sourceTree = "<group>"; };
 		961B70EB1A40B86C0036C02B /* MessageToUnsubChannelTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageToUnsubChannelTest.m; sourceTree = "<group>"; };
@@ -667,6 +669,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		79C62C021C3D22D100C3C8A1 /* 3.8.0 Message Filtering Tests */ = {
+			isa = PBXGroup;
+			children = (
+				79C62C031C3D230000C3C8A1 /* PNMessageFilteringTest.m */,
+			);
+			path = "3.8.0 Message Filtering Tests";
+			sourceTree = "<group>";
+		};
 		960063271A027770002063CF /* 3.7.2 Regression tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -1204,6 +1214,7 @@
 			children = (
 				96517C171B1717F80023E5BF /* Client State tests */,
 				969EDF6A1ACC20820023279A /* PAM Functional Tests */,
+				79C62C021C3D22D100C3C8A1 /* 3.8.0 Message Filtering Tests */,
 				96E1B4081AC56877000824A0 /* 3.7.10.3 Regression Tests */,
 				9697B42B1AA4C2E800D63BCB /* 3.7.9 Regression tests */,
 				9627E74A1A51F12F00D939FA /* 3.7.7 Regression tests */,
@@ -1668,6 +1679,7 @@
 				96CB6A9F19D19A6B0093D64E /* HugeCompressedMessageTest.m in Sources */,
 				965CFF7B1AD68160004FB197 /* PAMSimpleTest.m in Sources */,
 				96CB6A9719D19A6B0093D64E /* PNResponseTest.m in Sources */,
+				79C62C041C3D230000C3C8A1 /* PNMessageFilteringTest.m in Sources */,
 				9697B42D1AA4C2E800D63BCB /* PNSizeOfMessageTest.m in Sources */,
 				96CB6A7719D19A6B0093D64E /* PNAccessRightOptionsTest.m in Sources */,
 				9606DE6E1A15EB6E00EF1934 /* PNConnectNegativeTest.m in Sources */,

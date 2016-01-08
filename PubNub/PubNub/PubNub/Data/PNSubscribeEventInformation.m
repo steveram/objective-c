@@ -16,7 +16,7 @@ struct PNEventDebugEnvelopeStructure PNDebugEventEnvelope = {
     .subscribeKey = @"k",
     .replicationMap = @"r",
     .eatAfterReading = @"ear",
-    .meta = @"u",
+    .metadata = @"u",
     .waypoints = @"w"
 };
 
@@ -45,7 +45,7 @@ struct PNEventDebugEnvelopeStructure PNDebugEventEnvelope = {
         _subscribeKey = [payload[PNDebugEventEnvelope.subscribeKey] copy];
         _replicationMap = [payload[PNDebugEventEnvelope.replicationMap] copy];
         _eatAfterReading = payload[PNDebugEventEnvelope.eatAfterReading];
-        _meta = [payload[PNDebugEventEnvelope.meta] copy];
+        _metadata = [payload[PNDebugEventEnvelope.metadata] copy];
         _waypoints = [payload[PNDebugEventEnvelope.waypoints] copy];
     }
 
@@ -63,13 +63,13 @@ struct PNEventDebugEnvelopeStructure PNDebugEventEnvelope = {
 
     return [[NSString alloc] initWithFormat:@"%@ (%p) <shard identifier: %@, flags: %@, client "
             "identifier: %@, sequence number: %@, subscribe key: %@, replication map: %@, "
-            "eat after reading: %@, meta: %@, waypoints: %@>",
+            "eat after reading: %@, metadata: %@, waypoints: %@>",
             NSStringFromClass([self class]), (__bridge void*)self,
             (self.shardIdentifier?: @"<null>"), (self.debugFlags?: @"<null>"),
             (self.senderIdentifier?: @"<null>"), (self.sequenceNumber?: @"<null>"),
             (self.subscribeKey?: @"<null>"), (self.replicationMap?: @"<null>"),
             (self.eatAfterReading ? (self.shouldEatAfterReading ? @"YES" : @"NO") : @"<null>"),
-            (self.meta ? [PNJSONSerialization stringFromJSONObject:self.meta] : @"<null>"),
+            (self.metadata ? [PNJSONSerialization stringFromJSONObject:self.metadata] : @"<null>"),
             (self.waypoints ? [PNJSONSerialization stringFromJSONObject:self.waypoints] : @"<null>")];
 }
 
@@ -82,7 +82,7 @@ struct PNEventDebugEnvelopeStructure PNDebugEventEnvelope = {
             (self.senderIdentifier?: [NSNull null]), (self.sequenceNumber?: [NSNull null]),
             (self.subscribeKey?: [NSNull null]), (self.replicationMap?: [NSNull null]),
             (self.eatAfterReading ? (self.shouldEatAfterReading ? @"YES" : @"NO") : [NSNull null]),
-            ([self.meta performSelector:@selector(logDescription)]?: [NSNull null]),
+            ([self.metadata performSelector:@selector(logDescription)]?: [NSNull null]),
             ([self.waypoints performSelector:@selector(logDescription)]?: [NSNull null])];
     #pragma clang diagnostic pop
 }

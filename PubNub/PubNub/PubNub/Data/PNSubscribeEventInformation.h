@@ -55,10 +55,10 @@
 @property (nonatomic, readonly, assign)BOOL shouldEatAfterReading;
 
 /**
- @brief  Stores reference on user-provided (during publish) meta-data which will be taken into
+ @brief  Stores reference on user-provided (during publish) metadata which will be taken into
          account by filtering algorithms.
  */
-@property (nonatomic, readonly, copy) NSDictionary *meta;
+@property (nonatomic, readonly, copy) NSDictionary *metadata;
 
 /**
  @brief  Stores reference information about waypoints.

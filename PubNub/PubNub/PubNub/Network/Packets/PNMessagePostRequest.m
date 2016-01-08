@@ -168,10 +168,10 @@
         
         [resourcePath appendString:@"&store=0"];
     }
-    if (self.message.userMeta) {
+    if (self.message.userMetadata) {
         
         [resourcePath appendFormat:@"&meta=%@", 
-         [[PNJSONSerialization stringFromJSONObject:self.message.userMeta] pn_percentEscapedString]];
+         [[PNJSONSerialization stringFromJSONObject:self.message.userMetadata] pn_percentEscapedString]];
     }
     
 

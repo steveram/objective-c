@@ -53,10 +53,10 @@ struct PNEventDebugEnvelopeStructure {
     __unsafe_unretained NSString *eatAfterReading;
 
     /**
-     @brief  Stores reference on key under which stored user-provided (during publish) meta-data
+     @brief  Stores reference on key under which stored user-provided (during publish) metadata
              which will be taken into account by filtering algorithms.
      */
-    __unsafe_unretained NSString *meta;
+    __unsafe_unretained NSString *metadata;
 
     /**
      @brief  Stores reference on key under which stored information about waypoints.
@@ -81,7 +81,7 @@ extern struct PNEventDebugEnvelopeStructure PNDebugEventEnvelope;
 @property (nonatomic, copy) NSString *subscribeKey;
 @property (nonatomic, copy) NSNumber *replicationMap;
 @property (nonatomic, copy) NSNumber *eatAfterReading;
-@property (nonatomic, copy) NSDictionary *meta;
+@property (nonatomic, copy) NSDictionary *metadata;
 @property (nonatomic, copy) NSArray *waypoints;
 
 

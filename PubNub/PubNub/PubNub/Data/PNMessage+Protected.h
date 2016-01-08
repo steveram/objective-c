@@ -37,9 +37,9 @@ struct PNMessageDataKeysStruct {
     __unsafe_unretained NSString *message;
 
     /**
-     Stores key under which meta data will be encoded.
+     Stores key under which metadata will be encoded.
     */
-    __unsafe_unretained NSString *meta;
+    __unsafe_unretained NSString *metadata;
 
     /**
      Stores key under which encrypted message will be encoded.
@@ -91,12 +91,11 @@ extern struct PNMessageDataKeysStruct PNMessageDataKeys;
 @property (nonatomic, copy) id<NSObject, NSCopying> message;
 
 /**
- @brief  Stores reference on meta data information which should be used by message filter
-         logic.
+ @brief  Stores reference on metadata information which should be used by message filter logic.
  
  @since 3.8.0
  */
-@property (nonatomic, copy) NSDictionary *userMeta;
+@property (nonatomic, copy) NSDictionary *userMetadata;
 
 // Stores whether message should be compressed or not
 @property (nonatomic, assign, getter = shouldCompressMessage) BOOL compressMessage;

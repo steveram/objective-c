@@ -65,11 +65,11 @@
 #pragma mark - Instance methods
 
 /**
- @brief  Access to meta information which has been passed by other client during message publish.
+ @brief  Access to metadata information which has been passed by other client during message publish.
  
- @return Dictionary with meta-data passed by other user.
+ @return Dictionary with metadata passed by other user.
  */
-- (NSDictionary *)meta;
+- (NSDictionary *)metadata;
 
 /**
  Serialized \b PNMessage and save it into file at specified path.
