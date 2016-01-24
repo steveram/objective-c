@@ -86,6 +86,15 @@ typedef enum _PNPubNubClientState {
 @property (nonatomic, strong) PNCryptoHelper *cryptoHelper;
 
 /**
+ @brief      Stores reference on string which provied by user for message filtering.
+ @discussion Storage required to keep this information between communication channels
+             recreation.
+ 
+ @since 3.8.0
+ */
+@property (nonatomic, copy) NSString *messageFilterExpression;
+
+/**
  Stores reference on local \b PubNub cache instance which will cache some portion of data.
  */
 @property (nonatomic, strong) PNCache *cache;

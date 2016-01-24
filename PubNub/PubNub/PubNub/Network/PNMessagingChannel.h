@@ -21,7 +21,7 @@
 
 #pragma mark Class forward
 
-@class PNChannel;
+@class PNPredicate, PNChannel;
 
 
 #pragma mark - Public interface declaration
@@ -67,7 +67,7 @@
 #pragma mark - Filtering
 
 /**
- @brief  Pass string with message filtering configuration to the client.
+ @brief      Pass string with message filtering configuration to the client.
  @discussion Only messages who's \c metadata conform to this filtering configuration will
              reach client.
  

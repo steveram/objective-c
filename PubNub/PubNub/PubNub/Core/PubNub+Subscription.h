@@ -1,6 +1,12 @@
 #import "PubNub.h"
 #import "PNChannelProtocol.h"
 
+
+#pragma mark Class forward
+
+@class PNPredicate;
+
+
 /**
  Base class extension which provide methods for subscription manipulation.
  
@@ -1921,7 +1927,7 @@ withCompletionHandlingBlock:(PNClientChannelUnsubscriptionHandlerBlock)handlerBl
 #pragma mark - Instance methods
 
 /**
- @brief  Pass string with message filtering configuration to the client.
+ @brief      Pass string with message filtering configuration to the client.
  @discussion Only messages who's \c metadata conform to this filtering configuration will
              reach client.
  
@@ -1931,6 +1937,18 @@ withCompletionHandlingBlock:(PNClientChannelUnsubscriptionHandlerBlock)handlerBl
  @since 3.8.0
  */
 - (void)setFilterExpression:(NSString *)filterExpression;
+
+/**
+ @brief      Pass filter predicate which describes message filtering configuration to the client.
+ @discussion Only messages who's \c metadata conform to this filtering configuration will
+             reach client.
+ 
+ @param filterPredicate Reference on \b PNPredicate instance which contains filtering
+                        configuration.
+ 
+ @since 3.8.0
+ */
+- (void)setFilterPredicate:(PNPredicate *)filterPredicate;
 
 /**
  Retrieve list of channels on which \b PubNub client subscribed at this moment.

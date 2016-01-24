@@ -7,6 +7,7 @@
  */
 
 #import "PubNub+Subscription.h"
+#import "PNPredicate+Protected.h"
 #import "NSObject+PNAdditions.h"
 #import "PNMessagingChannel.h"
 #import "PubNub+Protected.h"
@@ -250,7 +251,13 @@ withCompletionHandlingBlock:(PNClientChannelUnsubscriptionHandlerBlock)handlerBl
 
 - (void)setFilterExpression:(NSString *)filterExpression {
     
-    [self.messagingChannel setFilterExpression:filterExpression];
+    self.messageFilterExpression = filterExpression;
+    if (self.messagingChannel) { [self.messagingChannel setFilterExpression:filterExpression]; }
+}
+
+- (void)setFilterPredicate:(PNPredicate *)filterPredicate {
+
+    [self setFilterExpression:[filterPredicate stringValueWithOutParenthesis]];
 }
 
 - (NSArray *)subscribedChannels {

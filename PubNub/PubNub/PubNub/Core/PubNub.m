@@ -115,6 +115,15 @@ static dispatch_once_t onceToken;
 @property (nonatomic, strong) PNCryptoHelper *cryptoHelper;
 
 /**
+ @brief      Stores reference on string which provied by user for message filtering.
+ @discussion Storage required to keep this information between communication channels
+             recreation.
+ 
+ @since 3.8.0
+ */
+@property (nonatomic, copy) NSString *messageFilterExpression;
+
+/**
  Stores reference on local \b PubNub cache instance which will cache some portion of data.
  */
 @property (nonatomic, strong) PNCache *cache;
@@ -1638,6 +1647,10 @@ shouldObserveProcessing:(BOOL)shouldObserveProcessing;
                                                     // Initialize communication channels
                                                     self.messagingChannel = [PNMessagingChannel messageChannelWithConfiguration:self.clientConfiguration
                                                                                                                     andDelegate:self];
+                                                    if (self.messageFilterExpression) {
+                                                        
+                                                        [self.messagingChannel setFilterExpression:self.messageFilterExpression];
+                                                    }
                                                     self.messagingChannel.messagingDelegate = self;
                                                     self.serviceChannel = [PNServiceChannel serviceChannelWithConfiguration:self.clientConfiguration
                                                                                                                 andDelegate:self];

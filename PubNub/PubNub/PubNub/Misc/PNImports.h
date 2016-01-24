@@ -47,6 +47,11 @@
 #import "PNError.h"
 #import "PNDate.h"
 
+#import "PNComparisonPredicate.h"
+#import "PNCompoundPredicate.h"
+#import "PNExpression.h"
+#import "PNPredicate.h"
+
 #import "PubNub+ChannelRegistry.h"
 #import "PubNub+PresenceEvents.h"
 #import "PubNub+Subscription.h"
