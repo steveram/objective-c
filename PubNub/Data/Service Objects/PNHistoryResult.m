@@ -3,7 +3,7 @@
  @since 4.0
  @copyright © 2009-2016 PubNub, Inc.
  */
-#import "PNHistoryResult.h"
+#import "PNHistoryResult+Private.h"
 #import "PNServiceData+Private.h"
 #import "PNResult+Private.h"
 
@@ -54,6 +54,20 @@
 #pragma mark - Interface implementation
 
 @implementation PNHistoryResult
+
+
+#pragma mark - Data modification
+
+- (void)replaceMessagesWith:(NSArray *)messages startDate:(NSNumber *)start endDate:(NSNumber *)end {
+    
+    NSMutableDictionary *updatedData = [self.serviceData mutableCopy];
+    updatedData[@"messages"] = messages;
+    updatedData[@"start"] = start;
+    updatedData[@"end"] = end;
+    self.data = nil;
+    
+    [self updateData:updatedData];
+}
 
 
 #pragma mark - Information
