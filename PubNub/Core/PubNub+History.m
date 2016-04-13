@@ -24,13 +24,19 @@
  @param result Reference on result object which describe service response on history request.
  @param status Reference on status instance which hold information about processing results.
  
- @return \c YES in case if 
+ @return Next request parameters or \c nil in case if next request shouldn't be performed.
  
  @since 4.4
  */
 typedef PNRequestParameters *(^PNHistoryRequestCompletionBlock)(PNHistoryResult * _Nullable result,
                                                                 PNErrorStatus * _Nullable status);
 
+/**
+ @brief  Enum describes possible ways to retrieve events which is required to fullfill provided requirements
+         about time frame and/or limit.
+ 
+ @since 4.4
+ */
 typedef NS_ENUM(NSUInteger, PNHistoryFetchRequirements) {
     
     /**
@@ -72,12 +78,48 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Fetch history
 
+
+
 /**
- @brief  Perform history fetch using configured parameters set.
+ @brief  Fetch as much as possible events from \c channel if they conform to provided requirements.
+ 
+ @param channel                Name of the channel for which events should be pulled out from storage.
+ @param startDate              Reference on time token for oldest event starting from which next should be 
+                               returned events. Value will be converted to required precision internally.
+ @param endDate                Reference on time token for latest event till which events should be pulled 
+                               out. Value will be converted to required precision internally.
+ @param limit                  Maximum number of events which should be returned in response. If value more 
+                               than \b 100 (service limit per request) will be passed, series of requests will
+                               be done to fetch as much message as available to fulfill \c limit request. 
+                               \b 0 allow to fetch all available events from \c channge if they conform to 
+                               requierements.
+ @param shouldReverseOrder     Whether events order in response should be reversed or not.
+ @param shouldIncludeTimeToken Whether event dates (time tokens) should be included in response or not.
+ @param requirements           Requirements which desceribe how client should fetch events from channel to 
+                               fulfill \c limit requirement.
+ @param block                  History pull processing completion block which pass two arguments: 
+                               \c result - in case of successful request processing \c data field will contain
+                               results of history request operation; \c status - in case if error occurred 
+                               during request processing.
+ @param retryBlock             Reference on block which should be passed as part of \c status object to retry 
+                               history fetch.
+ 
+ @since 4.4
+ */
+- (void)historyForChannel:(NSString *)channel start:(NSNumber *)startDate end:(NSNumber *)endDate 
+                    limit:(NSUInteger)limit reverse:(BOOL)shouldReverseOrder 
+         includeTimeToken:(BOOL)shouldIncludeTimeToken requirements:(PNHistoryFetchRequirements)requirements
+           withCompletion:(PNHistoryCompletionBlock)block andRetry:(dispatch_block_t)retryBlock;
+
+/**
+ @brief      Perform history fetch using configured parameters set.
+ @discussion Perform single history request with predefined request options.
  
  @param parameters Reference on configured request parameters set.
  @param retryBlock Reference on block which should be set to error status object in case of fialure.
  @param block      Reference on block which should be called at the end of request processing.
+ 
+ @since 4.4
  */
 - (void)fetchHistoryWithParameters:(PNRequestParameters *)parameters retry:(dispatch_block_t)retryBlock
                         completion:(PNHistoryRequestCompletionBlock)block;
@@ -103,10 +145,32 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Misc
 
+/**
+ @brief  Build history fetch request parameters object basing on provided information.
+ 
+ @param channel                Name of the channel for which events should be pulled out from storage.
+ @param startDate              Reference on time token for oldest event starting from which next should be 
+                               returned events. Value will be converted to required precision internally.
+ @param endDate                Reference on time token for latest event till which events should be pulled 
+                               out. Value will be converted to required precision internally.
+ @param limit                  Maximum number of events which should be returned in response. If value more 
+                               than \b 100 (service limit per request) will be passed, series of requests will
+                               be done to fetch as much message as available to fulfill \c limit request. 
+                               \b 0 allow to fetch all available events from \c channge if they conform to 
+                               requierements.
+ @param shouldReverseOrder     Whether events order in response should be reversed or not.
+ @param shouldIncludeTimeToken Whether event dates (time tokens) should be included in response or not.
+ @param requirements           Requirements which desceribe how client should fetch events from channel to 
+                               fulfill \c limit requirement.
+ 
+ @return Configured and ready to use history fetch request parameters object.
+ 
+ @since 4.4
+ */
 - (PNRequestParameters *)parametersForChannel:(NSString *)channel start:(nullable NSNumber *)startDate
                                           end:(nullable NSNumber *)endDate limit:(NSUInteger)limit 
-                                      reverse:(BOOL)shouldReverseOrder 
-                                    includeTimeToken:(BOOL)shouldIncludeTimeToken;
+                                      reverse:(BOOL)shouldReverseOrder
+                             includeTimeToken:(BOOL)shouldIncludeTimeToken;
 
 #pragma mark -
 

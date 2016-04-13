@@ -799,7 +799,7 @@ NSNumber *referenceDate = @([[NSDate dateWithTimeIntervalSinceNow:-(60*60)] time
  
  @since 4.4
  */
-- (void)historyForChannel:(NSString *)channel newerThan:(NSNumber *)date limit:(NSUInteger)limit 
+- (void)historyForChannel:(NSString *)channel newerThan:(NSNumber *)date limit:(NSUInteger)limit
          includeTimeToken:(BOOL)shouldIncludeTimeToken withCompletion:(PNHistoryCompletionBlock)block;
 
 /**
