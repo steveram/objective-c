@@ -741,7 +741,13 @@ NS_ASSUME_NONNULL_END
            }
            failure:^(NSURLSessionDataTask *task, NSError *error) {
                //DDLogClientInfo(weakSelf.client.logger, @"NSURLSession activity in the background requires you to set `applicationExtensionSharedGroupIdentifier` in PNConfiguration");
-               NSAssert((error.domain != NSURLErrorDomain) && (error.code == NSURLErrorBackgroundSessionRequiresSharedContainer), @"NSURLSession activity in the background requires you to set `applicationExtensionSharedGroupIdentifier` in PNConfiguration");
+               if (
+                   error.domain == NSURLErrorDomain &&
+                   error.code == NSURLErrorBackgroundSessionRequiresSharedContainer
+                   ) {
+                   DDLogClientInfo(weakSelf.client.logger, @"NSURLSession activity in the background requires you to set `applicationExtensionSharedGroupIdentifier` in PNConfiguration");
+               }
+               //NSAssert((error.domain != NSURLErrorDomain) && (error.code == NSURLErrorBackgroundSessionRequiresSharedContainer), @"NSURLSession activity in the background requires you to set `applicationExtensionSharedGroupIdentifier` in PNConfiguration");
                [weakSelf handleOperation:operationType taskDidFail:task withError:error
                          completionBlock:block];
            }] resume];
