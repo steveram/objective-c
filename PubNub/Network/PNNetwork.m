@@ -1026,7 +1026,7 @@ NS_ASSUME_NONNULL_END
             [error.domain isEqualToString:NSURLErrorDomain] &&
             error.code == -995
             ) {
-            DDLogClientInfo(self.client.logger, @"NSURLSession activity in the background requires you to set `applicationExtensionSharedGroupIdentifier` in PNConfiguration");
+            DDLogClientInfo(self.client.logger, @"<PubNub> NSURLSession activity in the background requires you to set `applicationExtensionSharedGroupIdentifier` in PNConfiguration");
         }
         NSData *fetchedData = [self.fetchedData copy];
         self.fetchedData = nil; 
