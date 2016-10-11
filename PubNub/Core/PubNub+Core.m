@@ -225,6 +225,16 @@ NS_ASSUME_NONNULL_END
         DDLogClientInfo(self.logger, @"<PubNub> PubNub SDK %@ (%@)", kPNLibraryVersion, kPNCommit);
         
         _configuration = [configuration copy];
+        
+        // Let's remind the user to set an `applicationExtensionSharedGroupIdentifier`
+        // if they are planning to run as an extension
+        if (
+            _configuration.isApplicationExtensionSupportEnabled &&
+            !_configuration.applicationExtensionSharedGroupIdentifier
+            ) {
+            DDLogClientInfo(self.logger, @"<PubNub> If `PNConfiguration` has `isApplicationExtensionSupportEnabled` set to `YES` then you must supply a string for the `applicationExtensionSharedGroupIdentifier` on `PNConfiguration` as well.");
+        }
+        
         _callbackQueue = callbackQueue;
         [self prepareNetworkManagers];
         

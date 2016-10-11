@@ -1021,6 +1021,13 @@ NS_ASSUME_NONNULL_END
     
     if (self.configuration.isApplicationExtensionSupportEnabled) {
         
+        // NSURLErrorBackgroundSessionRequiresSharedContainer == -995
+        if (
+            [error.domain isEqualToString:NSURLErrorDomain] &&
+            error.code == -995
+            ) {
+            DDLogClientInfo(self.client.logger, @"NSURLSession activity in the background requires you to set `applicationExtensionSharedGroupIdentifier` in PNConfiguration");
+        }
         NSData *fetchedData = [self.fetchedData copy];
         self.fetchedData = nil; 
         if (self.previousDataTaskCompletionHandler) {
@@ -1083,12 +1090,7 @@ NS_ASSUME_NONNULL_END
         [self handleOperation:operation taskDidComplete:task withData:nil completionBlock:block];
     }
     else {
-        if (
-            [error.domain isEqualToString:NSURLErrorDomain] &&
-            error.code == -995
-            ) {
-            DDLogClientInfo(self.client.logger, @"NSURLSession activity in the background requires you to set `applicationExtensionSharedGroupIdentifier` in PNConfiguration");
-        }
+        
         id errorDetails = nil;
         NSData *errorData = (error?: task.error).userInfo[kPNNetworkErrorResponseDataKey];
         if (errorData) {
