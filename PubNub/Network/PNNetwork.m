@@ -742,7 +742,7 @@ NS_ASSUME_NONNULL_END
            failure:^(NSURLSessionDataTask *task, NSError *error) {
                // NSURLErrorBackgroundSessionRequiresSharedContainer == -995
                if (
-                   error.domain == NSURLErrorDomain &&
+                   [error.domain isEqualToString:NSURLErrorDomain] &&
                    error.code == -995
                    ) {
                    NSLog(@"NSURLSession activity in the background requires you to set `applicationExtensionSharedGroupIdentifier` in PNConfiguration");
