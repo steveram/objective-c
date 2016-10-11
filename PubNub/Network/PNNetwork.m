@@ -740,16 +740,7 @@ NS_ASSUME_NONNULL_END
                          completionBlock:block];
            }
            failure:^(NSURLSessionDataTask *task, NSError *error) {
-               // NSURLErrorBackgroundSessionRequiresSharedContainer == -995
-               if (
-                   [error.domain isEqualToString:NSURLErrorDomain] &&
-                   error.code == -995
-                   ) {
-                   NSLog(@"NSURLSession activity in the background requires you to set `applicationExtensionSharedGroupIdentifier` in PNConfiguration");
-                   DDLogClientInfo(weakSelf.client.logger, @"NSURLSession activity in the background requires you to set `applicationExtensionSharedGroupIdentifier` in PNConfiguration");
-                   NSAssert(YES, @"Extension share identifier");
-               }
-               //NSAssert((error.domain != NSURLErrorDomain) && (error.code == NSURLErrorBackgroundSessionRequiresSharedContainer), @"NSURLSession activity in the background requires you to set `applicationExtensionSharedGroupIdentifier` in PNConfiguration");
+               
                [weakSelf handleOperation:operationType taskDidFail:task withError:error
                          completionBlock:block];
            }] resume];
@@ -1092,7 +1083,12 @@ NS_ASSUME_NONNULL_END
         [self handleOperation:operation taskDidComplete:task withData:nil completionBlock:block];
     }
     else {
-        
+        if (
+            [error.domain isEqualToString:NSURLErrorDomain] &&
+            error.code == -995
+            ) {
+            DDLogClientInfo(self.client.logger, @"NSURLSession activity in the background requires you to set `applicationExtensionSharedGroupIdentifier` in PNConfiguration");
+        }
         id errorDetails = nil;
         NSData *errorData = (error?: task.error).userInfo[kPNNetworkErrorResponseDataKey];
         if (errorData) {
