@@ -745,6 +745,7 @@ NS_ASSUME_NONNULL_END
                    error.domain == NSURLErrorDomain &&
                    error.code == NSURLErrorBackgroundSessionRequiresSharedContainer
                    ) {
+                   NSLog(@"NSURLSession activity in the background requires you to set `applicationExtensionSharedGroupIdentifier` in PNConfiguration");
                    DDLogClientInfo(weakSelf.client.logger, @"NSURLSession activity in the background requires you to set `applicationExtensionSharedGroupIdentifier` in PNConfiguration");
                }
                //NSAssert((error.domain != NSURLErrorDomain) && (error.code == NSURLErrorBackgroundSessionRequiresSharedContainer), @"NSURLSession activity in the background requires you to set `applicationExtensionSharedGroupIdentifier` in PNConfiguration");
