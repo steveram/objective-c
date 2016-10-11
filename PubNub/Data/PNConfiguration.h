@@ -222,7 +222,7 @@ NS_ASSUME_NONNULL_BEGIN
  @brief      Stores reference on group identifier which is used to share request cache between application 
              extension and it's containing application.
  @discussion Because \b NSURLSession for application extensions can operate only as background data pull it 
-             doesn't have cache (where temporarry data can be loaded) in application extension. Shared data 
+             doesn't have cache (where temporary data can be loaded) in application extension. Shared data
              container will be used by \b NSURLSession during request processing.
  
  @since 4.5.4

@@ -352,7 +352,7 @@ NS_ASSUME_NONNULL_BEGIN
  
  @since 4.0
  */
-- (void)prepareSessionWithRequesrTimeout:(NSTimeInterval)timeout
+- (void)prepareSessionWithRequestTimeout:(NSTimeInterval)timeout
                       maximumConnections:(NSInteger)maximumConnections;
 
 /**
@@ -566,7 +566,7 @@ NS_ASSUME_NONNULL_END
         _serializer = [PNNetworkResponseSerializer new];
         _baseURL = [self requestBaseURL];
         _lock = OS_SPINLOCK_INIT;
-        [self prepareSessionWithRequesrTimeout:timeout maximumConnections:maximumConnections];
+        [self prepareSessionWithRequestTimeout:timeout maximumConnections:maximumConnections];
     }
     
     return self;
@@ -739,8 +739,9 @@ NS_ASSUME_NONNULL_END
                [weakSelf handleOperation:operationType taskDidComplete:task withData:responseObject
                          completionBlock:block];
            }
-           failure:^(NSURLSessionDataTask *task, id error) {
-               
+           failure:^(NSURLSessionDataTask *task, NSError *error) {
+               //DDLogClientInfo(weakSelf.client.logger, @"NSURLSession activity in the background requires you to set `applicationExtensionSharedGroupIdentifier` in PNConfiguration");
+               NSAssert((error.domain != NSURLErrorDomain) && (error.code == NSURLErrorBackgroundSessionRequiresSharedContainer), @"NSURLSession activity in the background requires you to set `applicationExtensionSharedGroupIdentifier` in PNConfiguration");
                [weakSelf handleOperation:operationType taskDidFail:task withError:error
                          completionBlock:block];
            }] resume];
@@ -889,7 +890,7 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - Session constructor
 
-- (void)prepareSessionWithRequesrTimeout:(NSTimeInterval)timeout
+- (void)prepareSessionWithRequestTimeout:(NSTimeInterval)timeout
                       maximumConnections:(NSInteger)maximumConnections {
     
     _requestTimeout = timeout;
@@ -1011,7 +1012,7 @@ NS_ASSUME_NONNULL_END
 #endif // TARGET_OS_IOS
         
         // Replace invalidated session with new one which can be used for next requests.
-        [self prepareSessionWithRequesrTimeout:self.requestTimeout
+        [self prepareSessionWithRequestTimeout:self.requestTimeout
                             maximumConnections:self.maximumConnections];
         OSSpinLockUnlock(&_lock);
     }
