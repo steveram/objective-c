@@ -222,7 +222,7 @@ typedef void(^PNSubscriberCompletionBlock)(PNSubscribeStatus * _Nullable status)
  
  @since 4.2.0
  */
-- (void)unsubscribeFromAll;
+- (void)unsubscribeFromAllWithCompletion:(nullable PNSubscriberCompletionBlock)block;
 
 /**
  @brief      Perform unsubscription operation.

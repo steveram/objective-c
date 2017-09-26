@@ -989,7 +989,7 @@ NS_ASSUME_NONNULL_END
     [self subscribe:NO usingTimeToken:nil withState:nil completion:block];
 }
 
-- (void)unsubscribeFromAll {
+- (void)unsubscribeFromAllWithCompletion:(PNSubscriberCompletionBlock)block; {
     
     NSArray *channels = [self.channels copy];
     NSArray *channelGroups = [self.channelGroups copy]; 
@@ -999,7 +999,7 @@ NS_ASSUME_NONNULL_END
         [self removePresenceChannels:self.presenceChannels];
         [self removeChannelGroups:channelGroups];
         [self unsubscribeFromChannels:channels groups:channelGroups informingListener:YES subscribeOnRest:NO
-                           completion:nil];
+                           completion:block];
     }
 }
 

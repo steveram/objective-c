@@ -268,7 +268,12 @@ static NSString * const kPNSubscribeAPIPrefix = @"/v2/subscribe/";
 
 - (void)unsubscribeFromAll {
     
-    [self.subscriberManager unsubscribeFromAll];
+    [self.subscriberManager unsubscribeFromAllWithCompletion:nil];
+}
+
+- (void)unsubscribeFromAllWithCompletion:(PNStatusBlock)block {
+    
+    [self.subscriberManager unsubscribeFromAllWithCompletion:block];
 }
 
 

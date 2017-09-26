@@ -443,6 +443,23 @@ self.client = [PubNub clientWithConfiguration:configuration];
  */
 - (void)unsubscribeFromAll;
 
+/**
+ @brief      Unsubscribe from all channels and groups on which client has been subscrbed so far.
+ @discussion This API will remove all channels, presence channels and channel groups from subscribe cycle and
+ as result will stop it.
+ @discussion \b Example:
+ 
+ @code
+ PNConfiguration *configuration = [PNConfiguration configurationWithPublishKey:@"demo"
+ subscribeKey:@"demo"];
+ self.client = [PubNub clientWithConfiguration:configuration];
+ [self.client unsubscribeFromAllWithCompletion:nil];
+ @endcode
+ 
+ @since 4.7.0
+ */
+- (void)unsubscribeFromAllWithCompletion:(nullable PNStatusBlock)block;
+
 #pragma mark -
 
 
