@@ -354,14 +354,17 @@ static os_unfair_lock keychainAccessLock = OS_UNFAIR_LOCK_INIT;
     NSData *packedData = nil;
     if (data) {
         
-        if ([data respondsToSelector:@selector(count)]) {
-            
-            NSError *error = nil;
+        if ([data isKindOfClass:NSString.class]) {
+            packedData = [(NSString *)data dataUsingEncoding:NSUTF8StringEncoding]; 
+        }
+        else if ([data isKindOfClass:NSData.class]) { 
+          packedData = data; 
+        }
+        else { 
+         NSError *error = nil;
             packedData = [NSJSONSerialization dataWithJSONObject:data options:(NSJSONWritingOptions)0
                                                            error:&error];
         }
-        else if ([data isKindOfClass:NSData.class]) { packedData = data; }
-        else { packedData = [(NSString *)data dataUsingEncoding:NSUTF8StringEncoding]; }
     }
     
     return packedData;
